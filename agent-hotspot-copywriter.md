@@ -435,7 +435,147 @@ selected_topics = 按热度排序后取前 max_topics 个
 
 ---
 
-## ✅ 正确示例 (Good Examples)
+### Step 7: 生成 HTML 网页与归档
+
+采用**单篇相关 + 目录索引**的结构，避免文件覆盖。
+
+1.  **准备文件名与路径**：
+    *   文件名格式：`posts/article_[YYYYMMDD]_[HHMM].html`
+    *   确保 `posts/` 目录存在（不存在则创建）
+
+2.  **生成文章页**：
+    *   使用 [文章页 HTML 模板]
+    *   注入内容，并确保包含 `<a href="../index.html">← 返回首页</a>`
+    *   写入新文件
+
+3.  **更新目录页 (`index.html`)**：
+    *   **检查**：根目录下是否存在 `index.html`
+    *   **不存在**：使用 [目录页 HTML 模板] 创建新文件
+    *   **存在**：读取文件内容
+    *   **插入**：在 `<div class="article-list">` 标签后插入新的 [文章卡片]
+    *   **保存**：覆盖更新 `index.html`
+
+### Step 8: 自动部署到 GitHub Pages
+
+1.  **执行 Git 命令**：
+    ```bash
+    git add .
+    git commit -m "New article: [文章标题]"
+    git push
+    ```
+
+2.  **输出结果**：
+    *   告知用户文章已发布
+    *   文章链接：`https://[username].github.io/[repo]/posts/article_[time].html`
+    *   首页链接：`https://[username].github.io/[repo]/`
+
+---
+
+## 🎨 HTML 模板 (Templates)
+
+### 1. 文章页模板 (posts/article_*.html)
+
+```html
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>[文章标题]</title>
+    <!-- 引入 Shared CSS，或者在此处直接内联完整 CSS -->
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        /* [此处复制完整的 CSS 样式] */
+        /* 新增：返回按钮样式 */
+        .back-nav { padding: 20px 0; margin-bottom: 20px; }
+        .back-nav a { text-decoration: none; color: var(--primary-color); font-weight: 600; display: inline-flex; align-items: center; gap: 5px; }
+        .back-nav a:hover { color: var(--accent-color); }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <nav class="back-nav fade-in">
+            <a href="../index.html">← 返回首页</a>
+        </nav>
+        
+        <header class="article-header fade-in">
+            <h1>[文章标题]</h1>
+            <div class="article-meta">
+                <span class="meta-item">[Agent名]</span>
+                <span class="meta-item">[日期]</span>
+                <span class="meta-item">[来源]</span>
+            </div>
+        </header>
+
+        <section class="content-section fade-in">
+            [插入正文内容]
+        </section>
+        
+        <!-- CTA 和 Footer -->
+        <!-- ... -->
+    </div>
+    <!-- Script ... -->
+</body>
+</html>
+```
+
+### 2. 目录页模板 (index.html)
+
+```html
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Agent 财经热点分析报告</title>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        /* 基础 CSS 与文章页一致 */
+        :root { --primary-color: #1a5490; --accent-color: #f77f00; --bg-light: #f8f9fa; --text-dark: #1d3557; }
+        body { font-family: 'Noto Serif SC', serif; background: var(--bg-light); color: var(--text-dark); margin: 0; }
+        .container { max-width: 800px; margin: 0 auto; padding: 40px 20px; }
+        .header { text-align: center; margin-bottom: 60px; padding: 40px 0; border-bottom: 2px solid #eee; }
+        .header h1 { font-size: 2.5rem; color: var(--primary-color); }
+        .article-list { display: flex; flex-direction: column; gap: 30px; }
+        .article-card { 
+            display: block; background: white; padding: 30px; border-radius: 15px; 
+            text-decoration: none; color: inherit; box-shadow: 0 5px 20px rgba(0,0,0,0.05);
+            transition: transform 0.2s, box-shadow 0.2s; border-left: 5px solid transparent;
+        }
+        .article-card:hover { transform: translateY(-5px); box-shadow: 0 10px 30px rgba(0,0,0,0.1); border-left-color: var(--accent-color); }
+        .article-card h2 { margin: 0 0 10px 0; font-size: 1.5rem; color: var(--primary-color); }
+        .article-card .meta { font-family: 'Inter', sans-serif; color: #666; font-size: 0.9rem; }
+        .intro { color: #666; font-size: 1.1rem; max-width: 600px; margin: 20px auto 0; line-height: 1.6; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header class="header">
+            <h1>📊 Agent 财经热点分析</h1>
+            <p class="intro">这里汇集了智能 Agent 对最新宏观政策、市场热点的深度解读与量化分析。</p>
+        </header>
+
+        <div class="article-list">
+            <!-- 新文章卡片将插入到这里 -->
+        </div>
+    </div>
+</body>
+</html>
+```
+
+### 3. 文章卡片片段 (Article Card Snippet)
+
+```html
+<a href="[文章相对路径]" class="article-card">
+    <h2>[文章标题]</h2>
+    <div class="meta">
+        <span>📅 [日期]</span> • <span>🔥 [热点来源]</span>
+    </div>
+    <p style="margin-top: 15px; color: #555; line-height: 1.6;">
+        [副标题或一句话摘要]
+    </p>
+</a>
+```
 
 ### Example 1: 正常执行（一气呵成）
 
