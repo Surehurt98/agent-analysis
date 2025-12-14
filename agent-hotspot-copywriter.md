@@ -490,6 +490,21 @@ selected_topics = 按热度排序后取前 max_topics 个
         .back-nav { padding: 20px 0; margin-bottom: 20px; }
         .back-nav a { text-decoration: none; color: var(--primary-color); font-weight: 600; display: inline-flex; align-items: center; gap: 5px; }
         .back-nav a:hover { color: var(--accent-color); }
+        
+        /* Mobile Optimization */
+        @media (max-width: 768px) {
+            .container { padding: 20px 15px; }
+            .article-header { padding: 40px 20px; text-align: left; }
+            .article-header h1 { font-size: 1.8rem; }
+            .article-meta { gap: 10px; font-size: 0.85rem; }
+            .content-section { padding: 30px 20px; }
+            .section-title { font-size: 1.4rem; }
+            .highlight-box { padding: 20px; }
+            .data-table { display: block; overflow-x: auto; white-space: nowrap; }
+            .comparison-grid { grid-template-columns: 1fr; }
+            .cta-section { padding: 40px 20px; }
+            .cta-section h3 { font-size: 1.6rem; }
+        }
     </style>
 </head>
 <body>
