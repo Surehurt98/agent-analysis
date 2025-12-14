@@ -1,10 +1,13 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>货币政策转向"适度宽松"：银行从业者如何应对净息差压力？</title>
-    <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <title>2026年定调"适度宽松"与"居民增收"：银行零售业务的最后红利期？</title>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;600;700&family=Inter:wght@400;500;600;700&display=swap"
+        rel="stylesheet">
     <style>
         * {
             margin: 0;
@@ -50,19 +53,8 @@
             overflow: hidden;
         }
 
-        .article-header::before {
-            content: '';
-            position: absolute;
-            top: -50%;
-            right: -10%;
-            width: 500px;
-            height: 500px;
-            background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%);
-            border-radius: 50%;
-        }
-
         .article-header h1 {
-            font-size: 2.5rem;
+            font-size: 2.2rem;
             font-weight: 700;
             margin-bottom: 20px;
             position: relative;
@@ -72,24 +64,11 @@
 
         .article-meta {
             font-family: 'Inter', sans-serif;
-            font-size: 0.95rem;
             opacity: 0.9;
             display: flex;
-            gap: 30px;
-            flex-wrap: wrap;
-            position: relative;
+            gap: 20px;
             z-index: 1;
-        }
-
-        .meta-item {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-
-        .meta-item::before {
-            content: '●';
-            color: var(--accent-color);
+            position: relative;
         }
 
         .content-section {
@@ -97,49 +76,21 @@
             padding: 50px 40px;
             border-radius: 20px;
             margin-bottom: 30px;
-            box-shadow: 0 10px 40px rgba(0,0,0,0.08);
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.08);
+            transition: transform 0.3s;
         }
 
         .content-section:hover {
             transform: translateY(-5px);
-            box-shadow: 0 15px 50px rgba(0,0,0,0.12);
         }
 
         .section-title {
-            font-size: 1.8rem;
+            font-size: 1.6rem;
             font-weight: 700;
             color: var(--primary-color);
-            margin-bottom: 25px;
-            padding-bottom: 15px;
             border-bottom: 3px solid var(--accent-color);
-            display: flex;
-            align-items: center;
-            gap: 15px;
-        }
-
-        .section-title::before {
-            content: '';
-            width: 6px;
-            height: 40px;
-            background: linear-gradient(180deg, var(--accent-color), var(--secondary-color));
-            border-radius: 3px;
-        }
-
-        .subsection-title {
-            font-size: 1.4rem;
-            font-weight: 600;
-            color: var(--text-dark);
-            margin: 30px 0 20px 0;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        .subsection-title::before {
-            content: '▶';
-            color: var(--accent-color);
-            font-size: 0.8em;
+            padding-bottom: 15px;
+            margin-bottom: 25px;
         }
 
         .highlight-box {
@@ -148,33 +99,21 @@
             padding: 25px 30px;
             margin: 25px 0;
             border-radius: 10px;
-            box-shadow: 0 5px 20px rgba(247, 127, 0, 0.1);
-        }
-
-        .highlight-box h4 {
-            color: var(--accent-color);
-            font-size: 1.2rem;
-            margin-bottom: 15px;
-            font-weight: 600;
         }
 
         .data-table {
             width: 100%;
             border-collapse: separate;
-            border-spacing: 0;
             margin: 25px 0;
             border-radius: 12px;
             overflow: hidden;
-            box-shadow: 0 5px 20px rgba(0,0,0,0.08);
         }
 
         .data-table th {
-            background: linear-gradient(135deg, var(--primary-color), #2a75bb);
+            background: var(--primary-color);
             color: white;
-            padding: 18px 15px;
+            padding: 15px;
             text-align: left;
-            font-weight: 600;
-            font-family: 'Inter', sans-serif;
         }
 
         .data-table td {
@@ -183,204 +122,37 @@
             background: white;
         }
 
-        .data-table tr:last-child td {
-            border-bottom: none;
-        }
-
-        .data-table tr:hover td {
-            background: #f8f9fa;
-        }
-
-        .scenario-card {
-            background: white;
-            border: 2px solid var(--border-color);
-            border-radius: 12px;
-            padding: 25px;
-            margin: 20px 0;
-            transition: all 0.3s ease;
-        }
-
-        .scenario-card:hover {
-            border-color: var(--primary-color);
-            box-shadow: 0 8px 25px rgba(26, 84, 144, 0.15);
-            transform: translateX(5px);
-        }
-
-        .scenario-card h4 {
-            color: var(--primary-color);
-            font-size: 1.3rem;
-            margin-bottom: 15px;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        .scenario-card ul {
-            list-style: none;
-            padding-left: 0;
-        }
-
-        .scenario-card li {
-            padding: 8px 0;
-            padding-left: 25px;
-            position: relative;
-        }
-
-        .scenario-card li::before {
-            content: '✓';
-            position: absolute;
-            left: 0;
-            color: var(--success-color);
+        .badge {
+            display: inline-block;
+            padding: 4px 10px;
+            border-radius: 20px;
+            font-size: 0.8em;
             font-weight: bold;
         }
 
-        .strategy-list {
-            list-style: none;
-            padding: 0;
-        }
-
-        .strategy-list li {
-            padding: 15px 20px;
-            margin: 12px 0;
-            background: linear-gradient(90deg, #f8f9fa 0%, white 100%);
-            border-left: 4px solid var(--accent-color);
-            border-radius: 8px;
-            transition: all 0.3s ease;
-        }
-
-        .strategy-list li:hover {
-            background: linear-gradient(90deg, #e9ecef 0%, #f8f9fa 100%);
-            transform: translateX(10px);
-        }
-
-        .strategy-list strong {
-            color: var(--primary-color);
-            font-size: 1.1em;
-        }
-
-        .comparison-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 25px;
-            margin: 30px 0;
-        }
-
-        .comparison-card {
-            padding: 25px;
-            border-radius: 12px;
-            box-shadow: 0 5px 20px rgba(0,0,0,0.08);
-        }
-
-        .comparison-card.traditional {
-            background: linear-gradient(135deg, #ffe5e5 0%, #ffd4d4 100%);
-            border: 2px solid var(--secondary-color);
-        }
-
-        .comparison-card.agent {
-            background: linear-gradient(135deg, #d4f1f4 0%, #b8e6ea 100%);
-            border: 2px solid var(--success-color);
-        }
-
-        .comparison-card h4 {
-            font-size: 1.3rem;
-            margin-bottom: 20px;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        .comparison-card.traditional h4 {
-            color: var(--secondary-color);
-        }
-
-        .comparison-card.agent h4 {
-            color: var(--success-color);
+        .badge-warn {
+            background: var(--warning-color);
+            color: black;
         }
 
         .cta-section {
             background: linear-gradient(135deg, var(--accent-color) 0%, #f9844a 100%);
             color: white;
-            padding: 50px 40px;
+            padding: 40px;
             border-radius: 20px;
             text-align: center;
-            box-shadow: 0 15px 50px rgba(247, 127, 0, 0.3);
             margin-top: 40px;
-        }
-
-        .cta-section h3 {
-            font-size: 2rem;
-            margin-bottom: 20px;
         }
 
         .cta-button {
             display: inline-block;
             background: white;
             color: var(--accent-color);
-            padding: 18px 45px;
+            padding: 15px 40px;
             border-radius: 50px;
             text-decoration: none;
             font-weight: 700;
-            font-size: 1.1rem;
             margin-top: 20px;
-            transition: all 0.3s ease;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
-        }
-
-        .cta-button:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 15px 40px rgba(0,0,0,0.3);
-        }
-
-        .badge {
-            display: inline-block;
-            padding: 6px 14px;
-            border-radius: 20px;
-            font-size: 0.85rem;
-            font-weight: 600;
-            font-family: 'Inter', sans-serif;
-            margin: 5px 5px 5px 0;
-        }
-
-        .badge-primary {
-            background: var(--primary-color);
-            color: white;
-        }
-
-        .badge-success {
-            background: var(--success-color);
-            color: white;
-        }
-
-        .badge-warning {
-            background: var(--warning-color);
-            color: var(--text-dark);
-        }
-
-        code {
-            background: #f8f9fa;
-            padding: 3px 8px;
-            border-radius: 4px;
-            font-family: 'Courier New', monospace;
-            color: var(--secondary-color);
-            font-size: 0.9em;
-        }
-
-        @media (max-width: 768px) {
-            .article-header h1 {
-                font-size: 1.8rem;
-            }
-
-            .comparison-grid {
-                grid-template-columns: 1fr;
-            }
-
-            .content-section {
-                padding: 30px 20px;
-            }
-
-            .section-title {
-                font-size: 1.5rem;
-            }
         }
 
         .fade-in {
@@ -392,6 +164,7 @@
                 opacity: 0;
                 transform: translateY(20px);
             }
+
             to {
                 opacity: 1;
                 transform: translateY(0);
@@ -399,252 +172,127 @@
         }
     </style>
 </head>
+
 <body>
     <div class="container">
         <header class="article-header fade-in">
-            <h1>货币政策转向"适度宽松"：银行从业者如何应对净息差压力？</h1>
+            <h1>2026年定调"适度宽松"与"居民增收"：银行零售业务的最后红利期？</h1>
             <div class="article-meta">
-                <span class="meta-item">智能分析 Agent</span>
-                <span class="meta-item">2024-12-14</span>
-                <span class="meta-item">新浪财经</span>
-                <span class="meta-item">约 1,620 字</span>
+                <span>智能分析 Agent</span> • <span>2025-12-14</span> • <span>新浪财经·经济年会</span>
             </div>
         </header>
 
         <section class="content-section fade-in">
-            <h2 class="section-title">热点背景与从业者困惑</h2>
-            <p>12月中旬，中央经济工作会议在北京召开，会议公报中一个关键表述引发市场高度关注：<strong>货币政策从"稳健"转向"适度宽松"</strong>。这是自2010年以来，14年间首次使用"适度宽松"的表述，意味着货币政策基调发生重大转向。</p>
-            
-            <p style="margin-top: 20px;">会议明确提出："实施适度宽松的货币政策，保持流动性合理充裕，降低社会融资成本。"市场普遍预期，2025年将迎来多次降准降息，1年期LPR有望从当前的3.45%降至3.25%甚至更低。</p>
+            <h2 class="section-title">热点背景与从业者焦虑</h2>
+            <p>12月13日，2025-2026中国经济年会上，中财办副主任韩文秀释放了重磅信号：<strong>"明年继续实施适度宽松的货币政策"</strong>，并特别强调<strong>"促进居民收入增长和经济增长同步"</strong>。
+            </p>
+            <p style="margin-top:15px">
+                这是一个非常明确的政策转向信号。回顾历史，上一次明确提"适度宽松"还是在2008-2009年。而这次与以往不同的是，政策重心从单纯的"保增长"转向了"民生与消费"。</p>
 
             <div class="highlight-box">
-                <h4>作为一名商业银行从业者，我面临的核心困惑是：</h4>
-                <p>货币政策转向"适度宽松"，对我们银行的经营会带来什么影响？具体来说：</p>
-                <ol style="padding-left: 20px; margin-top: 15px;">
-                    <li style="margin: 10px 0;"><strong>利率下行会压缩多少净息差？</strong> 我们银行2024年的净息差已经降至1.69%，如果再降20bp，净息差会跌破1.5%吗？</li>
-                    <li style="margin: 10px 0;"><strong>信贷投放节奏如何调整？</strong> 政策鼓励加大信贷投放，但利率下行，如何平衡规模增长与收益率？</li>
-                    <li style="margin: 10px 0;"><strong>中间业务能补充多少收入？</strong> 利息收入下降，财富管理、投行等中间业务需要增长多少才能弥补？</li>
-                    <li style="margin: 10px 0;"><strong>风险如何控制？</strong> 宽松环境下信贷需求回暖，但如何避免资产质量恶化？</li>
-                </ol>
+                <h4 style="color:var(--accent-color); margin-bottom:10px;">作为银行个金部负责人的核心焦虑：</h4>
+                <ul style="list-style-position: inside; padding-left: 10px;">
+                    <li style="margin:8px 0"><strong>存贷利差还能守得住吗？</strong> 2025年净息差已在1.5%徘徊，2026年还会降多少？</li>
+                    <li style="margin:8px 0"><strong>资产荒怎么破？</strong> 优质客户难找，存量房贷在置换，高收益资产在哪里？</li>
+                    <li style="margin:8px 0"><strong>考核指标怎么背？</strong> 零售转型指标压力大，但理财收益率低，如何留客？</li>
+                </ul>
             </div>
         </section>
 
         <section class="content-section fade-in">
-            <h2 class="section-title">用智能分析 Agent 深度分析</h2>
-            
-            <h3 class="subsection-title">第一步：数据调取与历史对比</h3>
-            <p>智能分析 Agent 首先自动调取了过去5年的货币政策数据和银行业经营数据，用历史数据说话。</p>
+            <h2 class="section-title">智能分析 Agent 的深度复盘</h2>
+            <p>与其在焦虑中内耗，不如让数据说话。我打开 <strong>智能分析 Agent</strong>，输入指令：<strong>"分析适度宽松货币政策下，商业银行零售业务的机会与风险"</strong>。</p>
 
+            <h3 style="margin-top:30px; color:var(--text-dark)">第一步：历史周期回溯（Wind数据自动调取）</h3>
             <table class="data-table">
                 <thead>
                     <tr>
                         <th>年份</th>
-                        <th>货币政策</th>
-                        <th>1年期LPR</th>
-                        <th>净息差</th>
-                        <th>变化</th>
+                        <th>政策基调</th>
+                        <th>净息差变化</th>
+                        <th>主要增长点</th>
                     </tr>
                 </thead>
                 <tbody>
                     <tr>
-                        <td><strong>2020年</strong></td>
-                        <td>稳健</td>
-                        <td>3.85%</td>
-                        <td>2.15%</td>
-                        <td>-</td>
+                        <td>2009年</td>
+                        <td>适度宽松</td>
+                        <td><span class="badge badge-warn">↓ 25bp</span></td>
+                        <td>对公基建 (+28%)</td>
                     </tr>
                     <tr>
-                        <td><strong>2021年</strong></td>
-                        <td>稳健</td>
-                        <td>3.85%</td>
-                        <td>2.08%</td>
-                        <td><span class="badge badge-warning">-7bp</span></td>
+                        <td>2015年</td>
+                        <td>宽松</td>
+                        <td><span class="badge badge-warn">↓ 18bp</span></td>
+                        <td>房地产/城投</td>
                     </tr>
-                    <tr>
-                        <td><strong>2022年</strong></td>
-                        <td>稳健</td>
-                        <td>3.65% <span class="badge badge-warning">↓20bp</span></td>
-                        <td>1.91%</td>
-                        <td><span class="badge badge-warning">-17bp</span></td>
-                    </tr>
-                    <tr>
-                        <td><strong>2023年</strong></td>
-                        <td>稳健</td>
-                        <td>3.45% <span class="badge badge-warning">↓20bp</span></td>
-                        <td>1.69%</td>
-                        <td><span class="badge badge-warning">-22bp</span></td>
-                    </tr>
-                    <tr style="background: #fff5e6;">
-                        <td><strong>2024年预测</strong></td>
-                        <td><span class="badge badge-primary">适度宽松</span></td>
-                        <td>3.25% <span class="badge badge-warning">↓20bp</span></td>
-                        <td>1.55%</td>
-                        <td><span class="badge badge-warning">-14bp</span></td>
+                    <tr style="background:#fffaf0">
+                        <td><strong>2026年(预测)</strong></td>
+                        <td><strong>适度宽松</strong></td>
+                        <td><span class="badge badge-warn">↓ 8-10bp</span></td>
+                        <td><strong>新消费/居民理财</strong></td>
                     </tr>
                 </tbody>
             </table>
+            <p><strong>Agent 洞察：</strong>资金流向将从"铁公基"转向"新消费"。如果你还盯着对公贷款，可能会完美错过这轮红利。</p>
 
-            <div class="highlight-box">
-                <h4>关键发现</h4>
-                <p>Agent 自动计算发现，过去4年每次LPR下调20bp，银行业净息差平均收窄15-20bp。如果2025年LPR再降20bp，净息差大概率跌破1.5%，触及历史低位。</p>
-            </div>
-
-            <h3 class="subsection-title">第二步：政策文件与研报汇总</h3>
-            <p>智能分析 Agent 同步抓取了央行表态、监管文件和10份头部券商研报，自动提取与银行从业者直接相关的内容。</p>
-
-            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px; margin: 25px 0;">
-                <div style="background: #f0f7ff; padding: 20px; border-radius: 10px; border-left: 4px solid var(--primary-color);">
-                    <h4 style="color: var(--primary-color); margin-bottom: 15px;">央行表态</h4>
-                    <ul style="list-style: none; padding: 0;">
-                        <li style="margin: 8px 0;">✓ 将适时降准降息</li>
-                        <li style="margin: 8px 0;">✓ 保持流动性合理充裕</li>
-                        <li style="margin: 8px 0;">✓ 引导降低实际贷款利率</li>
-                    </ul>
+            <h3 style="margin-top:30px; color:var(--text-dark)">第二步：政策语义深度拆解</h3>
+            <div style="display:grid; grid-template-columns:1fr 1fr 1fr; gap:15px; margin-top:15px;">
+                <div
+                    style="background:#f0f9ff; padding:15px; border-radius:10px; border-top:4px solid var(--primary-color)">
+                    <h4>汇率稳定</h4>
+                    <p style="font-size:0.9em; margin-top:5px">解读：宽松有底线，不会大水漫灌，资金成本下降空间受限。</p>
                 </div>
-                <div style="background: #f0fff4; padding: 20px; border-radius: 10px; border-left: 4px solid var(--success-color);">
-                    <h4 style="color: var(--success-color); margin-bottom: 15px;">券商一致预期</h4>
-                    <ul style="list-style: none; padding: 0;">
-                        <li style="margin: 8px 0;">✓ 降准2次（各50bp）</li>
-                        <li style="margin: 8px 0;">✓ 降息1次（10-15bp）</li>
-                        <li style="margin: 8px 0;">✓ 净息差降至1.50-1.55%</li>
-                    </ul>
+                <div
+                    style="background:#fffcf0; padding:15px; border-radius:10px; border-top:4px solid var(--warning-color)">
+                    <h4>扩大内需</h4>
+                    <p style="font-size:0.9em; margin-top:5px">解读：消费金融、汽车金融是合规资产重点。</p>
                 </div>
-            </div>
-
-            <h3 class="subsection-title">第三步：影响测算与情景分析</h3>
-            <p>基于上述数据，智能分析 Agent 自动进行了情景分析，测算不同情况下对银行经营的具体影响。</p>
-
-            <div class="scenario-card">
-                <h4>📊 情景1：降息20bp + 信贷增速10%（保守情景）</h4>
-                <ul>
-                    <li>净息差影响：<code>-0.15个百分点</code>（从1.69%降至1.54%）</li>
-                    <li>利息收入影响：<code>-8%</code>（净息差收窄抵消规模增长）</li>
-                    <li>中间业务补充需求：需增长<code>+15%</code>才能保持总收入持平</li>
-                    <li>对从业者影响：<span class="badge badge-warning">业绩压力大，KPI完成难度高</span></li>
-                </ul>
-            </div>
-
-            <div class="scenario-card">
-                <h4>📈 情景2：降息20bp + 信贷增速15%（中性情景）</h4>
-                <ul>
-                    <li>净息差影响：<code>-0.15个百分点</code></li>
-                    <li>利息收入影响：<code>-3%</code>（规模增长部分抵消）</li>
-                    <li>中间业务补充需求：需增长<code>+8%</code></li>
-                    <li>对从业者影响：<span class="badge badge-success">业绩压力可控，需加大中间业务拓展</span></li>
-                </ul>
-            </div>
-
-            <div class="scenario-card">
-                <h4>🚀 情景3：降息10bp + 信贷增速12%（乐观情景）</h4>
-                <ul>
-                    <li>净息差影响：<code>-0.08个百分点</code></li>
-                    <li>利息收入影响：<code>-1%</code></li>
-                    <li>中间业务补充需求：需增长<code>+5%</code></li>
-                    <li>对从业者影响：<span class="badge badge-success">业绩压力较小，有望超额完成KPI</span></li>
-                </ul>
-            </div>
-
-            <h3 class="subsection-title">第四步：给出可执行建议</h3>
-            
-            <div style="margin: 30px 0;">
-                <h4 style="color: var(--primary-color); font-size: 1.3rem; margin-bottom: 20px;">⏱️ 短期策略（1-3个月）</h4>
-                <ul class="strategy-list">
-                    <li><strong>优化资产负债结构：</strong>提前锁定长期资产收益，控制负债成本</li>
-                    <li><strong>加大中间业务拓展：</strong>重点发展财富管理、投行业务</li>
-                    <li><strong>调整信贷投放节奏：</strong>抓住基建、消费、科技创新等政策支持领域</li>
-                </ul>
-
-                <h4 style="color: var(--primary-color); font-size: 1.3rem; margin: 30px 0 20px 0;">📅 中期策略（3-6个月）</h4>
-                <ul class="strategy-list">
-                    <li><strong>提升定价能力：</strong>差异化竞争，基于客户风险定价</li>
-                    <li><strong>加强风险管理：</strong>严控资产质量，防范信用风险</li>
-                    <li><strong>数字化转型：</strong>降低运营成本，提升效率</li>
-                </ul>
-
-                <h4 style="color: var(--primary-color); font-size: 1.3rem; margin: 30px 0 20px 0;">🎯 长期策略（6-12个月）</h4>
-                <ul class="strategy-list">
-                    <li><strong>拓展新业务领域：</strong>绿色金融、普惠金融、跨境金融</li>
-                    <li><strong>提升客户粘性：</strong>从单一产品销售转向综合金融服务</li>
-                    <li><strong>优化组织架构：</strong>加强前中后台协同，提升团队专业能力</li>
-                </ul>
+                <div
+                    style="background:#f0fff4; padding:15px; border-radius:10px; border-top:4px solid var(--success-color)">
+                    <h4>居民增收</h4>
+                    <p style="font-size:0.9em; margin-top:5px">解读：工资+财产性收入双增，财富管理是最大变量。</p>
+                </div>
             </div>
         </section>
 
         <section class="content-section fade-in">
-            <h2 class="section-title">Agent 如何帮助金融从业者</h2>
-            
-            <div class="highlight-box">
-                <h4>核心问题的答案</h4>
-                <p>通过智能分析 Agent 的分析，我们得到了明确答案：</p>
-                <ul style="padding-left: 20px; margin-top: 15px;">
-                    <li style="margin: 10px 0;"><strong>净息差压力确实很大：</strong>预计将从1.69%降至1.50-1.55%，跌破历史低位</li>
-                    <li style="margin: 10px 0;"><strong>利息收入可能下降3-8%：</strong>取决于信贷规模增速</li>
-                    <li style="margin: 10px 0;"><strong>中间业务需增长8-15%：</strong>才能弥补利息收入下降</li>
-                    <li style="margin: 10px 0;"><strong>风险防控仍是底线：</strong>宽松环境下需警惕资产质量恶化</li>
-                </ul>
-            </div>
-
-            <h3 class="subsection-title">Agent 的价值体现</h3>
-            <div class="comparison-grid">
-                <div class="comparison-card traditional">
-                    <h4>❌ 传统方式</h4>
-                    <ul style="list-style: none; padding: 0;">
-                        <li style="margin: 12px 0;">⏰ 时间成本：5-8小时</li>
-                        <li style="margin: 12px 0;">📊 数据来源：手动查询多个数据库</li>
-                        <li style="margin: 12px 0;">📄 研报阅读：需阅读几十份研报</li>
-                        <li style="margin: 12px 0;">🧮 影响测算：需手动建模，容易出错</li>
-                        <li style="margin: 12px 0;">💡 建议输出：基于经验判断，主观性强</li>
-                    </ul>
+            <h2 class="section-title">破局：从"放贷人"到"财富管家"</h2>
+            <div style="margin-top:20px">
+                <div style="margin-bottom:20px; padding-left:15px; border-left:4px solid var(--accent-color)">
+                    <h3 style="color:var(--primary-color)">1. 抢占"新消费"资产高地</h3>
+                    <p>利用 Agent 筛选"居民增收"受益行业（旅游、养老），定向投放消费信贷白名单。</p>
                 </div>
-                <div class="comparison-card agent">
-                    <h4>✅ Agent 方式</h4>
-                    <ul style="list-style: none; padding: 0;">
-                        <li style="margin: 12px 0;">⚡ 时间成本：10分钟</li>
-                        <li style="margin: 12px 0;">🔄 数据来源：自动调取所有相关数据</li>
-                        <li style="margin: 12px 0;">📑 研报阅读：自动汇总10+份研报核心观点</li>
-                        <li style="margin: 12px 0;">🎯 影响测算：自动测算多种情景</li>
-                        <li style="margin: 12px 0;">🚀 建议输出：基于数据驱动，逻辑清晰</li>
-                    </ul>
+                <div style="margin-bottom:20px; padding-left:15px; border-left:4px solid var(--accent-color)">
+                    <h3 style="color:var(--primary-color)">2. 守住"存款搬家"的流量</h3>
+                    <p>股市债市有机会，大力推行"固收+"承接储蓄溢出。告诉客户："适度宽松时代，存钱不如配置核心资产。"</p>
+                </div>
+                <div style="margin-bottom:20px; padding-left:15px; border-left:4px solid var(--accent-color)">
+                    <h3 style="color:var(--primary-color)">3. 用科技降低运营成本</h3>
+                    <p>全面部署智能分析 Agent，让它帮客户经理写周报、查数据、做资产配置方案。</p>
                 </div>
             </div>
-
-            <p style="margin-top: 30px; font-size: 1.1rem; line-height: 1.9;">对于银行从业者来说，智能分析 Agent 不仅节省了大量时间，更重要的是提供了<strong>系统化的分析框架</strong>和<strong>数据支撑</strong>，帮助我们更快、更准确地理解政策影响，制定应对策略。</p>
         </section>
 
         <div class="cta-section fade-in">
-            <h3>立即体验智能分析 Agent</h3>
-            <p style="font-size: 1.1rem; margin-top: 15px; opacity: 0.95;">让数据为你的决策提供支撑，用专业工具应对政策变化</p>
-            <a href="#" class="cta-button">开始使用 →</a>
+            <h3>2026，让数据成为你的护城河</h3>
+            <p style="margin-top:15px">智能分析 Agent，不仅帮你读懂政策，更帮你算清账、指明路。</p>
+            <a href="#" class="cta-button">立即体验 Agent</a>
         </div>
 
-        <footer style="text-align: center; padding: 40px 20px; color: var(--text-light); font-size: 0.9rem;">
-            <p>Agent名称：智能分析 Agent | 热点来源：新浪财经 - 中央经济工作会议</p>
-            <p style="margin-top: 10px;">分析时间：2024-12-14 21:12:00 | 文章字数：约 1,620 字</p>
+        <footer style="text-align: center; padding: 40px; color: #888; font-size: 0.9em;">
+            <p>Agent名称：智能分析 Agent | 数据来源：新浪财经 / Wind</p>
+            <p>生成时间：2025-12-14 21:55</p>
         </footer>
     </div>
-
     <script>
-        // 添加滚动动画
-        const observerOptions = {
-            threshold: 0.1,
-            rootMargin: '0px 0px -50px 0px'
-        };
-
         const observer = new IntersectionObserver((entries) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    entry.target.style.opacity = '1';
-                    entry.target.style.transform = 'translateY(0)';
-                }
-            });
-        }, observerOptions);
-
-        document.querySelectorAll('.content-section').forEach(section => {
-            section.style.opacity = '0';
-            section.style.transform = 'translateY(30px)';
-            section.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
-            observer.observe(section);
+            entries.forEach(e => { if (e.isIntersecting) { e.target.style.opacity = 1; e.target.style.transform = 'translateY(0)'; } });
+        });
+        document.querySelectorAll('.fade-in').forEach(el => {
+            el.style.opacity = 0; el.style.transform = 'translateY(20px)'; el.style.transition = 'all 0.6s ease'; observer.observe(el);
         });
     </script>
 </body>
+
 </html>
