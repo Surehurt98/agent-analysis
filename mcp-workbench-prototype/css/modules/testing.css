@@ -6,40 +6,51 @@
     flex-direction: column;
 }
 
-/* Sub Tabs */
+/* Sub Tabs - Smaller, underline style for clear hierarchy */
 .sub-tabs {
     display: flex;
-    gap: 4px;
-    padding: 0 0 var(--space-md) 0;
-    border-bottom: 1px solid var(--color-border);
-    margin-bottom: var(--space-md);
+    gap: 0;
+    padding: 0;
+    border-bottom: 2px solid var(--color-border);
+    margin-bottom: var(--space-lg);
+    background: transparent;
 }
 
 .sub-tab {
     display: flex;
     align-items: center;
-    gap: 6px;
-    padding: 8px 16px;
-    border-radius: var(--radius-sm);
-    font-size: 0.9rem;
+    gap: 4px;
+    padding: 10px 16px;
+    border-radius: 0;
+    font-size: 0.85rem;
     font-weight: 500;
-    color: var(--text-secondary);
+    color: var(--text-tertiary);
     background: transparent;
     transition: var(--transition-fast);
+    border-bottom: 2px solid transparent;
+    margin-bottom: -2px;
+    position: relative;
 }
 
 .sub-tab:hover {
-    background: var(--color-bg-surface-hover);
+    background: transparent;
     color: var(--text-primary);
 }
 
 .sub-tab.active {
-    background: var(--color-primary-light);
+    background: transparent;
     color: var(--color-primary);
+    border-bottom-color: var(--color-primary);
+    font-weight: 600;
 }
 
 .sub-tab .material-icons-round {
-    font-size: 18px;
+    font-size: 16px;
+    opacity: 0.8;
+}
+
+.sub-tab.active .material-icons-round {
+    opacity: 1;
 }
 
 .sub-panel {
