@@ -1,0 +1,465 @@
+/* css/modules/testing.css - No fixed heights for page scroll */
+
+/* Module Container - Normal flow */
+.module-container {
+    display: flex;
+    flex-direction: column;
+}
+
+/* Sub Tabs */
+.sub-tabs {
+    display: flex;
+    gap: 4px;
+    padding: 0 0 var(--space-md) 0;
+    border-bottom: 1px solid var(--color-border);
+    margin-bottom: var(--space-md);
+}
+
+.sub-tab {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 8px 16px;
+    border-radius: var(--radius-sm);
+    font-size: 0.9rem;
+    font-weight: 500;
+    color: var(--text-secondary);
+    background: transparent;
+    transition: var(--transition-fast);
+}
+
+.sub-tab:hover {
+    background: var(--color-bg-surface-hover);
+    color: var(--text-primary);
+}
+
+.sub-tab.active {
+    background: var(--color-primary-light);
+    color: var(--color-primary);
+}
+
+.sub-tab .material-icons-round {
+    font-size: 18px;
+}
+
+.sub-panel {
+    display: block;
+}
+
+/* Cases Panel with Detail Card */
+.cases-panel.with-detail {
+    display: grid;
+    grid-template-columns: 1fr 320px;
+    gap: var(--space-md);
+}
+
+.cases-list {
+    display: flex;
+    flex-direction: column;
+}
+
+/* Selectable Table Rows */
+.data-table.selectable tbody tr {
+    cursor: pointer;
+    transition: var(--transition-fast);
+}
+
+.data-table.selectable tbody tr:hover {
+    background: var(--color-bg-surface-hover);
+}
+
+.data-table.selectable tbody tr.selected {
+    background: var(--color-primary-light);
+}
+
+/* Case Detail Card */
+.case-detail {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-md);
+    position: sticky;
+    top: var(--space-md);
+    align-self: flex-start;
+}
+
+.case-detail h4 {
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: var(--text-primary);
+    padding-bottom: var(--space-sm);
+    border-bottom: 1px solid var(--color-border);
+}
+
+.detail-content {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-md);
+    flex: 1;
+}
+
+.detail-item {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.detail-item label {
+    font-size: 0.75rem;
+    color: var(--text-tertiary);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    font-weight: 500;
+}
+
+.detail-item .val {
+    font-size: 0.9rem;
+    color: var(--text-primary);
+}
+
+.detail-actions {
+    display: flex;
+    gap: var(--space-sm);
+    padding-top: var(--space-md);
+    border-top: 1px solid var(--color-border);
+}
+
+.detail-actions .btn {
+    flex: 1;
+    justify-content: center;
+}
+
+/* Toolbar */
+.toolbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: var(--space-md);
+}
+
+.toolbar-left,
+.toolbar-right {
+    display: flex;
+    gap: var(--space-sm);
+    align-items: center;
+}
+
+/* Debug Panel */
+.debug-panel,
+.affinity-debug {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: var(--space-md);
+}
+
+.debug-input,
+.debug-output,
+.prompt-input,
+.affinity-result {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-md);
+}
+
+.debug-input h4,
+.debug-output h4,
+.prompt-input h4,
+.affinity-result h4 {
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: var(--text-secondary);
+}
+
+.editor-wrapper {
+    background: #1e1e2e;
+    border-radius: var(--radius-sm);
+    overflow: auto;
+    min-height: 200px;
+    max-height: 300px;
+}
+
+.editor-wrapper.output {
+    background: var(--color-bg-app);
+    border: 1px solid var(--color-border);
+}
+
+.code-output {
+    font-family: var(--font-mono);
+    font-size: 0.85rem;
+    color: var(--color-success);
+    padding: var(--space-md);
+    margin: 0;
+}
+
+.debug-actions,
+.prompt-actions {
+    display: flex;
+    gap: var(--space-sm);
+    justify-content: flex-end;
+}
+
+.output-tabs {
+    display: flex;
+    gap: 4px;
+}
+
+.output-tab {
+    padding: 4px 12px;
+    font-size: 0.8rem;
+    border-radius: 4px;
+    color: var(--text-secondary);
+}
+
+.output-tab.active {
+    background: var(--color-bg-surface-active);
+    color: var(--text-primary);
+}
+
+/* Prompt Textarea */
+.prompt-textarea {
+    min-height: 120px;
+    resize: vertical;
+    font-size: 1rem;
+    padding: var(--space-md);
+}
+
+/* Result Grid */
+.result-grid {
+    display: grid;
+    gap: var(--space-md);
+}
+
+.result-item {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.result-item label {
+    font-size: 0.8rem;
+    color: var(--text-tertiary);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.result-value {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 0.95rem;
+}
+
+.result-value.hit {
+    color: var(--color-success);
+}
+
+.result-code {
+    font-family: var(--font-mono);
+    font-size: 0.85rem;
+    background: var(--color-bg-app);
+    padding: 8px 12px;
+    border-radius: var(--radius-sm);
+    margin: 0;
+}
+
+.mini-progress {
+    width: 80px;
+    height: 6px;
+    background: var(--color-bg-app);
+    border-radius: 3px;
+    overflow: hidden;
+}
+
+.mini-fill {
+    height: 100%;
+    background: var(--color-primary);
+}
+
+.score-num {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: var(--color-primary);
+}
+
+/* Status Chips */
+.status-chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    padding: 2px 8px;
+    border-radius: 4px;
+    font-size: 0.8rem;
+    font-weight: 500;
+}
+
+.status-chip.pass {
+    background: var(--color-success-bg);
+    color: var(--color-success);
+}
+
+.status-chip.fail {
+    background: var(--color-error-bg);
+    color: var(--color-error);
+}
+
+.status-chip .material-icons-round {
+    font-size: 14px;
+}
+
+/* Rate Chip */
+.rate-chip {
+    padding: 2px 8px;
+    border-radius: 4px;
+    font-size: 0.85rem;
+    font-weight: 600;
+}
+
+.rate-chip.good {
+    background: var(--color-success-bg);
+    color: var(--color-success);
+}
+
+.rate-chip.warn {
+    background: var(--color-warning-bg);
+    color: var(--color-warning);
+}
+
+.rate-chip.bad {
+    background: var(--color-error-bg);
+    color: var(--color-error);
+}
+
+/* Score Badge */
+.score-badge {
+    display: inline-block;
+    padding: 2px 8px;
+    border-radius: 4px;
+    font-size: 0.85rem;
+    font-weight: 700;
+}
+
+.score-badge.good {
+    background: var(--color-success-bg);
+    color: var(--color-success);
+}
+
+.score-badge.warn {
+    background: var(--color-warning-bg);
+    color: var(--color-warning);
+}
+
+.score-badge.bad {
+    background: var(--color-error-bg);
+    color: var(--color-error);
+}
+
+/* Batch Config */
+.batch-config {
+    margin-bottom: var(--space-md);
+}
+
+.config-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: var(--space-md);
+    margin-bottom: var(--space-md);
+}
+
+.batch-actions {
+    display: flex;
+    justify-content: center;
+}
+
+.btn-lg {
+    padding: 12px 24px;
+    font-size: 1rem;
+}
+
+/* Stats Preview */
+.stats-preview {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: var(--space-md);
+}
+
+.stat-card {
+    text-align: center;
+    padding: var(--space-md) !important;
+}
+
+.stat-label {
+    font-size: 0.8rem;
+    color: var(--text-tertiary);
+    margin-bottom: 8px;
+}
+
+.stat-value {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: var(--text-primary);
+}
+
+.stat-value.primary {
+    color: var(--color-primary);
+}
+
+.stat-value.success {
+    color: var(--color-success);
+}
+
+.stat-value small {
+    font-size: 0.9rem;
+    font-weight: 400;
+    color: var(--text-secondary);
+}
+
+/* Progress Area */
+.progress-area {
+    padding: var(--space-md);
+    background: var(--color-bg-surface-active);
+    border-radius: var(--radius-md);
+    margin-top: var(--space-md);
+}
+
+.progress-header {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: var(--space-sm);
+    font-weight: 500;
+}
+
+.progress-bar-container {
+    height: 8px;
+    background: var(--color-bg-app);
+    border-radius: 4px;
+    overflow: hidden;
+    margin-bottom: var(--space-sm);
+}
+
+.progress-bar-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--color-primary), var(--color-success));
+    transition: width 0.3s ease;
+}
+
+.progress-stats {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.85rem;
+    color: var(--text-secondary);
+}
+
+/* Spin Animation */
+@keyframes spin {
+    from {
+        transform: rotate(0deg);
+    }
+
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+.spin {
+    animation: spin 1s linear infinite;
+}

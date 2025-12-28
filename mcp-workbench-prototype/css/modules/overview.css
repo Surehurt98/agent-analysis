@@ -1,0 +1,368 @@
+/* css/modules/overview.css - Updated with inline basic info form */
+.overview-grid {
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+    gap: var(--space-md);
+}
+
+.overview-main {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-lg);
+}
+
+.overview-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+}
+
+/* Version Dropdown */
+.version-dropdown {
+    position: relative;
+}
+
+.version-trigger {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 8px 12px;
+    font-size: 0.85rem;
+}
+
+.version-menu {
+    position: absolute;
+    top: 100%;
+    right: 0;
+    margin-top: 4px;
+    min-width: 260px;
+    background: var(--color-bg-surface);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-md);
+    box-shadow: var(--shadow-md);
+    z-index: 100;
+    overflow: hidden;
+}
+
+.version-menu.hidden {
+    display: none;
+}
+
+.version-option {
+    display: flex;
+    align-items: center;
+    gap: var(--space-sm);
+    padding: 10px 12px;
+    cursor: pointer;
+    transition: var(--transition-fast);
+    border-bottom: 1px solid var(--color-border);
+}
+
+.version-option:last-child {
+    border-bottom: none;
+}
+
+.version-option:hover {
+    background: var(--color-bg-surface-hover);
+}
+
+.version-option.current {
+    background: var(--color-primary-light);
+}
+
+.version-info {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.version-num {
+    font-weight: 600;
+    font-family: var(--font-mono);
+    color: var(--text-primary);
+}
+
+.version-date {
+    font-size: 0.8rem;
+    color: var(--text-tertiary);
+}
+
+.version-delete {
+    width: 24px;
+    height: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 4px;
+    color: var(--text-tertiary);
+    opacity: 0;
+    transition: var(--transition-fast);
+}
+
+.version-option:hover .version-delete {
+    opacity: 1;
+}
+
+.version-delete:hover {
+    color: var(--color-error);
+    background: var(--color-error-bg);
+}
+
+.tool-identity {
+    display: flex;
+    gap: var(--space-md);
+}
+
+.tool-icon {
+    width: 64px;
+    height: 64px;
+    background: linear-gradient(135deg, var(--color-primary-light), var(--color-bg-app));
+    border-radius: var(--radius-lg);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--color-primary);
+    border: 1px solid var(--color-primary);
+}
+
+.tool-icon .material-icons-round {
+    font-size: 32px;
+}
+
+.tool-name {
+    font-size: 1.5rem;
+    font-weight: 700;
+    margin-bottom: 4px;
+    color: var(--text-primary);
+}
+
+.tool-meta {
+    display: flex;
+    align-items: center;
+    gap: var(--space-sm);
+}
+
+.version {
+    font-family: var(--font-mono);
+    color: var(--text-secondary);
+    font-size: 0.9rem;
+    background: var(--color-bg-app);
+    padding: 2px 8px;
+    border-radius: 4px;
+}
+
+.badge-lg {
+    padding: 4px 12px;
+    font-size: 0.8rem;
+}
+
+/* Basic Info Inline Form */
+.basic-info-inline {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-md);
+    padding-top: var(--space-md);
+    border-top: 1px solid var(--color-border);
+}
+
+.form-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: var(--space-md);
+}
+
+/* Status Summary Bar */
+.status-summary {
+    display: flex;
+    gap: var(--space-lg);
+    padding: var(--space-md);
+    background: var(--color-bg-app);
+    border-radius: var(--radius-md);
+    border: 1px solid var(--color-border);
+}
+
+.summary-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 0.9rem;
+    color: var(--text-secondary);
+}
+
+.summary-item .material-icons-round {
+    font-size: 18px;
+    color: var(--text-tertiary);
+}
+
+.summary-item strong {
+    color: var(--text-primary);
+}
+
+/* Right Side - Governance */
+.overview-side {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-md);
+}
+
+.section-title {
+    font-size: 0.85rem;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    color: var(--text-tertiary);
+    font-weight: 600;
+}
+
+.gov-item {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.gov-item label {
+    font-size: 0.8rem;
+    color: var(--text-tertiary);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.gov-item .val {
+    font-size: 0.9rem;
+    color: var(--text-secondary);
+}
+
+.owner-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    align-items: center;
+}
+
+.owner-chip {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 4px 10px 4px 4px;
+    background: var(--color-bg-app);
+    border-radius: 20px;
+    border: 1px solid var(--color-border);
+}
+
+.owner-chip .avatar {
+    width: 28px;
+    height: 28px;
+    min-width: 28px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.owner-info {
+    display: flex;
+    flex-direction: column;
+}
+
+.owner-name {
+    font-size: 0.85rem;
+    font-weight: 500;
+    color: var(--text-primary);
+}
+
+.owner-role {
+    font-size: 0.7rem;
+    color: var(--text-tertiary);
+}
+
+/* Editable Owner Chip */
+.owner-chip.editable {
+    position: relative;
+    padding-right: 28px;
+}
+
+.chip-remove {
+    position: absolute;
+    right: 4px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    transition: var(--transition-fast);
+    color: var(--text-tertiary);
+}
+
+.chip-remove .material-icons-round {
+    font-size: 14px;
+}
+
+.owner-chip.editable:hover .chip-remove {
+    opacity: 1;
+}
+
+.chip-remove:hover {
+    background: var(--color-error-bg);
+    color: var(--color-error);
+}
+
+.add-owner-btn {
+    width: 36px !important;
+    height: 36px !important;
+    padding: 0 !important;
+    border-radius: 50% !important;
+    border: 2px dashed var(--color-border) !important;
+    color: var(--text-tertiary) !important;
+}
+
+.add-owner-btn:hover {
+    border-color: var(--color-primary) !important;
+    color: var(--color-primary) !important;
+    background: var(--color-primary-light) !important;
+}
+
+/* Action Buttons in Governance Card */
+.gov-actions {
+    margin-top: auto;
+    padding-top: var(--space-md);
+    border-top: 1px solid var(--color-border);
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-sm);
+}
+
+.gov-actions .btn {
+    width: 100%;
+    justify-content: center;
+}
+
+.btn-danger {
+    background: transparent;
+    color: var(--color-error);
+    border: 1px solid var(--color-error);
+}
+
+.btn-danger:hover {
+    background: var(--color-error-bg);
+}
+
+/* Spin Animation */
+@keyframes spin {
+    from {
+        transform: rotate(0deg);
+    }
+
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+.spin {
+    animation: spin 1s linear infinite;
+}
