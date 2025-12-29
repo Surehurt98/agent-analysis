@@ -145,7 +145,11 @@
             <!-- Level 2 Navigation (Tabs) - No Basic Info Tab -->
             <div class="tabs-container">
                 <nav class="tabs-nav" id="main-tabs">
-                    <button class="tab-btn active" data-tab="schema">
+                    <button class="tab-btn active" data-tab="basic-info">
+                        <span class="material-icons-round">info</span>
+                        基本信息
+                    </button>
+                    <button class="tab-btn" data-tab="schema">
                         <span class="material-icons-round">data_object</span>
                         Schema 定义
                     </button>
@@ -164,7 +168,8 @@
                 </nav>
 
                 <div class="tab-content-area" id="tab-panels">
-                    <div class="tab-panel active" id="panel-schema"></div>
+                    <div class="tab-panel active" id="panel-basic-info"></div>
+                    <div class="tab-panel" id="panel-schema"></div>
                     <div class="tab-panel" id="panel-protocol"></div>
                     <div class="tab-panel" id="panel-interface-test"></div>
                     <div class="tab-panel" id="panel-affinity-test"></div>
@@ -335,6 +340,39 @@
         </div>
     </div>
 
+    <!-- AI Auto Config Modal -->
+    <div class="modal-overlay hidden" id="ai-config-modal">
+        <div class="modal" style="width:550px;">
+            <div class="modal-header">
+                <h3>AI 一键配置</h3>
+                <button class="modal-close"
+                    onclick="document.getElementById('ai-config-modal').classList.add('hidden')"><span
+                        class="material-icons-round">close</span></button>
+            </div>
+            <div class="modal-body">
+                <div class="ai-config-intro">
+                    <span class="material-icons-round"
+                        style="font-size:32px; color:var(--color-primary);">auto_awesome</span>
+                    <p>请使用自然语言描述您的 MCP 工具功能，AI 将自动生成相应的工具名称、分类和描述信息。</p>
+                </div>
+                <div class="input-group">
+                    <label class="input-label">功能描述</label>
+                    <textarea class="input-control" id="ai-config-prompt" rows="5"
+                        placeholder="例如：这是一个天气查询服务，可以查询全球主要城市的实时天气、未来7天预报，支持按城市名称搜索，返回温度、湿度、风速等信息，还能进行极端天气预警推送..."></textarea>
+                    <span class="input-hint">描述越详细，生成的配置越准确</span>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary"
+                    onclick="document.getElementById('ai-config-modal').classList.add('hidden')">取消</button>
+                <button class="btn btn-primary"
+                    onclick="alert('AI 配置生成中...（模拟）\n\n已自动填充工具名称、分类和描述字段。'); document.getElementById('ai-config-modal').classList.add('hidden');">
+                    <span class="material-icons-round">auto_fix_high</span> 生成配置
+                </button>
+            </div>
+        </div>
+    </div>
+
     <!-- All Scripts Inline -->
     <script>
         // ============ DATA ============
@@ -427,159 +465,101 @@
             const statusInfo = getStatusBadge(mcpData.status);
 
             container.innerHTML = `
-            <div class="overview-grid">
-                <!-- Left Card: Tool Info & Basic Info Form -->
-                <div class="card overview-main">
-                    <div class="overview-header">
-                        <div class="tool-identity">
-                            <div class="tool-icon"><span class="material-icons-round">cloud</span></div>
-                            <div>
-                                <h1 class="tool-name">${mcpData.nameCN || mcpData.name}</h1>
-                                <div class="tool-meta">
-                                    <span class="version">v${mcpData.version}</span>
-                                    <span class="badge badge-lg ${statusInfo.class}">${statusInfo.label}</span>
-                                </div>
+            <div class="overview-card-merged card">
+                <!-- Header Row: Icon, Name, Version, Status, Version Dropdown -->
+                <div class="overview-header-compact">
+                    <div class="tool-identity">
+                        <div class="tool-icon"><span class="material-icons-round">cloud</span></div>
+                        <div>
+                            <h1 class="tool-name">${mcpData.nameCN || mcpData.name}</h1>
+                            <div class="tool-meta">
+                                <span class="version">v${mcpData.version}</span>
+                                <span class="badge badge-lg ${statusInfo.class}">${statusInfo.label}</span>
                             </div>
                         </div>
-                        <!-- Version Dropdown -->
-                        <div class="version-dropdown" id="version-dropdown">
-                            <button class="btn btn-secondary version-trigger" id="version-trigger">
-                                <span class="material-icons-round">history</span>
-                                <span>版本: v${mcpData.version}</span>
-                                <span class="material-icons-round">expand_more</span>
-                            </button>
-                            <div class="version-menu hidden" id="version-menu">
-                                ${VERSION_HISTORY.map(v => `
-                                    <div class="version-option ${v.isCurrent ? 'current' : ''}" data-version="${v.version}">
-                                        <div class="version-info">
-                                            <span class="version-num">v${v.version}</span>
-                                            <span class="badge ${v.status === 'PUBLISHED' ? 'badge-published' : 'badge-draft'}">${v.status === 'PUBLISHED' ? '已发布' : '草稿'}</span>
-                                        </div>
-                                        <span class="version-date">${v.date}</span>
-                                        ${v.status === 'DRAFT' && !v.isCurrent ? `<button class="version-delete" data-version="${v.version}" title="删除此版本"><span class="material-icons-round">delete</span></button>` : ''}
+                    </div>
+                    <!-- Version Dropdown -->
+                    <div class="version-dropdown" id="version-dropdown">
+                        <button class="btn btn-secondary version-trigger" id="version-trigger">
+                            <span class="material-icons-round">history</span>
+                            <span>版本: v${mcpData.version}</span>
+                            <span class="material-icons-round">expand_more</span>
+                        </button>
+                        <div class="version-menu hidden" id="version-menu">
+                            ${VERSION_HISTORY.map(v => `
+                                <div class="version-option ${v.isCurrent ? 'current' : ''}" data-version="${v.version}">
+                                    <div class="version-info">
+                                        <span class="version-num">v${v.version}</span>
+                                        <span class="badge ${v.status === 'PUBLISHED' ? 'badge-published' : 'badge-draft'}">${v.status === 'PUBLISHED' ? '已发布' : '草稿'}</span>
                                     </div>
-                                `).join('')}
-                            </div>
+                                    <span class="version-date">${v.date}</span>
+                                    ${v.status === 'DRAFT' && !v.isCurrent ? `<button class="version-delete" data-version="${v.version}" title="删除此版本"><span class="material-icons-round">delete</span></button>` : ''}
+                                </div>
+                            `).join('')}
                         </div>
-                    </div>
-                    
-                    <!-- Basic Info Form (Replacing Checklist) -->
-                    <div class="basic-info-inline">
-                        <div class="form-row">
-                            <div class="input-group">
-                                <label class="input-label">工具标识 (ID)</label>
-                                <input type="text" class="input-control" value="${mcpData.id}" disabled style="background:var(--color-bg-app);">
-                            </div>
-                            <div class="input-group">
-                                <label class="input-label">MCP 分类 *</label>
-                                <select class="input-control">
-                                    <option ${mcpData.category1 === '数据查询' ? 'selected' : ''}>数据查询</option>
-                                    <option>内容生成</option>
-                                    <option>系统操作</option>
-                                    <option>通讯协作</option>
-                                    <option>开发工具</option>
-                                    <option>天气/环境</option>
-                                    <option>金融/股票</option>
-                                    <option>地图/位置</option>
-                                </select>
-                            </div>
-                        </div>
-                        <div class="form-row">
-                            <div class="input-group">
-                                <label class="input-label">工具名称 (中文) *</label>
-                                <input type="text" class="input-control" value="${mcpData.nameCN}" placeholder="请输入中文名称">
-                            </div>
-                            <div class="input-group">
-                                <label class="input-label">工具名称 (英文) *</label>
-                                <input type="text" class="input-control" value="${mcpData.nameEN}" placeholder="Enter English name">
-                            </div>
-                        </div>
-                        <div class="input-group">
-                            <label class="input-label">工具描述 (中文) *</label>
-                            <textarea class="input-control" rows="4" placeholder="请输入中文描述">${mcpData.descriptionCN}</textarea>
-                        </div>
-                        <div class="input-group">
-                            <label class="input-label">工具描述 (英文)</label>
-                            <textarea class="input-control" rows="4" placeholder="Enter English description">${mcpData.descriptionEN}</textarea>
-                        </div>
-                    </div>
-
-                    <!-- Stats Summary -->
-                    <div class="status-summary">
-                        <div class="summary-item"><span class="material-icons-round">api</span><span>总调用量: <strong>${mcpData.stats?.totalCalls?.toLocaleString() || 'N/A'}</strong></span></div>
-                        <div class="summary-item"><span class="material-icons-round">timer</span><span>平均延迟: <strong>${mcpData.stats?.avgLatency || 'N/A'}ms</strong></span></div>
-                        <div class="summary-item"><span class="material-icons-round">error_outline</span><span>错误率: <strong>${mcpData.stats?.errorRate || 'N/A'}%</strong></span></div>
                     </div>
                 </div>
                 
-                <!-- Right Card: Governance -->
-                <div class="card overview-side">
-                    <h3 class="section-title">治理信息</h3>
-                    <div class="gov-item">
-                        <label>负责人 / 协作人</label>
-                        <div class="owner-list" id="owner-list">
-                            ${mcpData.owners.map((o, idx) => `
-                                <div class="owner-chip editable" data-idx="${idx}">
-                                    <div class="avatar" style="background:${o.role === '负责人' ? 'var(--color-primary)' : 'var(--color-border-hover)'}; color:white;">${o.avatar}</div>
-                                    <div class="owner-info">
-                                        <span class="owner-name">${o.name}</span>
-                                        <span class="owner-role">${o.role}</span>
+                <!-- Governance Info (Inline Compact) -->
+                <div class="governance-inline">
+                    <div class="gov-row">
+                        <div class="gov-item-inline">
+                            <span class="gov-label">负责人/协作人</span>
+                            <div class="owner-list-inline" id="owner-list">
+                                ${mcpData.owners.map((o, idx) => `
+                                    <div class="owner-chip-compact editable" data-idx="${idx}">
+                                        <div class="avatar" style="background:${o.role === '负责人' ? 'var(--color-primary)' : 'var(--color-border-hover)'}; color:white;">${o.avatar}</div>
+                                        <span class="owner-name-compact">${o.name}</span>
+                                        <button class="chip-remove-compact" data-idx="${idx}" title="移除">
+                                            <span class="material-icons-round">close</span>
+                                        </button>
                                     </div>
-                                    <button class="chip-remove" data-idx="${idx}" title="移除">
-                                        <span class="material-icons-round">close</span>
-                                    </button>
-                                </div>
-                            `).join('')}
-                            <button class="btn btn-ghost btn-sm add-owner-btn" id="btn-add-owner" title="添加成员">
-                                <span class="material-icons-round">person_add</span>
-                            </button>
+                                `).join('')}
+                                <button class="btn btn-ghost btn-xs add-owner-btn-compact" id="btn-add-owner" title="添加成员">
+                                    <span class="material-icons-round">person_add</span>
+                                </button>
+                            </div>
+                        </div>
+                        <div class="gov-item-inline">
+                            <span class="gov-label">所属团队</span>
+                            <span class="gov-value"><span class="material-icons-round icon-sm">groups</span>${mcpData.team || '未设置'}</span>
+                        </div>
+                        <div class="gov-item-inline">
+                            <span class="gov-label">创建来源</span>
+                            <span class="gov-value"><span class="material-icons-round icon-sm">source</span>${mcpData.source || '手动创建'}</span>
                         </div>
                     </div>
-                    <div class="gov-item">
-                        <label>所属团队</label>
-                        <div class="val" style="display:flex; align-items:center; gap:6px;">
-                            <span class="material-icons-round" style="font-size:16px;">groups</span>
-                            ${mcpData.team || '未设置'}
+                    <div class="gov-row">
+                        <div class="gov-item-inline">
+                            <span class="gov-label">可见性</span>
+                            <span class="gov-value"><span class="material-icons-round icon-sm">lock</span>私有 (仅团队可见)</span>
+                        </div>
+                        <div class="gov-item-inline">
+                            <span class="gov-label">创建信息</span>
+                            <span class="gov-value">${mcpData.createdBy} 于 ${new Date(mcpData.createdAt).toLocaleDateString('zh-CN')}</span>
+                        </div>
+                        <div class="gov-item-inline">
+                            <span class="gov-label">最后更新</span>
+                            <span class="gov-value">${new Date(mcpData.lastUpdated).toLocaleString('zh-CN')}</span>
                         </div>
                     </div>
-                    <div class="gov-item">
-                        <label>创建来源</label>
-                        <div class="val" style="display:flex; align-items:center; gap:6px;">
-                            <span class="material-icons-round" style="font-size:16px;">source</span>
-                            ${mcpData.source || '手动创建'}
-                        </div>
-                    </div>
-                    <div class="gov-item"><label>可见性</label><div class="val" style="display:flex; align-items:center; gap:6px;"><span class="material-icons-round" style="font-size:16px;">lock</span>私有 (仅团队可见)</div></div>
-                    <div class="gov-item"><label>创建信息</label><div class="val">${mcpData.createdBy} 于 ${new Date(mcpData.createdAt).toLocaleDateString('zh-CN')}</div></div>
-                    <div class="gov-item"><label>最后更新</label><div class="val">${new Date(mcpData.lastUpdated).toLocaleString('zh-CN')}</div></div>
-                    
-                    <!-- Action Buttons -->
-                    <div class="gov-actions">
-                        <button class="btn btn-secondary" id="btn-save-draft"><span class="material-icons-round">save</span> 保存草稿</button>
-                        <button class="btn btn-secondary" id="btn-validate"><span class="material-icons-round">fact_check</span> 发起校验</button>
-                        <button class="btn btn-primary" id="btn-publish"><span class="material-icons-round">publish</span> 发布</button>
-                        <button class="btn btn-danger" id="btn-delete"><span class="material-icons-round">delete</span> 删除工具</button>
-                    </div>
+                </div>
+
+                <!-- Stats Summary -->
+                <div class="status-summary-compact">
+                    <div class="summary-item"><span class="material-icons-round">api</span><span>总调用量: <strong>${mcpData.stats?.totalCalls?.toLocaleString() || 'N/A'}</strong></span></div>
+                    <div class="summary-item"><span class="material-icons-round">timer</span><span>平均延迟: <strong>${mcpData.stats?.avgLatency || 'N/A'}ms</strong></span></div>
+                    <div class="summary-item"><span class="material-icons-round">error_outline</span><span>错误率: <strong>${mcpData.stats?.errorRate || 'N/A'}%</strong></span></div>
+                </div>
+                
+                <!-- Action Buttons - Bottom Right -->
+                <div class="card-actions-row">
+                    <button class="btn btn-secondary" id="btn-save-draft"><span class="material-icons-round">save</span> 暂存</button>
+                    <button class="btn btn-danger" id="btn-delete"><span class="material-icons-round">delete</span> 删除</button>
+                    <button class="btn btn-primary" id="btn-publish"><span class="material-icons-round">publish</span> 发布</button>
                 </div>
             </div>
         `;
-
-            // Bind Actions
-            const validateBtn = container.querySelector('#btn-validate');
-            if (validateBtn) {
-                validateBtn.addEventListener('click', () => {
-                    validateBtn.innerHTML = '<span class="material-icons-round spin">sync</span> 校验中...';
-                    validateBtn.disabled = true;
-                    setTimeout(() => {
-                        appState.mcp.status = 'VALIDATING';
-                        renderOverview(container, appState.mcp);
-                        setTimeout(() => {
-                            appState.mcp.status = 'READY';
-                            renderOverview(container, appState.mcp);
-                        }, 3000);
-                    }, 800);
-                });
-            }
 
             // Publish Button - Show Modal
             const publishBtn = container.querySelector('#btn-publish');
@@ -603,14 +583,14 @@
                     setTimeout(() => {
                         saveBtn.innerHTML = '<span class="material-icons-round">check</span> 已保存';
                         setTimeout(() => {
-                            saveBtn.innerHTML = '<span class="material-icons-round">save</span> 保存草稿';
+                            saveBtn.innerHTML = '<span class="material-icons-round">save</span> 暂存';
                         }, 2000);
                     }, 500);
                 });
             }
 
             // Owner management - Remove
-            container.querySelectorAll('.chip-remove').forEach(btn => {
+            container.querySelectorAll('.chip-remove-compact').forEach(btn => {
                 btn.addEventListener('click', (e) => {
                     e.stopPropagation();
                     const idx = parseInt(btn.dataset.idx);
@@ -693,6 +673,113 @@
                 });
             }
         }
+
+        // ============ BASIC INFO MODULE ============
+        function renderBasicInfo(container, mcpData) {
+            container.innerHTML = `
+            <div class="basic-info-layout">
+                <!-- Left Card: Basic Info Form -->
+                <div class="card editor-card">
+                    <div class="card-header">
+                        <h3>MCP 基本信息配置</h3>
+                        <div class="actions">
+                            <button class="btn btn-secondary btn-sm" id="btn-ai-auto-config">
+                                <span class="material-icons-round">auto_awesome</span> AI 一键配置
+                            </button>
+                        </div>
+                    </div>
+                    <div class="basic-info-form">
+                        <div class="form-row">
+                            <div class="input-group">
+                                <label class="input-label">工具标识 (ID)</label>
+                                <input type="text" class="input-control" value="${mcpData.id}" disabled style="background:var(--color-bg-app);">
+                                <span class="input-hint">系统自动生成，不可修改</span>
+                            </div>
+                            <div class="input-group">
+                                <label class="input-label">MCP 分类 *</label>
+                                <select class="input-control" id="basic-info-category">
+                                    <option ${mcpData.category1 === '数据查询' ? 'selected' : ''}>数据查询</option>
+                                    <option ${mcpData.category1 === '内容生成' ? 'selected' : ''}>内容生成</option>
+                                    <option ${mcpData.category1 === '系统操作' ? 'selected' : ''}>系统操作</option>
+                                    <option ${mcpData.category1 === '通讯协作' ? 'selected' : ''}>通讯协作</option>
+                                    <option ${mcpData.category1 === '开发工具' ? 'selected' : ''}>开发工具</option>
+                                    <option ${mcpData.category1 === '天气/环境' ? 'selected' : ''}>天气/环境</option>
+                                    <option ${mcpData.category1 === '金融/股票' ? 'selected' : ''}>金融/股票</option>
+                                    <option ${mcpData.category1 === '地图/位置' ? 'selected' : ''}>地图/位置</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="input-group">
+                                <label class="input-label">工具名称 (中文) *</label>
+                                <input type="text" class="input-control" id="basic-info-name-cn" value="${mcpData.nameCN}" placeholder="请输入中文名称">
+                            </div>
+                            <div class="input-group">
+                                <label class="input-label">工具名称 (英文) *</label>
+                                <input type="text" class="input-control" id="basic-info-name-en" value="${mcpData.nameEN}" placeholder="Enter English name">
+                            </div>
+                        </div>
+                        <div class="input-group">
+                            <label class="input-label">工具描述 (中文) *</label>
+                            <textarea class="input-control" id="basic-info-desc-cn" rows="3" placeholder="请输入中文描述">${mcpData.descriptionCN}</textarea>
+                            <span class="input-hint">建议 50-200 字，简明描述工具的功能和适用场景</span>
+                        </div>
+                        <div class="input-group">
+                            <label class="input-label">工具描述 (英文)</label>
+                            <textarea class="input-control" id="basic-info-desc-en" rows="3" placeholder="Enter English description">${mcpData.descriptionEN}</textarea>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Right Card: AI Consistency Validation -->
+                <div class="validation-panel card">
+                    <div class="panel-header"><h4>AI 一致性校验</h4><span class="badge badge-ready">PASS</span></div>
+                    <div class="validation-content">
+                        <div class="validation-item pass">
+                            <span class="material-icons-round">check_circle</span>
+                            <div class="validation-info">
+                                <div class="validation-label">中英文名称一致性</div>
+                                <div class="validation-detail">中英文名称语义对应正确</div>
+                            </div>
+                        </div>
+                        <div class="validation-item pass">
+                            <span class="material-icons-round">check_circle</span>
+                            <div class="validation-info">
+                                <div class="validation-label">描述完整性</div>
+                                <div class="validation-detail">功能描述清晰，包含核心能力说明</div>
+                            </div>
+                        </div>
+                        <div class="validation-item warn">
+                            <span class="material-icons-round">warning</span>
+                            <div class="validation-info">
+                                <div class="validation-label">分类准确性</div>
+                                <div class="validation-detail">建议同时归类到"天气/环境"分类</div>
+                            </div>
+                        </div>
+                        <div class="validation-item pass">
+                            <span class="material-icons-round">check_circle</span>
+                            <div class="validation-info">
+                                <div class="validation-label">Schema 匹配度</div>
+                                <div class="validation-detail">描述与 Schema 定义功能匹配</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="panel-actions">
+                        <button class="btn btn-primary"><span class="material-icons-round">refresh</span> 重新校验</button>
+                    </div>
+                </div>
+            </div>
+            `;
+
+            // AI Auto Config Modal Trigger
+            const aiConfigBtn = container.querySelector('#btn-ai-auto-config');
+            if (aiConfigBtn) {
+                aiConfigBtn.addEventListener('click', () => {
+                    document.getElementById('ai-config-modal').classList.remove('hidden');
+                });
+            }
+        }
+
 
         // ============ PUBLISH MODAL ============
         function showPublishModal() {
@@ -796,7 +883,6 @@
                         <p>Schema 校验通过，符合发布标准。</p>
                     </div>
                     <div class="panel-actions">
-                        <button class="btn btn-secondary"><span class="material-icons-round">save</span> 保存</button>
                         <button class="btn btn-primary"><span class="material-icons-round">refresh</span> 重新校验</button>
                     </div>
                 </div>
@@ -878,367 +964,96 @@ Content-Type: application/json</pre>
 
         // ============ INTERFACE TEST MODULE ============
         function renderInterfaceTest(container) {
-            let currentSubTab = 'debug';
+            let currentSubTab = 'cases';
             let cases = [...INTERFACE_TEST_CASES];
 
             const render = () => {
                 let panelContent = '';
-                if (currentSubTab === 'debug') {
+                if (currentSubTab === 'cases') {
+                    const selectedCase = cases[0];
                     panelContent = `
-                    <div class="debug-panel">
-                        <div class="debug-input card">
-                            <h4>请求参数 (MCP Input)</h4>
-                            <div class="editor-wrapper">
-<pre class="code-editor" contenteditable="true">{
-  "city": "北京",
-  "units": "metric"
-}</pre>
-                            </div>
-                            <div class="debug-actions">
-                                <select class="input-control" style="width:120px;"><option>Test 环境</option><option>Prod 环境</option></select>
-                                <button class="btn btn-primary"><span class="material-icons-round">send</span> 发送请求</button>
-                            </div>
-                        </div>
-                        <div class="debug-output card">
-                            <h4>响应结果 (MCP Output)</h4>
-                            <div class="editor-wrapper output">
-<pre class="code-output">{
-  "temperature": 22,
-  "conditions": "晴",
-  "humidity": 45
-}
-
-// 耗时: 98ms | 状态: 200 OK</pre>
-                            </div>
-                        </div>
-                    </div>
-                `;
-                } else if (currentSubTab === 'cases') {
-                    const selectedCase = cases[0]; // Default to first case
-                    panelContent = `
-                    <div class="cases-panel with-detail">
-                        <div class="cases-list">
-                            <div class="toolbar">
-                                <div class="toolbar-left">
-                                    <input type="text" class="input-control" placeholder="搜索用例..." style="width:160px;">
-                                    <select class="input-control" style="width:100px;"><option value="">所有分类</option><option>功能测试</option><option>异常测试</option><option>安全测试</option></select>
-                                    <select class="input-control" style="width:100px;"><option value="">所有测试集</option><option>冒烟测试</option><option>边界测试</option><option>安全测试</option><option>国际化测试</option></select>
-                                    <select class="input-control" style="width:90px;"><option value="">所有环境</option><option>test</option><option>prod</option></select>
-                                    <select class="input-control" style="width:90px;"><option value="">所有结果</option><option>PASS</option><option>FAIL</option></select>
+                    <div class="merged-test-panel">
+                        <div class="debug-section card">
+                            <div class="debug-header"><h4><span class="material-icons-round">bug_report</span> 单次调试</h4><button class="btn btn-secondary btn-sm" id="btn-save-as-case"><span class="material-icons-round">save</span> 保存为用例</button></div>
+                            <div class="debug-row">
+                                <div class="debug-input-compact">
+                                    <div class="editor-wrapper"><pre class="code-editor" contenteditable="true">{ "city": "北京", "units": "metric" }</pre></div>
+                                    <div class="debug-actions-inline"><select class="input-control" style="width:100px;"><option>Test</option><option>Prod</option></select><button class="btn btn-primary"><span class="material-icons-round">send</span> 发送</button></div>
                                 </div>
-                                <div class="toolbar-right">
-                                    <button class="btn btn-secondary" title="批量导入"><span class="material-icons-round">upload_file</span> 导入</button>
-                                    <button class="btn btn-secondary" title="批量导出"><span class="material-icons-round">download</span> 导出</button>
-                                    <button class="btn btn-primary" id="btn-add-interface-case"><span class="material-icons-round">add</span> 新增用例</button>
-                                </div>
-                            </div>
-                            <div class="card" style="padding:0; overflow:hidden;">
-                                <table class="data-table selectable" id="interface-cases-table">
-                                    <thead><tr><th style="width:40px;"><input type="checkbox"></th><th>ID</th><th>用例名称</th><th>分类</th><th>结果</th><th>耗时</th></tr></thead>
-                                    <tbody>
-                                        ${cases.map((c, idx) => `
-                                            <tr class="case-row ${idx === 0 ? 'selected' : ''}" data-idx="${idx}">
-                                                <td><input type="checkbox"></td>
-                                                <td><code>${c.id}</code></td>
-                                                <td style="font-weight:500;">${c.name}</td>
-                                                <td><span class="badge badge-draft">${c.category}</span></td>
-                                                <td><span class="status-chip ${c.status === 'PASS' ? 'pass' : 'fail'}"><span class="material-icons-round">${c.status === 'PASS' ? 'check_circle' : 'cancel'}</span>${c.status === 'PASS' ? '通过' : '失败'}</span></td>
-                                                <td><code>${c.latency}ms</code></td>
-                                            </tr>
-                                        `).join('')}
-                                    </tbody>
-                                </table>
+                                <div class="debug-output-compact"><pre class="code-output">{ "temperature": 22, "conditions": "晴" }
+// 98ms | 200 OK</pre></div>
                             </div>
                         </div>
-                        <div class="case-detail card" id="interface-case-detail">
-                            <h4>用例详情</h4>
-                            <div class="detail-content">
-                                <div class="detail-item"><label>用例名称</label><div class="val">${selectedCase.name}</div></div>
-                                <div class="detail-item"><label>用例分类</label><div class="val"><span class="badge badge-draft">${selectedCase.category}</span></div></div>
-                                <div class="detail-item"><label>所属测试集</label><div class="val">${selectedCase.testSuite}</div></div>
-                                <div class="detail-item"><label>预期结果</label><div class="val">${selectedCase.expectedResult}</div></div>
-                                <div class="detail-item"><label>执行环境</label><div class="val">${selectedCase.env}</div></div>
-                                <div class="detail-item"><label>最近执行</label><div class="val">${selectedCase.lastRun}</div></div>
-                            </div>
-                            <div class="detail-actions">
-                                <button class="btn btn-secondary" id="btn-edit-interface-case"><span class="material-icons-round">edit</span> 编辑</button>
-                                <button class="btn btn-danger"><span class="material-icons-round">delete</span> 删除</button>
-                            </div>
+                        <div class="cases-section">
+                            <div class="toolbar"><div class="toolbar-left"><input type="text" class="input-control" placeholder="搜索..." style="width:120px;"><select class="input-control" style="width:90px;"><option value="">分类</option><option>功能</option><option>异常</option></select></div><div class="toolbar-right"><button class="btn btn-secondary btn-sm"><span class="material-icons-round">upload_file</span></button><button class="btn btn-primary btn-sm" id="btn-add-interface-case"><span class="material-icons-round">add</span> 新增</button></div></div>
+                            <div class="card" style="padding:0; overflow:hidden;"><table class="data-table selectable"><thead><tr><th style="width:40px;"><input type="checkbox"></th><th>ID</th><th>用例名称</th><th>分类</th><th>结果</th><th>耗时</th></tr></thead><tbody>${cases.map((c, i) => `<tr class="case-row ${i === 0 ? 'selected' : ''}"><td><input type="checkbox"></td><td><code>${c.id}</code></td><td>${c.name}</td><td><span class="badge badge-draft">${c.category}</span></td><td><span class="status-chip ${c.status === 'PASS' ? 'pass' : 'fail'}"><span class="material-icons-round">${c.status === 'PASS' ? 'check_circle' : 'cancel'}</span>${c.status === 'PASS' ? '通过' : '失败'}</span></td><td><code>${c.latency}ms</code></td></tr>`).join('')}</tbody></table></div>
                         </div>
-                    </div>
-                `;
+                    </div>`;
                 } else if (currentSubTab === 'batch') {
                     panelContent = `
-                    <div class="batch-panel">
-                        <div class="batch-config card">
-                            <h4>执行配置</h4>
-                            <div class="config-grid">
-                                <div class="input-group"><label class="input-label">选择用例集</label><select class="input-control"><option>全部用例 (${cases.length})</option><option>冒烟测试 Suite</option></select></div>
-                                <div class="input-group"><label class="input-label">执行环境</label><select class="input-control"><option>Test 环境</option><option>Prod 环境</option></select></div>
-                                <div class="input-group"><label class="input-label">执行方式</label><select class="input-control"><option>后台异步 (推荐)</option><option>前台同步</option></select></div>
-                            </div>
-                            <div class="batch-actions"><button class="btn btn-primary btn-lg" id="btn-start-batch"><span class="material-icons-round">play_arrow</span> 开始批量执行</button></div>
-                        </div>
-                        <div class="progress-area" id="batch-progress" style="display:none;">
-                            <div class="progress-header"><span class="material-icons-round spin">sync</span><span>批量执行中...</span></div>
-                            <div class="progress-bar-container"><div class="progress-bar-fill" style="width: 0%"></div></div>
-                            <div class="progress-stats"><span>0 / ${cases.length} 完成</span></div>
-                        </div>
-                    </div>
-                `;
-                } else if (currentSubTab === 'history') {
-                    panelContent = `
-                    <div class="history-panel">
-                        <div class="card" style="padding:0; overflow:hidden;">
-                            <table class="data-table">
-                                <thead><tr><th>执行 ID</th><th>触发方式</th><th>用例数</th><th>成功率</th><th>平均耗时</th><th>执行时间</th><th>执行人</th><th>操作</th></tr></thead>
-                                <tbody>
-                                    ${INTERFACE_TEST_HISTORY.map(h => `
-                                        <tr>
-                                            <td><code>${h.runId}</code></td>
-                                            <td>${h.trigger}</td>
-                                            <td>${h.caseCount}</td>
-                                            <td><span class="rate-chip ${h.successRate >= 95 ? 'good' : h.successRate >= 80 ? 'warn' : 'bad'}">${h.successRate}%</span></td>
-                                            <td><code>${h.avgLatency}ms</code></td>
-                                            <td>${h.startTime}</td>
-                                            <td>${h.user}</td>
-                                            <td><button class="btn btn-ghost btn-sm"><span class="material-icons-round">description</span></button></td>
-                                        </tr>
-                                    `).join('')}
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-                `;
+                    <div class="batch-panel-merged">
+                        <div class="batch-config card"><h4>批量执行配置</h4><div class="config-grid"><div class="input-group"><label class="input-label">用例集</label><select class="input-control"><option>全部 (${cases.length})</option></select></div><div class="input-group"><label class="input-label">环境</label><select class="input-control"><option>Test</option><option>Prod</option></select></div></div><div class="batch-actions"><button class="btn btn-primary" id="btn-start-batch"><span class="material-icons-round">play_arrow</span> 开始执行</button></div><div class="progress-area" id="batch-progress" style="display:none;"><div class="progress-header"><span class="material-icons-round spin">sync</span><span>执行中...</span></div><div class="progress-bar-container"><div class="progress-bar-fill" style="width:0%"></div></div></div></div>
+                        <div class="history-section"><h4>历史记录</h4><div class="card" style="padding:0; overflow:hidden;"><table class="data-table"><thead><tr><th>ID</th><th>触发</th><th>用例数</th><th>成功率</th><th>时间</th></tr></thead><tbody>${INTERFACE_TEST_HISTORY.map(h => `<tr><td><code>${h.runId}</code></td><td>${h.trigger}</td><td>${h.caseCount}</td><td><span class="rate-chip ${h.successRate >= 95 ? 'good' : h.successRate >= 80 ? 'warn' : 'bad'}">${h.successRate}%</span></td><td>${h.startTime}</td></tr>`).join('')}</tbody></table></div></div>
+                    </div>`;
                 }
-
-                container.innerHTML = `
-                <div class="module-container">
-                    <div class="sub-tabs">
-                        <button class="sub-tab ${currentSubTab === 'debug' ? 'active' : ''}" data-subtab="debug"><span class="material-icons-round">bug_report</span> 即时调试</button>
-                        <button class="sub-tab ${currentSubTab === 'cases' ? 'active' : ''}" data-subtab="cases"><span class="material-icons-round">list_alt</span> 测试用例</button>
-                        <button class="sub-tab ${currentSubTab === 'batch' ? 'active' : ''}" data-subtab="batch"><span class="material-icons-round">play_circle</span> 批量执行</button>
-                        <button class="sub-tab ${currentSubTab === 'history' ? 'active' : ''}" data-subtab="history"><span class="material-icons-round">history</span> 历史记录</button>
-                    </div>
-                    <div class="sub-panel">${panelContent}</div>
-                </div>
-            `;
-
-                container.querySelectorAll('.sub-tab').forEach(tab => {
-                    tab.addEventListener('click', () => { currentSubTab = tab.dataset.subtab; render(); });
-                });
-
+                container.innerHTML = `<div class="module-container"><div class="sub-tabs"><button class="sub-tab ${currentSubTab === 'cases' ? 'active' : ''}" data-subtab="cases"><span class="material-icons-round">list_alt</span> 测试用例</button><button class="sub-tab ${currentSubTab === 'batch' ? 'active' : ''}" data-subtab="batch"><span class="material-icons-round">play_circle</span> 批量测试</button></div><div class="sub-panel">${panelContent}</div></div>`;
+                container.querySelectorAll('.sub-tab').forEach(tab => tab.addEventListener('click', () => { currentSubTab = tab.dataset.subtab; render(); }));
                 const batchBtn = container.querySelector('#btn-start-batch');
-                if (batchBtn) {
-                    batchBtn.addEventListener('click', () => {
-                        const progressArea = container.querySelector('#batch-progress');
-                        const fill = progressArea.querySelector('.progress-bar-fill');
-                        progressArea.style.display = 'block';
-                        let width = 0;
-                        const interval = setInterval(() => {
-                            width += 20;
-                            fill.style.width = width + '%';
-                            if (width >= 100) {
-                                clearInterval(interval);
-                                setTimeout(() => { alert('批量执行完成！成功率: 86.7%'); currentSubTab = 'history'; render(); }, 500);
-                            }
-                        }, 300);
-                    });
-                }
-
-                // Interface Test Modal Triggers
-                const addInterfaceCaseBtn = container.querySelector('#btn-add-interface-case');
-                if (addInterfaceCaseBtn) {
-                    addInterfaceCaseBtn.addEventListener('click', () => {
-                        document.getElementById('interface-modal-title').textContent = '新增接口测试用例';
-                        document.getElementById('if-case-name').value = '';
-                        document.getElementById('if-case-expected').value = '';
-                        document.getElementById('if-case-params').value = '';
-                        document.getElementById('interface-case-modal').classList.remove('hidden');
-                    });
-                }
-
-                const editInterfaceCaseBtn = container.querySelector('#btn-edit-interface-case');
-                if (editInterfaceCaseBtn) {
-                    editInterfaceCaseBtn.addEventListener('click', () => {
-                        const selectedCase = cases[0]; // Use first case as example
-                        document.getElementById('interface-modal-title').textContent = '编辑接口测试用例';
-                        document.getElementById('if-case-name').value = selectedCase.name;
-                        document.getElementById('if-case-expected').value = selectedCase.expectedResult;
-                        document.getElementById('if-case-params').value = '{"city": "北京"}';
-                        document.getElementById('interface-case-modal').classList.remove('hidden');
-                    });
-                }
+                if (batchBtn) { batchBtn.addEventListener('click', () => { const p = container.querySelector('#batch-progress'); const f = p.querySelector('.progress-bar-fill'); p.style.display = 'block'; let w = 0; const i = setInterval(() => { w += 20; f.style.width = w + '%'; if (w >= 100) { clearInterval(i); setTimeout(() => { alert('完成！'); render(); }, 500); } }, 300); }); }
+                const addBtn = container.querySelector('#btn-add-interface-case');
+                if (addBtn) { addBtn.addEventListener('click', () => { document.getElementById('interface-modal-title').textContent = '新增用例'; document.getElementById('if-case-name').value = ''; document.getElementById('interface-case-modal').classList.remove('hidden'); }); }
+                const saveBtn = container.querySelector('#btn-save-as-case');
+                if (saveBtn) { saveBtn.addEventListener('click', () => { document.getElementById('interface-modal-title').textContent = '保存为用例'; document.getElementById('if-case-name').value = '调试用例'; document.getElementById('interface-case-modal').classList.remove('hidden'); }); }
             };
             render();
         }
 
         // ============ AFFINITY TEST MODULE ============
         function renderAffinityTest(container) {
-            let currentSubTab = 'debug';
+            let currentSubTab = 'cases';
 
             const render = () => {
                 let panelContent = '';
-                if (currentSubTab === 'debug') {
+                if (currentSubTab === 'cases') {
+                    const selectedCase = AFFINITY_TEST_CASES[0];
                     panelContent = `
-                    <div class="affinity-debug">
-                        <div class="prompt-input card">
-                            <h4>输入自然语言指令</h4>
-                            <textarea class="input-control prompt-textarea" placeholder="例如：帮我查一下明天上海的天气预报"></textarea>
-                            <div class="prompt-actions">
-                                <select class="input-control" style="width:180px;"><option>GPT-4-Turbo</option><option>GPT-4</option><option>Claude-3</option></select>
-                                <button class="btn btn-primary"><span class="material-icons-round">send</span> 测试亲和性</button>
-                            </div>
-                        </div>
-                        <div class="affinity-result card">
-                            <h4>评测结果</h4>
-                            <div class="result-grid">
-                                <div class="result-item"><label>是否命中 MCP</label><div class="result-value hit"><span class="material-icons-round">check_circle</span> 是</div></div>
-                                <div class="result-item"><label>生成的 MCP Input</label><pre class="result-code">{ "city": "上海", "date": "tomorrow" }</pre></div>
-                                <div class="result-item"><label>参数完整率</label><div class="result-value"><div class="mini-progress"><div class="mini-fill" style="width:80%"></div></div><span>80%</span></div></div>
-                                <div class="result-item"><label>综合评分</label><div class="result-value score"><span class="score-num">4.5</span> / 5.0</div></div>
-                            </div>
-                        </div>
-                    </div>
-                `;
-                } else if (currentSubTab === 'cases') {
-                    const selectedCase = AFFINITY_TEST_CASES[0]; // Default to first case
-                    panelContent = `
-                    <div class="cases-panel with-detail">
-                        <div class="cases-list">
-                            <div class="toolbar">
-                                <div class="toolbar-left">
-                                    <input type="text" class="input-control" placeholder="搜索用例..." style="width:140px;">
-                                    <select class="input-control" style="width:100px;"><option value="">所有分类</option><option>基础场景</option><option>复杂场景</option><option>边界场景</option><option>负向测试</option></select>
-                                    <select class="input-control" style="width:100px;"><option value="">所有测试集</option><option>核心用例</option><option>扩展用例</option><option>边界用例</option><option>负向用例</option></select>
-                                    <select class="input-control" style="width:90px;"><option value="">命中状态</option><option>命中</option><option>未命中</option></select>
-                                    <select class="input-control" style="width:90px;"><option value="">所有结果</option><option>PASS</option><option>WARN</option><option>FAIL</option></select>
+                    <div class="merged-test-panel">
+                        <div class="debug-section card">
+                            <div class="debug-header"><h4><span class="material-icons-round">chat</span> 单次调试</h4><button class="btn btn-secondary btn-sm" id="btn-save-affinity-case"><span class="material-icons-round">save</span> 保存为用例</button></div>
+                            <div class="affinity-debug-row">
+                                <div class="prompt-input-compact">
+                                    <textarea class="input-control" placeholder="输入自然语言指令，如：帮我查一下明天上海的天气预报" rows="2"></textarea>
+                                    <div class="debug-actions-inline">
+                                        <select class="input-control" style="width:140px;"><option>GPT-4-Turbo</option><option>Claude-3</option></select>
+                                        <button class="btn btn-primary"><span class="material-icons-round">send</span> 测试</button>
+                                    </div>
                                 </div>
-                                <div class="toolbar-right">
-                                    <button class="btn btn-secondary" title="批量导入"><span class="material-icons-round">upload_file</span> 导入</button>
-                                    <button class="btn btn-secondary" title="批量导出"><span class="material-icons-round">download</span> 导出</button>
-                                    <button class="btn btn-primary" id="btn-add-affinity-case"><span class="material-icons-round">add</span> 新增用例</button>
+                                <div class="affinity-result-compact">
+                                    <div class="result-row"><span class="label">命中:</span><span class="badge badge-ready">是</span></div>
+                                    <div class="result-row"><span class="label">评分:</span><span class="score-badge good">4.5</span></div>
+                                    <div class="result-row"><span class="label">输出:</span><code>{"city":"上海"}</code></div>
                                 </div>
                             </div>
-                            <div class="card" style="padding:0; overflow:hidden;">
-                                <table class="data-table selectable" id="affinity-cases-table">
-                                    <thead><tr><th style="width:40px;"><input type="checkbox"></th><th>ID</th><th>用例名称</th><th>分类</th><th>命中?</th><th>得分</th></tr></thead>
-                                    <tbody>
-                                        ${AFFINITY_TEST_CASES.map((c, idx) => `
-                                            <tr class="case-row ${idx === 0 ? 'selected' : ''}" data-idx="${idx}">
-                                                <td><input type="checkbox"></td>
-                                                <td><code>${c.id}</code></td>
-                                                <td style="font-weight:500;">${c.name}</td>
-                                                <td><span class="badge badge-draft">${c.category}</span></td>
-                                                <td>${c.hit ? '<span class="badge badge-ready">是</span>' : '<span class="badge badge-offline">否</span>'}</td>
-                                                <td><span class="score-badge ${c.score >= 4.5 ? 'good' : c.score >= 3.5 ? 'warn' : 'bad'}">${c.score}</span></td>
-                                            </tr>
-                                        `).join('')}
-                                    </tbody>
-                                </table>
-                            </div>
                         </div>
-                        <div class="case-detail card" id="affinity-case-detail">
-                            <h4>用例详情</h4>
-                            <div class="detail-content">
-                                <div class="detail-item"><label>用例名称</label><div class="val">${selectedCase.name}</div></div>
-                                <div class="detail-item"><label>Prompt</label><div class="val" style="font-style:italic;">"${selectedCase.prompt}"</div></div>
-                                <div class="detail-item"><label>用例分类</label><div class="val"><span class="badge badge-draft">${selectedCase.category}</span></div></div>
-                                <div class="detail-item"><label>所属测试集</label><div class="val">${selectedCase.testSuite}</div></div>
-                                <div class="detail-item"><label>预期结果</label><div class="val">${selectedCase.expectedResult}</div></div>
-                                <div class="detail-item"><label>评分</label><div class="val"><span class="score-badge ${selectedCase.score >= 4.5 ? 'good' : selectedCase.score >= 3.5 ? 'warn' : 'bad'}">${selectedCase.score}</span></div></div>
-                            </div>
-                            <div class="detail-actions">
-                                <button class="btn btn-secondary" id="btn-edit-affinity-case"><span class="material-icons-round">edit</span> 编辑</button>
-                                <button class="btn btn-danger"><span class="material-icons-round">delete</span> 删除</button>
-                            </div>
+                        <div class="cases-section">
+                            <div class="toolbar"><div class="toolbar-left"><input type="text" class="input-control" placeholder="搜索..." style="width:120px;"><select class="input-control" style="width:90px;"><option value="">分类</option><option>基础</option><option>复杂</option></select></div><div class="toolbar-right"><button class="btn btn-secondary btn-sm"><span class="material-icons-round">upload_file</span></button><button class="btn btn-primary btn-sm" id="btn-add-affinity-case"><span class="material-icons-round">add</span> 新增</button></div></div>
+                            <div class="card" style="padding:0; overflow:hidden;"><table class="data-table selectable"><thead><tr><th style="width:40px;"><input type="checkbox"></th><th>ID</th><th>用例名称</th><th>分类</th><th>命中</th><th>得分</th></tr></thead><tbody>${AFFINITY_TEST_CASES.map((c, i) => `<tr class="case-row ${i === 0 ? 'selected' : ''}"><td><input type="checkbox"></td><td><code>${c.id}</code></td><td>${c.name}</td><td><span class="badge badge-draft">${c.category}</span></td><td>${c.hit ? '<span class="badge badge-ready">是</span>' : '<span class="badge badge-offline">否</span>'}</td><td><span class="score-badge ${c.score >= 4.5 ? 'good' : c.score >= 3.5 ? 'warn' : 'bad'}">${c.score}</span></td></tr>`).join('')}</tbody></table></div>
                         </div>
-                    </div>
-                `;
+                    </div>`;
                 } else if (currentSubTab === 'batch') {
                     panelContent = `
-                    <div class="batch-panel">
-                        <div class="batch-config card">
-                            <h4>批量评测配置</h4>
-                            <div class="config-grid">
-                                <div class="input-group"><label class="input-label">选择用例集</label><select class="input-control"><option>全部用例 (${AFFINITY_TEST_CASES.length})</option></select></div>
-                                <div class="input-group"><label class="input-label">LLM 版本</label><select class="input-control"><option>GPT-4-Turbo</option><option>GPT-4</option></select></div>
-                                <div class="input-group"><label class="input-label">执行轮次</label><select class="input-control"><option>1 轮</option><option>3 轮 (推荐)</option></select></div>
-                            </div>
-                            <div class="batch-actions"><button class="btn btn-primary btn-lg"><span class="material-icons-round">psychology</span> 开始批量评测</button></div>
-                        </div>
-                        <div class="stats-preview">
-                            <div class="stat-card card"><div class="stat-label">平均得分</div><div class="stat-value primary">4.8 <small>/ 5.0</small></div></div>
-                            <div class="stat-card card"><div class="stat-label">命中率</div><div class="stat-value success">96%</div></div>
-                            <div class="stat-card card"><div class="stat-label">参数完整率</div><div class="stat-value">88%</div></div>
-                            <div class="stat-card card"><div class="stat-label">调用成功率</div><div class="stat-value success">100%</div></div>
-                        </div>
-                    </div>
-                `;
-                } else if (currentSubTab === 'history') {
-                    panelContent = `
-                    <div class="history-panel">
-                        <div class="card" style="padding:0; overflow:hidden;">
-                            <table class="data-table">
-                                <thead><tr><th>执行 ID</th><th>LLM 版本</th><th>用例数</th><th>平均分</th><th>命中率</th><th>执行时间</th><th>操作</th></tr></thead>
-                                <tbody>
-                                    ${AFFINITY_TEST_HISTORY.map(h => `
-                                        <tr>
-                                            <td><code>${h.runId}</code></td>
-                                            <td>${h.llmVersion}</td>
-                                            <td>${h.caseCount}</td>
-                                            <td><span class="score-badge good">${h.avgScore}</span></td>
-                                            <td>${h.hitRate}%</td>
-                                            <td>${h.startTime}</td>
-                                            <td><button class="btn btn-ghost btn-sm"><span class="material-icons-round">description</span></button></td>
-                                        </tr>
-                                    `).join('')}
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-                `;
+                    <div class="batch-panel-merged">
+                        <div class="batch-config card"><h4>批量评测配置</h4><div class="config-grid"><div class="input-group"><label class="input-label">用例集</label><select class="input-control"><option>全部 (${AFFINITY_TEST_CASES.length})</option></select></div><div class="input-group"><label class="input-label">LLM</label><select class="input-control"><option>GPT-4-Turbo</option><option>Claude-3</option></select></div></div><div class="batch-actions"><button class="btn btn-primary"><span class="material-icons-round">psychology</span> 开始评测</button></div></div>
+                        <div class="stats-preview"><div class="stat-card card"><div class="stat-label">平均分</div><div class="stat-value primary">4.8</div></div><div class="stat-card card"><div class="stat-label">命中率</div><div class="stat-value success">96%</div></div></div>
+                        <div class="history-section"><h4>历史记录</h4><div class="card" style="padding:0; overflow:hidden;"><table class="data-table"><thead><tr><th>ID</th><th>LLM</th><th>用例数</th><th>平均分</th><th>时间</th></tr></thead><tbody>${AFFINITY_TEST_HISTORY.map(h => `<tr><td><code>${h.runId}</code></td><td>${h.llmVersion}</td><td>${h.caseCount}</td><td><span class="score-badge good">${h.avgScore}</span></td><td>${h.startTime}</td></tr>`).join('')}</tbody></table></div></div>
+                    </div>`;
                 }
-
-                container.innerHTML = `
-                <div class="module-container">
-                    <div class="sub-tabs">
-                        <button class="sub-tab ${currentSubTab === 'debug' ? 'active' : ''}" data-subtab="debug"><span class="material-icons-round">chat</span> 单句调试</button>
-                        <button class="sub-tab ${currentSubTab === 'cases' ? 'active' : ''}" data-subtab="cases"><span class="material-icons-round">list_alt</span> 测试用例</button>
-                        <button class="sub-tab ${currentSubTab === 'batch' ? 'active' : ''}" data-subtab="batch"><span class="material-icons-round">psychology</span> 批量评测</button>
-                        <button class="sub-tab ${currentSubTab === 'history' ? 'active' : ''}" data-subtab="history"><span class="material-icons-round">history</span> 历史报告</button>
-                    </div>
-                    <div class="sub-panel">${panelContent}</div>
-                </div>
-            `;
-
-                container.querySelectorAll('.sub-tab').forEach(tab => {
-                    tab.addEventListener('click', () => { currentSubTab = tab.dataset.subtab; render(); });
-                });
-
-                // Affinity Test Modal Triggers
-                const addAffinityCaseBtn = container.querySelector('#btn-add-affinity-case');
-                if (addAffinityCaseBtn) {
-                    addAffinityCaseBtn.addEventListener('click', () => {
-                        document.getElementById('affinity-modal-title').textContent = '新增 AI 亲和性用例';
-                        document.getElementById('af-case-name').value = '';
-                        document.getElementById('af-case-prompt').value = '';
-                        document.getElementById('af-case-expected').value = '';
-                        document.getElementById('affinity-case-modal').classList.remove('hidden');
-                    });
-                }
-
-                const editAffinityCaseBtn = container.querySelector('#btn-edit-affinity-case');
-                if (editAffinityCaseBtn) {
-                    editAffinityCaseBtn.addEventListener('click', () => {
-                        const selectedCase = AFFINITY_TEST_CASES[0]; // Use first case as example
-                        document.getElementById('affinity-modal-title').textContent = '编辑 AI 亲和性用例';
-                        document.getElementById('af-case-name').value = selectedCase.name;
-                        document.getElementById('af-case-prompt').value = selectedCase.prompt;
-                        document.getElementById('af-case-expected').value = selectedCase.expectedResult;
-                        document.getElementById('affinity-case-modal').classList.remove('hidden');
-                    });
-                }
+                container.innerHTML = `<div class="module-container"><div class="sub-tabs"><button class="sub-tab ${currentSubTab === 'cases' ? 'active' : ''}" data-subtab="cases"><span class="material-icons-round">list_alt</span> 测试用例</button><button class="sub-tab ${currentSubTab === 'batch' ? 'active' : ''}" data-subtab="batch"><span class="material-icons-round">psychology</span> 批量测试</button></div><div class="sub-panel">${panelContent}</div></div>`;
+                container.querySelectorAll('.sub-tab').forEach(tab => tab.addEventListener('click', () => { currentSubTab = tab.dataset.subtab; render(); }));
+                const addBtn = container.querySelector('#btn-add-affinity-case');
+                if (addBtn) { addBtn.addEventListener('click', () => { document.getElementById('affinity-modal-title').textContent = '新增用例'; document.getElementById('af-case-name').value = ''; document.getElementById('affinity-case-modal').classList.remove('hidden'); }); }
+                const saveBtn = container.querySelector('#btn-save-affinity-case');
+                if (saveBtn) { saveBtn.addEventListener('click', () => { document.getElementById('affinity-modal-title').textContent = '保存为用例'; document.getElementById('af-case-name').value = '调试用例'; document.getElementById('affinity-case-modal').classList.remove('hidden'); }); }
             };
             render();
         }
@@ -1248,8 +1063,8 @@ Content-Type: application/json</pre>
             // Render Overview
             renderOverview(document.getElementById('overview-area'), appState.mcp);
 
-            // Render default tab (Schema)
-            renderSchema(document.getElementById('panel-schema'));
+            // Render default tab (Basic Info)
+            renderBasicInfo(document.getElementById('panel-basic-info'), appState.mcp);
 
             // Tab switching
             document.querySelectorAll('.tab-btn').forEach(tab => {
@@ -1265,6 +1080,7 @@ Content-Type: application/json</pre>
                     const panel = document.getElementById(`panel-${target}`);
                     if (panel.childElementCount === 0) {
                         switch (target) {
+                            case 'basic-info': renderBasicInfo(panel, appState.mcp); break;
                             case 'schema': renderSchema(panel); break;
                             case 'protocol': renderProtocol(panel); break;
                             case 'interface-test': renderInterfaceTest(panel); break;
