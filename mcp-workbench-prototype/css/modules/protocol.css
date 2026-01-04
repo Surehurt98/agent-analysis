@@ -1,8 +1,0 @@
-/* css/modules/protocol.css */
-.protocol-grid {
-    display: grid;
-    gap: var(--space-md);
-    align-content: start;
-    max-width: 1000px;
-    margin: 0 auto;
-}

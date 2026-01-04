@@ -224,12 +224,62 @@
         }
 
         .btn-edit {
-            background: #7c3aed;
-            color: white;
+            background: var(--color-bg-surface-hover);
+            color: var(--text-primary);
+            border: 1px solid var(--color-border);
         }
 
         .btn-edit:hover {
-            background: #6d28d9;
+            background: var(--color-bg-app);
+            border-color: var(--text-tertiary);
+        }
+
+        /* Row hover actions */
+        .case-row {
+            position: relative;
+        }
+
+        .row-actions {
+            position: absolute;
+            right: 8px;
+            top: 50%;
+            transform: translateY(-50%);
+            display: none;
+            gap: 4px;
+            background: var(--color-bg-surface);
+            padding: 4px;
+            border-radius: var(--radius-sm);
+            box-shadow: var(--shadow-md);
+        }
+
+        .case-row:hover .row-actions {
+            display: flex;
+        }
+
+        .row-action-btn {
+            padding: 4px;
+            border: none;
+            background: transparent;
+            cursor: pointer;
+            border-radius: 4px;
+            color: var(--text-secondary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .row-action-btn:hover {
+            background: var(--color-bg-surface-hover);
+            color: var(--text-primary);
+        }
+
+        .row-action-btn.danger:hover {
+            background: #fee2e2;
+            color: var(--color-danger);
+        }
+
+        .row-action-btn .material-icons-round {
+            font-size: 16px;
         }
 
         /* Badges */
@@ -265,6 +315,11 @@
         .badge-offline {
             background: #f1f5f9;
             color: #475569;
+        }
+
+        .badge-warning {
+            background: #fed7aa;
+            color: #c2410c;
         }
 
         .badge-interface {
@@ -615,27 +670,28 @@
 
         /* Overview */
         .overview-card-merged {
-            margin-bottom: var(--space-lg);
+            margin-bottom: var(--space-md);
+            padding: var(--space-md);
         }
 
         .overview-header-compact {
             display: flex;
             justify-content: space-between;
-            align-items: flex-start;
-            margin-bottom: var(--space-lg);
+            align-items: center;
+            margin-bottom: var(--space-sm);
         }
 
         .tool-identity {
             display: flex;
-            gap: var(--space-md);
+            gap: var(--space-sm);
             align-items: center;
         }
 
         .tool-icon {
-            width: 48px;
-            height: 48px;
+            width: 36px;
+            height: 36px;
             background: linear-gradient(135deg, var(--color-primary), #818cf8);
-            border-radius: var(--radius-md);
+            border-radius: var(--radius-sm);
             display: flex;
             align-items: center;
             justify-content: center;
@@ -643,13 +699,13 @@
         }
 
         .tool-icon .material-icons-round {
-            font-size: 24px;
+            font-size: 18px;
         }
 
         .tool-name {
-            font-size: 1.25rem;
+            font-size: 1rem;
             font-weight: 600;
-            margin-bottom: 4px;
+            margin-bottom: 2px;
         }
 
         .tool-meta {
@@ -727,12 +783,12 @@
 
         .governance-inline {
             display: flex;
-            flex-direction: column;
-            gap: var(--space-sm);
-            padding: var(--space-md);
+            flex-direction: row;
+            gap: var(--space-lg);
+            padding: var(--space-sm) var(--space-md);
             background: var(--color-bg-app);
-            border-radius: var(--radius-md);
-            margin-bottom: var(--space-md);
+            border-radius: var(--radius-sm);
+            margin-bottom: 0;
         }
 
         .gov-row {
@@ -1757,9 +1813,9 @@
         </main>
     </div>
 
-    <!-- Modals -->
+    <!-- 发布检查弹窗 -->
     <div class="modal-overlay hidden" id="publish-modal">
-        <div class="modal">
+        <div class="modal" style="width:550px;">
             <div class="modal-header">
                 <h3>发布检查</h3><button class="modal-close" id="modal-close"><span
                         class="material-icons-round">close</span></button>
@@ -1772,8 +1828,80 @@
                     class="btn btn-primary" id="modal-confirm" disabled>确认发布</button></div>
         </div>
     </div>
+    <!-- 发布日志弹窗 -->
+    <div class="modal-overlay hidden" id="publish-log-modal">
+        <div class="modal" style="width:500px;">
+            <div class="modal-header">
+                <h3>填写发布日志</h3><button class="modal-close"
+                    onclick="document.getElementById('publish-log-modal').classList.add('hidden')"><span
+                        class="material-icons-round">close</span></button>
+            </div>
+            <div class="modal-body">
+                <div class="ai-config-intro" style="background:#eef2ff;margin-bottom:var(--space-md);">
+                    <span class="material-icons-round"
+                        style="font-size:28px;color:var(--color-primary);">description</span>
+                    <p>请填写本次发布的变更说明，以便审核人员了解变更内容。</p>
+                </div>
+                <div class="input-group">
+                    <label class="input-label">发布类型 *</label>
+                    <select class="input-control" id="publish-type">
+                        <option value="feature">新功能</option>
+                        <option value="fix">问题修复</option>
+                        <option value="optimize">优化改进</option>
+                        <option value="config">配置变更</option>
+                    </select>
+                </div>
+                <div class="input-group" style="margin-top:var(--space-md);">
+                    <label class="input-label">变更说明 *</label>
+                    <textarea class="input-control" id="publish-log-content" rows="4"
+                        placeholder="请详细描述本次发布的变更内容..."></textarea>
+                </div>
+                <div class="input-group" style="margin-top:var(--space-md);">
+                    <label class="input-label">影响范围</label>
+                    <div style="display:flex;flex-wrap:wrap;gap:var(--space-sm);margin-top:var(--space-xs);">
+                        <label style="display:flex;align-items:center;gap:4px;font-size:13px;"><input type="checkbox"
+                                checked> 基本信息</label>
+                        <label style="display:flex;align-items:center;gap:4px;font-size:13px;"><input type="checkbox"
+                                checked> Schema 定义</label>
+                        <label style="display:flex;align-items:center;gap:4px;font-size:13px;"><input type="checkbox">
+                            协议转换</label>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary"
+                    onclick="document.getElementById('publish-log-modal').classList.add('hidden')">返回</button>
+                <button class="btn btn-primary" id="btn-submit-publish"><span class="material-icons-round">send</span>
+                    提交发布</button>
+            </div>
+        </div>
+    </div>
+    <!-- 工单提交成功弹窗 -->
+    <div class="modal-overlay hidden" id="publish-success-modal">
+        <div class="modal" style="width:420px;text-align:center;">
+            <div class="modal-body" style="padding:var(--space-xl);">
+                <div
+                    style="width:64px;height:64px;background:#d1fae5;border-radius:50%;display:flex;align-items:center;justify-content:center;margin:0 auto var(--space-md);">
+                    <span class="material-icons-round" style="font-size:36px;color:#10b981;">check_circle</span>
+                </div>
+                <h3 style="font-size:1.25rem;margin-bottom:var(--space-sm);">已发起发布工单</h3>
+                <p style="color:var(--text-secondary);font-size:14px;margin-bottom:var(--space-md);">工单编号：<code
+                        id="work-order-id"
+                        style="font-family:'JetBrains Mono',monospace;background:var(--color-bg-app);padding:2px 8px;border-radius:4px;">WO-20231027001</code>
+                </p>
+                <p style="color:var(--text-secondary);font-size:13px;">您的发布申请已提交，请等待审核人员审批。<br>审核通过后将自动发布上线。</p>
+            </div>
+            <div class="modal-footer"
+                style="justify-content:center;border-top:1px solid var(--color-border);padding-top:var(--space-md);">
+                <button class="btn btn-secondary"
+                    onclick="document.getElementById('publish-success-modal').classList.add('hidden')">关闭</button>
+                <button class="btn btn-primary" id="btn-view-work-order"><span
+                        class="material-icons-round">open_in_new</span> 查看工单详情</button>
+            </div>
+        </div>
+    </div>
     <div class="modal-overlay hidden" id="interface-case-modal">
-        <div class="modal" style="width:600px;">
+        <div class="modal" style="width:700px;max-height:90vh;overflow-y:auto;">
             <div class="modal-header">
                 <h3 id="interface-modal-title">新增接口测试用例</h3><button class="modal-close"
                     onclick="document.getElementById('interface-case-modal').classList.add('hidden')"><span
@@ -1781,35 +1909,58 @@
             </div>
             <div class="modal-body">
                 <div class="form-grid">
-                    <div class="input-group"><label class="input-label">用例名称 *</label><input type="text"
-                            class="input-control" id="if-case-name" placeholder="请输入用例名称"></div>
                     <div class="form-row">
-                        <div class="input-group"><label class="input-label">用例分类 *</label><select class="input-control">
-                                <option>功能测试</option>
-                                <option>异常测试</option>
-                                <option>安全测试</option>
-                            </select></div>
-                        <div class="input-group"><label class="input-label">所属测试集 *</label><select
-                                class="input-control">
-                                <option>冒烟测试</option>
-                                <option>边界测试</option>
+                        <div class="input-group"><label class="input-label">用例编号 *</label><input type="text"
+                                class="input-control" id="if-case-id" placeholder="如：TC-001"></div>
+                        <div class="input-group"><label class="input-label">用例分类 *</label><select class="input-control"
+                                id="if-case-category">
+                                <option>基础功能</option>
+                                <option>参数组合</option>
+                                <option>边界值</option>
+                                <option>默认值</option>
+                                <option>参数缺失</option>
+                                <option>参数错误</option>
+                                <option>业务异常</option>
+                                <option>格式错误</option>
+                                <option>并发与超时</option>
                             </select></div>
                     </div>
-                    <div class="input-group"><label class="input-label">预期结果 *</label><textarea class="input-control"
-                            rows="2" placeholder="请描述预期结果"></textarea></div>
-                    <div class="input-group"><label class="input-label">请求参数 (JSON)</label><textarea
-                            class="input-control" rows="3" placeholder='{"city": "北京"}'></textarea></div>
+                    <div class="input-group"><label class="input-label">用例名称 *</label><input type="text"
+                            class="input-control" id="if-case-name" placeholder="请输入用例名称"></div>
+                    <div class="input-group"><label class="input-label">输入参数 (JSON) *</label><textarea
+                            class="input-control" id="if-case-input" rows="4"
+                            placeholder='{"city": "北京", "units": "metric"}'></textarea></div>
+                    <div class="input-group"><label class="input-label">预期输出 (JSON) *</label><textarea
+                            class="input-control" id="if-case-expected" rows="4"
+                            placeholder='{"temperature": 22, "conditions": "晴"}'></textarea></div>
+                </div>
+                <!-- 执行结果区域 -->
+                <div id="if-exec-result" style="margin-top:var(--space-md);display:none;">
+                    <div
+                        style="padding:var(--space-md);background:var(--color-bg-app);border-radius:var(--radius-md);border:1px solid var(--color-border);">
+                        <div
+                            style="display:flex;justify-content:space-between;align-items:center;margin-bottom:var(--space-sm);">
+                            <h5 style="font-size:13px;font-weight:600;display:flex;align-items:center;gap:4px;">
+                                <span class="material-icons-round" style="font-size:16px;">output</span> 执行结果
+                            </h5>
+                            <div id="if-exec-status"></div>
+                        </div>
+                        <pre class="code-output" id="if-exec-output" style="height:120px;font-size:12px;">等待执行...</pre>
+                    </div>
                 </div>
             </div>
-            <div class="modal-footer"><button class="btn btn-secondary"
-                    onclick="document.getElementById('interface-case-modal').classList.add('hidden')">取消</button><button
-                    class="btn btn-primary"
-                    onclick="alert('已保存');document.getElementById('interface-case-modal').classList.add('hidden')">保存</button>
+            <div class="modal-footer">
+                <button class="btn btn-secondary"
+                    onclick="document.getElementById('interface-case-modal').classList.add('hidden')">取消</button>
+                <button class="btn btn-secondary" id="btn-if-execute" onclick="executeInterfaceTest()">
+                    <span class="material-icons-round">play_arrow</span> 执行
+                </button>
+                <button class="btn btn-primary" onclick="saveInterfaceCase()">确认保存</button>
             </div>
         </div>
     </div>
     <div class="modal-overlay hidden" id="affinity-case-modal">
-        <div class="modal" style="width:600px;">
+        <div class="modal" style="width:700px;max-height:90vh;overflow-y:auto;">
             <div class="modal-header">
                 <h3 id="affinity-modal-title">新增 AI 亲和性用例</h3><button class="modal-close"
                     onclick="document.getElementById('affinity-case-modal').classList.add('hidden')"><span
@@ -1817,28 +1968,71 @@
             </div>
             <div class="modal-body">
                 <div class="form-grid">
-                    <div class="input-group"><label class="input-label">用例名称 *</label><input type="text"
-                            class="input-control" id="af-case-name" placeholder="请输入用例名称"></div>
-                    <div class="input-group"><label class="input-label">Prompt *</label><textarea class="input-control"
-                            rows="2" placeholder="北京今天天气怎么样？"></textarea></div>
                     <div class="form-row">
-                        <div class="input-group"><label class="input-label">用例分类</label><select class="input-control">
-                                <option>基础场景</option>
-                                <option>复杂场景</option>
-                            </select></div>
-                        <div class="input-group"><label class="input-label">期望命中</label><select class="input-control">
-                                <option value="true">是</option>
-                                <option value="false">否</option>
+                        <div class="input-group"><label class="input-label">用例编号 *</label><input type="text"
+                                class="input-control" id="af-case-id" placeholder="如：AC-001"></div>
+                        <div class="input-group"><label class="input-label">用例分类 *</label><select class="input-control"
+                                id="af-case-category">
+                                <option>标准直述型</option>
+                                <option>口语化自然型</option>
+                                <option>简略省略型</option>
+                                <option>语义模糊型</option>
+                                <option>不可执行型</option>
                             </select></div>
                     </div>
-                    <div class="input-group"><label class="input-label">预期结果 *</label><textarea class="input-control"
-                            rows="2" placeholder="请描述预期结果"></textarea></div>
+                    <div class="input-group"><label class="input-label">用例名称 *</label><input type="text"
+                            class="input-control" id="af-case-name" placeholder="请输入用例名称"></div>
+                    <div class="form-row">
+                        <div class="input-group"><label class="input-label">模型 *</label><select class="input-control"
+                                id="af-case-model">
+                                <option>GPT-4-Turbo</option>
+                                <option>Claude-3</option>
+                                <option>Gemini-Pro</option>
+                            </select></div>
+                    </div>
+                    <div class="input-group"><label class="input-label">用户文具（自然语言输入） *</label><textarea
+                            class="input-control" id="af-case-user-input" rows="2" placeholder="北京今天天气怎么样？"></textarea>
+                    </div>
+                    <div class="input-group"><label class="input-label">预期 LLM 入参构造 (JSON) *</label><textarea
+                            class="input-control" id="af-case-llm-params" rows="3"
+                            placeholder='{"city": "北京", "date": "今天"}'></textarea></div>
+                    <div class="input-group"><label class="input-label">预期输出结果 *</label><textarea class="input-control"
+                            id="af-case-expected" rows="2" placeholder="请描述预期输出结果"></textarea></div>
+                </div>
+                <!-- 执行结果区域 -->
+                <div id="af-exec-result" style="margin-top:var(--space-md);display:none;">
+                    <div
+                        style="padding:var(--space-md);background:var(--color-bg-app);border-radius:var(--radius-md);border:1px solid var(--color-border);">
+                        <div
+                            style="display:flex;justify-content:space-between;align-items:center;margin-bottom:var(--space-sm);">
+                            <h5 style="font-size:13px;font-weight:600;display:flex;align-items:center;gap:4px;">
+                                <span class="material-icons-round" style="font-size:16px;">psychology</span> LLM 执行结果
+                            </h5>
+                            <div id="af-exec-status"></div>
+                        </div>
+                        <div
+                            style="display:grid;grid-template-columns:1fr 1fr;gap:var(--space-md);margin-bottom:var(--space-sm);">
+                            <div><span style="font-size:12px;color:var(--text-tertiary);">命中工具</span>
+                                <div id="af-exec-hit">-</div>
+                            </div>
+                            <div><span style="font-size:12px;color:var(--text-tertiary);">评分</span>
+                                <div id="af-exec-score">-</div>
+                            </div>
+                        </div>
+                        <div><span style="font-size:12px;color:var(--text-tertiary);">实际 LLM 入参</span>
+                            <pre class="code-output" id="af-exec-params"
+                                style="height:80px;font-size:12px;margin-top:4px;">等待执行...</pre>
+                        </div>
+                    </div>
                 </div>
             </div>
-            <div class="modal-footer"><button class="btn btn-secondary"
-                    onclick="document.getElementById('affinity-case-modal').classList.add('hidden')">取消</button><button
-                    class="btn btn-primary"
-                    onclick="alert('已保存');document.getElementById('affinity-case-modal').classList.add('hidden')">保存</button>
+            <div class="modal-footer">
+                <button class="btn btn-secondary"
+                    onclick="document.getElementById('affinity-case-modal').classList.add('hidden')">取消</button>
+                <button class="btn btn-secondary" id="btn-af-execute" onclick="executeAffinityTest()">
+                    <span class="material-icons-round">play_arrow</span> 执行
+                </button>
+                <button class="btn btn-primary" onclick="saveAffinityCase()">确认保存</button>
             </div>
         </div>
     </div>
@@ -1889,6 +2083,35 @@
                 <button class="btn btn-secondary"
                     onclick="document.getElementById('consistency-check-modal').classList.add('hidden')">关闭</button>
                 <button class="btn btn-primary" id="btn-run-consistency"><span
+                        class="material-icons-round">play_circle</span> 开始检测</button>
+            </div>
+        </div>
+    </div>
+    <!-- MCP Schema 检测弹窗 -->
+    <div class="modal-overlay hidden" id="schema-check-modal">
+        <div class="modal" style="width:600px;">
+            <div class="modal-header">
+                <h3>MCP Schema 检测</h3><button class="modal-close"
+                    onclick="document.getElementById('schema-check-modal').classList.add('hidden')"><span
+                        class="material-icons-round">close</span></button>
+            </div>
+            <div class="modal-body">
+                <div class="ai-config-intro" style="background:#eef2ff;">
+                    <span class="material-icons-round"
+                        style="font-size:32px;color:var(--color-primary);">verified</span>
+                    <p>检测 Schema 字段的 LLMdescription 是否清晰易懂，meta-type 是否为常用标准值。</p>
+                </div>
+                <div id="schema-check-results" style="margin-top:var(--space-md);">
+                    <div class="validation-empty">
+                        <span class="material-icons-round">hourglass_empty</span>
+                        <p>点击下方按钮开始检测</p>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary"
+                    onclick="document.getElementById('schema-check-modal').classList.add('hidden')">关闭</button>
+                <button class="btn btn-primary" id="btn-run-schema-check"><span
                         class="material-icons-round">play_circle</span> 开始检测</button>
             </div>
         </div>
@@ -1950,10 +2173,11 @@
             descriptionEN: "Provides weather forecast and disaster alert services.",
             version: "1.2.0", category1: "数据查询", status: "DRAFT", team: "AI平台-工具中台", source: "API导入",
             checklist: {
-                schema: { status: "PASS", message: "Schema 校验通过" },
-                protocol: { status: "WARN", message: "协议配置存在警告" },
-                interfaceTest: { status: "FAIL", message: "接口测试未通过" },
-                affinityTest: { status: "PASS", message: "AI 亲和性良好" }
+                basicInfo: { status: "PASS", message: "基本信息配置完整" },
+                schema: { status: "PASS", message: "MCP 出入参构造校验通过" },
+                protocol: { status: "PASS", message: "协议转换配置正确" },
+                interfaceTest: { status: "PASS", message: "接口测试全部通过" },
+                affinityTest: { status: "PASS", message: "AI 亲和性评分良好" }
             },
             owners: [{ name: "张三", avatar: "张", role: "负责人" }, { name: "李四", avatar: "李", role: "协作人" }],
             createdAt: "2023-09-15",
@@ -2011,19 +2235,24 @@
             { version: "1.2.0", status: "DRAFT", date: "2023-10-27", isCurrent: true },
             { version: "1.1.0", status: "PUBLISHED", date: "2023-10-15", isCurrent: false }
         ];
+        // 接口测试用例分类
+        const INTERFACE_CATEGORIES = ['基础功能', '参数组合', '边界值', '默认值', '参数缺失', '参数错误', '业务异常', '格式错误', '并发与超时'];
         const INTERFACE_TEST_CASES = [
-            { id: "TC-001", name: "获取北京天气 (正常)", category: "功能测试", status: "PASS", latency: 98, lastRun: "2分钟前" },
-            { id: "TC-002", name: "获取上海天气 (正常)", category: "功能测试", status: "PASS", latency: 112, lastRun: "2分钟前" },
-            { id: "TC-003", name: "缺少必填参数 city", category: "异常测试", status: "FAIL", latency: 45, lastRun: "2分钟前" },
-            { id: "TC-004", name: "无效 API Key", category: "安全测试", status: "FAIL", latency: 30, lastRun: "2分钟前" },
-            { id: "TC-005", name: "获取东京天气", category: "功能测试", status: "PASS", latency: 156, lastRun: "5分钟前" }
+            { id: "TC-001", name: "获取北京天气 (正常)", category: "基础功能", inputParams: '{"city": "北京", "units": "metric"}', expectedOutput: '{"temperature": 22, "conditions": "晴"}', status: "PASS", latency: 98 },
+            { id: "TC-002", name: "获取上海天气 (正常)", category: "基础功能", inputParams: '{"city": "上海", "units": "metric"}', expectedOutput: '{"temperature": 25, "conditions": "多云"}', status: "PASS", latency: 112 },
+            { id: "TC-003", name: "缺少必填参数 city", category: "参数缺失", inputParams: '{"units": "metric"}', expectedOutput: '{"error": "Missing required parameter: city"}', status: "FAIL", latency: 45 },
+            { id: "TC-004", name: "无效城市名称", category: "参数错误", inputParams: '{"city": "@#$%", "units": "metric"}', expectedOutput: '{"error": "Invalid city name"}', status: "FAIL", latency: 30 },
+            { id: "TC-005", name: "边界温度单位测试", category: "边界值", inputParams: '{"city": "东京", "units": "imperial"}', expectedOutput: '{"temperature": 72, "conditions": "晴"}', status: "PASS", latency: 156 },
+            { id: "TC-006", name: "默认单位测试", category: "默认值", inputParams: '{"city": "广州"}', expectedOutput: '{"temperature": 28, "conditions": "阴"}', status: "PASS", latency: 89 }
         ];
+        // AI亲和性测试用例分类
+        const AFFINITY_CATEGORIES = ['标准直述型', '口语化自然型', '简略省略型', '语义模糊型', '不可执行型'];
         const AFFINITY_TEST_CASES = [
-            { id: "AC-001", name: "基础天气查询", prompt: "北京今天天气怎么样？", category: "基础场景", hit: true, status: "PASS", score: 5.0 },
-            { id: "AC-002", name: "出行建议场景", prompt: "明天去上海需要带伞吗？", category: "复杂场景", hit: true, status: "PASS", score: 4.8 },
-            { id: "AC-003", name: "多日查询", prompt: "未来三天深圳温度变化", category: "复杂场景", hit: true, status: "PASS", score: 4.5 },
-            { id: "AC-004", name: "无关问题过滤", prompt: "给我讲个笑话", category: "负向测试", hit: false, status: "PASS", score: 5.0 },
-            { id: "AC-005", name: "模糊查询", prompt: "天气预报", category: "边界场景", hit: true, status: "WARN", score: 3.5 }
+            { id: "AC-001", name: "基础天气查询", category: "标准直述型", model: "GPT-4-Turbo", userInput: "查询北京今天的天气", expectedLLMParams: '{"city": "北京", "date": "今天"}', expectedOutput: "返回北京当日天气信息", status: "PASS" },
+            { id: "AC-002", name: "出行建议场景", category: "口语化自然型", model: "GPT-4-Turbo", userInput: "明天去上海需要带伞吗？", expectedLLMParams: '{"city": "上海", "date": "明天"}', expectedOutput: "根据天气建议是否带伞", status: "PASS" },
+            { id: "AC-003", name: "简略查询", category: "简略省略型", model: "Claude-3", userInput: "深圳天气", expectedLLMParams: '{"city": "深圳"}', expectedOutput: "返回深圳天气信息", status: "PASS" },
+            { id: "AC-004", name: "模糊意图识别", category: "语义模糊型", model: "GPT-4-Turbo", userInput: "今天会不会冷", expectedLLMParams: '{"date": "今天"}', expectedOutput: "需推断用户位置或询问", status: "FAIL" },
+            { id: "AC-005", name: "无关问题过滤", category: "不可执行型", model: "Claude-3", userInput: "给我讲个笑话", expectedLLMParams: 'null', expectedOutput: "不应调用天气工具", status: "PASS" }
         ];
         const BATCH_TEST_HISTORY = [
             { runId: "RUN-20231027-001", testType: "interface", trigger: "手动执行", caseCount: 15, successRate: 86.7, avgLatency: 105, startTime: "2023-10-27 10:25", user: "张三" },
@@ -2130,8 +2359,13 @@
 
         // Render Overview
         function renderOverview(container, mcp) {
-            const statusMap = { 'DRAFT': { class: 'badge-draft', label: '草稿' }, 'PUBLISHED': { class: 'badge-published', label: '已发布' } };
+            const statusMap = {
+                'DRAFT': { class: 'badge-draft', label: '草稿' },
+                'PUBLISHED': { class: 'badge-published', label: '已发布' },
+                'REVIEWING': { class: 'badge-warning', label: '审核中' }
+            };
             const st = statusMap[mcp.status] || statusMap['DRAFT'];
+            const isReviewing = mcp.status === 'REVIEWING';
             // 获取主要负责人（role 为 负责人 的第一个成员）
             const primaryOwner = mcp.owners.find(o => o.role === '负责人') || mcp.owners[0];
 
@@ -2141,22 +2375,23 @@
                     <div class="tool-identity">
                         <div class="tool-icon"><span class="material-icons-round">cloud</span></div>
                         <div>
-                            <div style="display:flex;align-items:center;gap:var(--space-sm);">
+                            <div style="display:flex;align-items:center;gap:var(--space-sm);flex-wrap:wrap;">
                                 <h1 class="tool-name">${mcp.nameCN}</h1>
-                                <span class="tool-id" onclick="copyToClipboard('${mcp.id}')" title="点击复制ID" style="font-size:12px;color:var(--text-tertiary);cursor:pointer;font-family:'JetBrains Mono',monospace;padding:2px 6px;background:var(--color-bg-app);border-radius:4px;display:flex;align-items:center;gap:4px;">
-                                    ID: ${mcp.id} <span class="material-icons-round" style="font-size:14px;">content_copy</span>
-                                </span>
-                            </div>
-                            <div class="tool-meta">
+                                <code style="font-size:12px;color:var(--text-secondary);font-family:'JetBrains Mono',monospace;background:var(--color-bg-app);padding:2px 8px;border-radius:4px;">${mcp.name}</code>
                                 <span class="badge badge-lg ${st.class}">${st.label}</span>
-                                <span class="save-time"><span class="material-icons-round">schedule</span> 最近保存: ${mcp.lastUpdated}</span>
+                            </div>
+                            <div class="tool-meta" style="margin-top:2px;">
+                                <span class="tool-id" onclick="copyToClipboard('${mcp.id}')" title="点击复制ID" style="font-size:11px;color:var(--text-tertiary);cursor:pointer;font-family:'JetBrains Mono',monospace;display:flex;align-items:center;gap:2px;">
+                                    ID: ${mcp.id} <span class="material-icons-round" style="font-size:12px;">content_copy</span>
+                                </span>
+                                <span class="save-time"><span class="material-icons-round">schedule</span> ${mcp.lastUpdated}</span>
                             </div>
                         </div>
                     </div>
                     <div style="display:flex;align-items:center;gap:var(--space-lg);">
                         <div class="action-buttons" style="display:flex;gap:var(--space-sm);">
-                            <button class="btn btn-edit btn-action" id="btn-edit-toggle"><span class="material-icons-round">edit</span> 编辑</button>
-                            <button class="btn btn-publish-readonly btn-action" id="btn-publish-readonly"><span class="material-icons-round">publish</span> 发布</button>
+                            <button class="btn btn-edit btn-action" id="btn-edit-toggle" ${isReviewing ? 'disabled style="opacity:0.5;cursor:not-allowed;"' : ''}><span class="material-icons-round">edit</span> 编辑</button>
+                            <button class="btn btn-publish-readonly btn-action" id="btn-publish-readonly" ${isReviewing ? 'disabled style="opacity:0.5;cursor:not-allowed;"' : ''}><span class="material-icons-round">publish</span> 发布</button>
                             <button class="btn btn-secondary edit-mode-btn" id="btn-save" style="display:none;"><span class="material-icons-round">save</span> 暂存</button>
                             <button class="btn btn-danger edit-mode-btn" id="btn-delete" style="display:none;"><span class="material-icons-round">delete</span> 删除</button>
                             <button class="btn btn-primary edit-mode-btn" id="btn-publish" style="display:none;"><span class="material-icons-round">publish</span> 发布</button>
@@ -2203,18 +2438,69 @@
         function showPublishModal() {
             const modal = document.getElementById('publish-modal');
             const checklist = appState.mcp.checklist;
-            const items = [{ key: 'schema', label: 'Schema 完整性' }, { key: 'protocol', label: '协议转换配置' }, { key: 'interfaceTest', label: '接口测试' }, { key: 'affinityTest', label: 'AI 亲和性' }];
+            const items = [
+                { key: 'basicInfo', label: '基础信息检测' },
+                { key: 'schema', label: 'MCP 出入参构造检测' },
+                { key: 'protocol', label: '协议转换配置检测' },
+                { key: 'interfaceTest', label: '接口测试' },
+                { key: 'affinityTest', label: 'AI 亲和性' }
+            ];
             const iconMap = { 'PASS': { icon: 'check_circle', class: 'pass' }, 'FAIL': { icon: 'cancel', class: 'fail' }, 'WARN': { icon: 'warning', class: 'warn' } };
             document.getElementById('modal-checklist').innerHTML = items.map(item => {
                 const c = checklist[item.key], st = iconMap[c.status];
                 return `<div class="modal-check-item"><span class="material-icons-round status-icon ${st.class}">${st.icon}</span><div class="check-info"><div class="check-label">${item.label}</div><div class="check-detail">${c.message}</div></div></div>`;
             }).join('');
-            document.getElementById('modal-confirm').disabled = !items.every(i => checklist[i.key].status === 'PASS');
+            const allPassed = items.every(i => checklist[i.key].status === 'PASS');
+            const confirmBtn = document.getElementById('modal-confirm');
+            confirmBtn.disabled = !allPassed;
+            if (!allPassed) {
+                confirmBtn.title = '请确保所有检查项均通过后再发布';
+            } else {
+                confirmBtn.title = '';
+            }
             modal.classList.remove('hidden');
         }
+
         document.getElementById('modal-close')?.addEventListener('click', () => document.getElementById('publish-modal').classList.add('hidden'));
         document.getElementById('modal-cancel')?.addEventListener('click', () => document.getElementById('publish-modal').classList.add('hidden'));
-        document.getElementById('modal-confirm')?.addEventListener('click', () => { appState.mcp.status = 'PUBLISHED'; renderOverview(document.getElementById('overview-area'), appState.mcp); document.getElementById('publish-modal').classList.add('hidden'); alert('发布成功！'); updateEditModeUI(); });
+
+        // 点击确认发布后，打开发布日志弹窗
+        document.getElementById('modal-confirm')?.addEventListener('click', () => {
+            document.getElementById('publish-modal').classList.add('hidden');
+            document.getElementById('publish-log-content').value = '';
+            document.getElementById('publish-log-modal').classList.remove('hidden');
+        });
+
+        // 提交发布日志
+        document.getElementById('btn-submit-publish')?.addEventListener('click', () => {
+            const logContent = document.getElementById('publish-log-content').value.trim();
+            if (!logContent) {
+                alert('请填写变更说明');
+                return;
+            }
+
+            // 关闭发布日志弹窗
+            document.getElementById('publish-log-modal').classList.add('hidden');
+
+            // 生成工单编号
+            const workOrderId = 'WO-' + new Date().toISOString().slice(0, 10).replace(/-/g, '') + Math.floor(Math.random() * 1000).toString().padStart(3, '0');
+            document.getElementById('work-order-id').textContent = workOrderId;
+
+            // 状态转为审核中
+            appState.mcp.status = 'REVIEWING';
+            renderOverview(document.getElementById('overview-area'), appState.mcp);
+            updateEditModeUI();
+
+            // 显示工单成功弹窗
+            document.getElementById('publish-success-modal').classList.remove('hidden');
+        });
+
+        // 查看工单详情
+        document.getElementById('btn-view-work-order')?.addEventListener('click', () => {
+            document.getElementById('publish-success-modal').classList.add('hidden');
+            alert('正在跳转至工单详情页...');
+            // 实际项目中这里应该跳转到工单系统
+        });
 
         // Basic Info - 新的左侧功能按钮 + 右侧内容布局
         function renderBasicInfo(container, mcp) {
@@ -2374,6 +2660,47 @@
         // 绑定检测按钮事件
         document.getElementById('btn-run-consistency')?.addEventListener('click', runConsistencyCheck);
 
+        // Schema 检测功能
+        function runSchemaCheck() {
+            const btn = document.getElementById('btn-run-schema-check');
+            const resultsContainer = document.getElementById('schema-check-results');
+
+            btn.innerHTML = '<span class="material-icons-round spin">sync</span> 检测中...';
+            btn.disabled = true;
+
+            setTimeout(() => {
+                // MCP Schema 校验结果
+                const schemaChecks = [
+                    { section: 'Input Schema', field: 'city', status: 'pass', message: 'LLMdescription 清晰描述了字段用途', detail: 'meta-type: location' },
+                    { section: 'Input Schema', field: 'units', status: 'warn', message: 'LLMdescription 缺失，建议补充', detail: '无 meta-type' },
+                    { section: 'Output Schema', field: 'temperature', status: 'pass', message: 'LLMdescription 描述清晰', detail: 'meta-type: number' },
+                    { section: 'Output Schema', field: 'conditions', status: 'pass', message: 'LLMdescription 描述清晰', detail: 'meta-type: weather_condition' },
+                    { section: 'Output Schema', field: 'humidity', status: 'warn', message: 'LLMdescription 缺失，建议补充', detail: '无 meta-type' }
+                ];
+
+                resultsContainer.innerHTML = schemaChecks.map(r => `
+                    <div class="result-content-row" style="display:flex;align-items:flex-start;gap:var(--space-md);padding:var(--space-sm) 0;border-bottom:1px solid var(--color-border);">
+                        <div class="result-icon ${r.status}" style="flex-shrink:0;">
+                            <span class="material-icons-round" style="font-size:18px;color:${r.status === 'pass' ? 'var(--color-success)' : 'var(--color-warning)'};">${r.status === 'pass' ? 'check_circle' : 'warning'}</span>
+                        </div>
+                        <div class="result-content-body" style="flex:1;">
+                            <div class="result-info">
+                                <span class="result-title" style="font-weight:600;font-size:13px;"><code>${r.field}</code> <span style="color:var(--text-tertiary);font-weight:400;">(${r.section})</span></span>
+                                <span class="result-message" style="display:block;font-size:12px;color:var(--text-secondary);margin-top:2px;">${r.message}</span>
+                                ${r.detail ? `<span style="font-size:11px;color:var(--text-tertiary);margin-top:2px;display:block;">${r.detail}</span>` : ''}
+                            </div>
+                        </div>
+                    </div>
+                `).join('');
+
+                btn.innerHTML = '<span class="material-icons-round">play_circle</span> 重新检测';
+                btn.disabled = false;
+            }, 800);
+        }
+
+        // 绑定 Schema 检测按钮事件
+        document.getElementById('btn-run-schema-check')?.addEventListener('click', runSchemaCheck);
+
         // Schema - 新的左侧功能按钮 + 右侧内容布局
         function renderSchema(container) {
             container.innerHTML = `
@@ -2389,7 +2716,7 @@
                         <span class="btn-label">模板</span>
                     </button>
                     <div class="sidebar-divider"></div>
-                    <button class="sidebar-btn" onclick="document.getElementById('consistency-check-modal').classList.remove('hidden')" title="一致性检测">
+                    <button class="sidebar-btn" onclick="document.getElementById('schema-check-modal').classList.remove('hidden')" title="MCP Schema 检测">
                         <span class="material-icons-round">fact_check</span>
                         <span class="btn-label">检测</span>
                     </button>
@@ -2398,24 +2725,50 @@
                 <!-- 右侧：内容区 -->
                 <div class="content-main">
                     <div class="schema-editors">
+                        <!-- Input Schema -->
                         <div class="card">
-                            <div class="card-header"><h3>Input Schema</h3></div>
-                            <pre class="code-editor" contenteditable="false">{
+                            <div class="card-header"><h3><span class="material-icons-round" style="vertical-align:middle;margin-right:4px;font-size:18px;">input</span>Input Schema</h3></div>
+                            <pre class="code-editor" contenteditable="false" style="height:auto;min-height:180px;">{
   "type": "object",
   "properties": {
-    "city": { "type": "string", "description": "城市名称" },
-    "units": { "type": "string", "enum": ["metric", "imperial"] }
+    "city": {
+      "type": "string",
+      "description": "城市名称",
+      "LLMdescription": "用户想要查询天气的城市名称",
+      "meta-type": "location"
+    },
+    "units": {
+      "type": "string",
+      "enum": ["metric", "imperial"],
+      "description": "温度单位"
+    }
   },
   "required": ["city"]
 }</pre>
                         </div>
+
+                        <!-- Output Schema -->
                         <div class="card">
-                            <div class="card-header"><h3>Output Schema</h3></div>
-                            <pre class="code-editor" contenteditable="false">{
+                            <div class="card-header"><h3><span class="material-icons-round" style="vertical-align:middle;margin-right:4px;font-size:18px;">output</span>Output Schema</h3></div>
+                            <pre class="code-editor" contenteditable="false" style="height:auto;min-height:180px;">{
   "type": "object",
   "properties": {
-    "temperature": { "type": "number" },
-    "conditions": { "type": "string" }
+    "temperature": {
+      "type": "number",
+      "description": "当前温度",
+      "LLMdescription": "当前温度数值（摄氏度）",
+      "meta-type": "number"
+    },
+    "conditions": {
+      "type": "string",
+      "description": "天气状况",
+      "LLMdescription": "当前天气状况文字描述",
+      "meta-type": "weather_condition"
+    },
+    "humidity": {
+      "type": "number",
+      "description": "湿度百分比"
+    }
   }
 }</pre>
                         </div>
@@ -2577,13 +2930,13 @@
                             <button class="btn btn-secondary btn-sm" id="btn-save-as-case"><span class="material-icons-round">save</span> 存为用例</button>
                         </div>
                         <div class="input-body">
-                            <pre class="code-editor test-editor" contenteditable="true" style="height:200px;margin-bottom:var(--space-md);">{
+                            <pre class="code-editor test-editor" contenteditable="true" style="height:200px;margin-bottom:var(--space-md);" id="if-debug-input">{
   "city": "北京",
   "units": "metric"
 }</pre>
                             <div class="debug-actions" style="display:flex;justify-content:space-between;">
                                 <select class="input-control test-input" style="width:140px"><option>Test 环境</option><option>Prod 环境</option></select>
-                                <button class="btn btn-primary"><span class="material-icons-round">send</span> 发送请求</button>
+                                <button class="btn btn-primary" id="btn-if-debug-send"><span class="material-icons-round">send</span> 发送请求</button>
                             </div>
                         </div>
                     </div>
@@ -2592,12 +2945,12 @@
                         <div class="section-header">
                             <h5><span class="material-icons-round">output</span> 响应结果</h5>
                             <div class="output-meta">
-                                <span class="badge badge-ready">200 OK</span>
-                                <span class="badge" style="background:var(--color-bg-app)">98ms</span>
+                                <span class="badge badge-ready" id="if-debug-status">200 OK</span>
+                                <span class="badge" style="background:var(--color-bg-app)" id="if-debug-latency">98ms</span>
                             </div>
                         </div>
                         <div class="output-body">
-                             <pre class="code-output" style="height:200px;">{
+                             <pre class="code-output" style="height:200px;" id="if-debug-output">{
   "temperature": 22,
   "conditions": "晴",
   "humidity": 45,
@@ -2609,20 +2962,34 @@
 
                 <!-- 右侧：测试用例列表 -->
                 <div class="cases-card">
+                    <!-- SessionID 输入行 -->
+                    <div class="session-id-bar" style="display:flex;align-items:center;gap:var(--space-md);padding:var(--space-sm) var(--space-md);background:var(--color-bg-app);border-bottom:1px solid var(--color-border);border-radius:var(--radius-md) var(--radius-md) 0 0;">
+                        <span class="material-icons-round" style="font-size:18px;color:var(--color-primary);">key</span>
+                        <span style="font-size:13px;font-weight:500;">SessionID</span>
+                        <input class="input-control test-input" id="if-global-session-id" placeholder="请输入会话ID（执行测试必填）" style="flex:1;max-width:400px;" title="调用接口测试功能必须提供 SessionID">
+                        <span style="font-size:11px;color:var(--text-tertiary);">测试执行需要有效的 SessionID</span>
+                    </div>
                     <div class="cases-header">
-                        <div style="display:flex;gap:var(--space-sm);">
-                            <input class="input-control test-input" placeholder="搜索用例..." style="width:180px">
-                            <select class="input-control test-input" style="width:120px"><option value="">全部分类</option><option>功能测试</option><option>异常测试</option><option>安全测试</option></select>
+                        <div style="display:flex;gap:var(--space-sm);align-items:center;">
+                            <input class="input-control test-input" placeholder="搜索用例..." style="width:140px">
+                            <select class="input-control test-input" id="if-category-filter" style="width:100px">
+                                <option value="">全部分类</option>
+                                ${INTERFACE_CATEGORIES.map(c => `<option value="${c}">${c}</option>`).join('')}
+                            </select>
                         </div>
                         <div style="display:flex;gap:var(--space-sm);">
+                            <div id="if-batch-actions" style="display:none;gap:var(--space-sm);">
+                                <button class="btn btn-secondary btn-sm"><span class="material-icons-round">download</span> 批量导出</button>
+                                <button class="btn btn-danger btn-sm"><span class="material-icons-round">delete</span> 批量删除</button>
+                            </div>
                             <button class="btn btn-secondary btn-sm"><span class="material-icons-round">upload_file</span> 导入</button>
-                            <button class="btn btn-primary btn-sm" onclick="document.getElementById('interface-case-modal').classList.remove('hidden')"><span class="material-icons-round">add</span> 新增</button>
+                            <button class="btn btn-primary btn-sm" onclick="openInterfaceCaseModal()"><span class="material-icons-round">add</span> 新增</button>
                         </div>
                     </div>
-                    <div class="cases-table-container">
+                    <div class="cases-table-container" style="overflow-x:auto;">
                         <table class="data-table selectable">
-                            <thead><tr><th style="width:40px"><input type="checkbox" class="test-input"></th><th>ID</th><th>用例名称</th><th>分类</th><th>结果</th><th>耗时</th><th>最后执行</th></tr></thead>
-                            <tbody>${INTERFACE_TEST_CASES.map((c, i) => `<tr class="case-row ${i === 0 ? 'selected' : ''}"><td><input type="checkbox" class="test-input"></td><td><code>${c.id}</code></td><td>${c.name}</td><td><span class="badge badge-draft">${c.category}</span></td><td><span class="status-chip ${c.status === 'PASS' ? 'pass' : 'fail'}"><span class="material-icons-round">${c.status === 'PASS' ? 'check_circle' : 'cancel'}</span>${c.status === 'PASS' ? '通过' : '失败'}</span></td><td><code>${c.latency}ms</code></td><td>${c.lastRun}</td></tr>`).join('')}</tbody>
+                            <thead><tr><th style="width:40px"><input type="checkbox" class="test-input" id="if-select-all"></th><th>用例编号</th><th>用例分类</th><th>用例名称</th><th>输入参数</th><th>预期输出</th><th>结果</th><th style="width:80px">操作</th></tr></thead>
+                            <tbody>${INTERFACE_TEST_CASES.map((c, i) => `<tr class="case-row ${i === 0 ? 'selected' : ''}" onclick="openInterfaceCaseDetail('${c.id}')" style="cursor:pointer;"><td onclick="event.stopPropagation()"><input type="checkbox" class="test-input case-checkbox"></td><td><code>${c.id}</code></td><td><span class="badge badge-draft">${c.category}</span></td><td>${c.name}</td><td><code style="max-width:120px;display:inline-block;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;" title='${c.inputParams}'>${c.inputParams.substring(0, 20)}...</code></td><td><code style="max-width:120px;display:inline-block;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;" title='${c.expectedOutput}'>${c.expectedOutput.substring(0, 20)}...</code></td><td><span class="status-chip ${c.status === 'PASS' ? 'pass' : 'fail'}"><span class="material-icons-round">${c.status === 'PASS' ? 'check_circle' : 'cancel'}</span>${c.status === 'PASS' ? '通过' : '失败'}</span></td><td onclick="event.stopPropagation()" style="text-align:right;"><div class="row-actions" style="display:flex;position:static;transform:none;background:transparent;box-shadow:none;padding:0;"><button class="row-action-btn" title="导出" onclick="alert('导出用例 ${c.id}')"><span class="material-icons-round">download</span></button><button class="row-action-btn" title="编辑" onclick="openInterfaceCaseDetail('${c.id}')"><span class="material-icons-round">edit</span></button><button class="row-action-btn danger" title="删除" onclick="if(confirm('确认删除用例 ${c.id}？')) alert('已删除')"><span class="material-icons-round">delete</span></button></div></td></tr>`).join('')}</tbody>
                         </table>
                     </div>
                 </div>
@@ -2630,6 +2997,7 @@
 
             container.querySelector('#btn-save-as-case')?.addEventListener('click', () => {
                 document.getElementById('interface-modal-title').textContent = '保存为用例';
+                document.getElementById('if-case-input').value = document.getElementById('if-debug-input').textContent;
                 document.getElementById('interface-case-modal').classList.remove('hidden');
             });
         }
@@ -2646,10 +3014,10 @@
                             <button class="btn btn-secondary btn-sm" id="btn-save-affinity"><span class="material-icons-round">save</span> 存为用例</button>
                         </div>
                         <div class="input-body">
-                            <textarea class="input-control test-input" placeholder="输入自然语言指令，如：帮我查一下明天上海的天气预报" style="height:120px;margin-bottom:var(--space-md);">帮我查一下北京明天的天气，需要带伞吗？</textarea>
+                            <textarea class="input-control test-input" id="af-debug-input" placeholder="输入自然语言指令，如：帮我查一下明天上海的天气预报" style="width:100%;box-sizing:border-box;height:100px;margin-bottom:var(--space-md);resize:vertical;">帮我查一下北京明天的天气，需要带伞吗？</textarea>
                             <div class="debug-actions" style="display:flex;justify-content:space-between;">
-                                <select class="input-control test-input" style="width:140px"><option>GPT-4-Turbo</option><option>Claude-3</option></select>
-                                <button class="btn btn-primary"><span class="material-icons-round">psychology</span> 测试</button>
+                                <select class="input-control test-input" id="af-debug-model" style="width:140px"><option>GPT-4-Turbo</option><option>Claude-3</option><option>Gemini-Pro</option></select>
+                                <button class="btn btn-primary" id="btn-af-debug-test"><span class="material-icons-round">psychology</span> 测试</button>
                             </div>
                         </div>
                     </div>
@@ -2660,14 +3028,20 @@
                         </div>
                         <div class="output-body">
                             <div class="result-grid" style="display:grid;grid-template-columns:repeat(2, 1fr);gap:var(--space-md);margin-bottom:var(--space-md);">
-                                <div class="result-item"><span class="label">是否命中</span><span class="value"><span class="badge badge-ready">是</span></span></div>
-                                <div class="result-item"><span class="label">评分</span><span class="value"><span class="score-badge good">4.8</span></span></div>
-                                <div class="result-item"><span class="label">参数填充率</span><span class="value">100%</span></div>
+                                <div class="result-item"><span class="label">是否符合预期</span><span class="value" id="af-debug-hit"><span class="badge badge-ready">是</span></span></div>
                                 <div class="result-item"><span class="label">调用成功</span><span class="value"><span class="material-icons-round" style="color:var(--color-success);font-size:18px">check_circle</span></span></div>
                             </div>
+                            <div class="output-json" style="margin-bottom:var(--space-sm);">
+                                <label class="input-label">构造的参数</label>
+                                <pre class="code-editor" contenteditable="false" style="height:60px;font-size:12px;" id="af-debug-params">{ "city": "北京", "date": "明天" }</pre>
+                            </div>
                             <div class="output-json">
-                                <label class="input-label">提取的参数</label>
-                                <pre class="code-editor" contenteditable="false" style="height:80px;font-size:12px;">{ "city": "北京", "date": "明天" }</pre>
+                                <label class="input-label">工具调用结果</label>
+                                <pre class="code-editor" contenteditable="false" style="height:80px;font-size:12px;" id="af-debug-result">{
+  "temperature": 22,
+  "conditions": "多云",
+  "humidity": 65
+}</pre>
                             </div>
                         </div>
                     </div>
@@ -2675,20 +3049,34 @@
 
                 <!-- 右侧：测试用例列表 -->
                 <div class="cases-card">
+                    <!-- SessionID 输入行 -->
+                    <div class="session-id-bar" style="display:flex;align-items:center;gap:var(--space-md);padding:var(--space-sm) var(--space-md);background:var(--color-bg-app);border-bottom:1px solid var(--color-border);border-radius:var(--radius-md) var(--radius-md) 0 0;">
+                        <span class="material-icons-round" style="font-size:18px;color:var(--color-primary);">key</span>
+                        <span style="font-size:13px;font-weight:500;">SessionID</span>
+                        <input class="input-control test-input" id="af-global-session-id" placeholder="请输入会话ID（执行测试必填）" style="flex:1;max-width:400px;" title="调用 LLM 测试功能必须提供 SessionID">
+                        <span style="font-size:11px;color:var(--text-tertiary);">AI亲和性测试需要有效的 SessionID</span>
+                    </div>
                     <div class="cases-header">
-                        <div style="display:flex;gap:var(--space-sm);">
-                            <input class="input-control test-input" placeholder="搜索用例..." style="width:180px">
-                            <select class="input-control test-input" style="width:120px"><option value="">全部分类</option><option>基础场景</option><option>复杂场景</option><option>边界场景</option><option>负向测试</option></select>
+                        <div style="display:flex;gap:var(--space-sm);align-items:center;">
+                            <input class="input-control test-input" placeholder="搜索用例..." style="width:140px">
+                            <select class="input-control test-input" id="af-category-filter" style="width:100px">
+                                <option value="">全部分类</option>
+                                ${AFFINITY_CATEGORIES.map(c => `<option value="${c}">${c}</option>`).join('')}
+                            </select>
                         </div>
                         <div style="display:flex;gap:var(--space-sm);">
+                            <div id="af-batch-actions" style="display:none;gap:var(--space-sm);">
+                                <button class="btn btn-secondary btn-sm"><span class="material-icons-round">download</span> 批量导出</button>
+                                <button class="btn btn-danger btn-sm"><span class="material-icons-round">delete</span> 批量删除</button>
+                            </div>
                             <button class="btn btn-secondary btn-sm"><span class="material-icons-round">upload_file</span> 导入</button>
-                            <button class="btn btn-primary btn-sm" onclick="document.getElementById('affinity-case-modal').classList.remove('hidden')"><span class="material-icons-round">add</span> 新增</button>
+                            <button class="btn btn-primary btn-sm" onclick="openAffinityCaseModal()"><span class="material-icons-round">add</span> 新增</button>
                         </div>
                     </div>
-                    <div class="cases-table-container">
+                    <div class="cases-table-container" style="overflow-x:auto;">
                         <table class="data-table selectable">
-                            <thead><tr><th style="width:40px"><input type="checkbox" class="test-input"></th><th>ID</th><th>用例名称</th><th>分类</th><th>命中</th><th>得分</th></tr></thead>
-                            <tbody>${AFFINITY_TEST_CASES.map((c, i) => `<tr class="case-row ${i === 0 ? 'selected' : ''}"><td><input type="checkbox" class="test-input"></td><td><code>${c.id}</code></td><td>${c.name}</td><td><span class="badge badge-draft">${c.category}</span></td><td>${c.hit ? '<span class="badge badge-ready">是</span>' : '<span class="badge badge-offline">否</span>'}</td><td><span class="score-badge ${c.score >= 4.5 ? 'good' : c.score >= 3.5 ? 'warn' : 'bad'}">${c.score}</span></td></tr>`).join('')}</tbody>
+                            <thead><tr><th style="width:40px"><input type="checkbox" class="test-input" id="af-select-all"></th><th>用例编号</th><th>用例分类</th><th>用例名称</th><th>模型</th><th>用户文具</th><th>预期LLM入参</th><th>结果</th><th style="width:80px">操作</th></tr></thead>
+                            <tbody>${AFFINITY_TEST_CASES.map((c, i) => `<tr class="case-row ${i === 0 ? 'selected' : ''}" onclick="openAffinityCaseDetail('${c.id}')" style="cursor:pointer;"><td onclick="event.stopPropagation()"><input type="checkbox" class="test-input case-checkbox"></td><td><code>${c.id}</code></td><td><span class="badge badge-draft">${c.category}</span></td><td>${c.name}</td><td><span class="badge badge-interface">${c.model}</span></td><td style="max-width:100px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;" title="${c.userInput}">${c.userInput}</td><td><code style="max-width:100px;display:inline-block;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;" title='${c.expectedLLMParams}'>${c.expectedLLMParams.substring(0, 15)}...</code></td><td><span class="status-chip ${c.status === 'PASS' ? 'pass' : 'fail'}"><span class="material-icons-round">${c.status === 'PASS' ? 'check_circle' : 'cancel'}</span>${c.status === 'PASS' ? '通过' : '失败'}</span></td><td onclick="event.stopPropagation()" style="text-align:right;"><div class="row-actions" style="display:flex;position:static;transform:none;background:transparent;box-shadow:none;padding:0;"><button class="row-action-btn" title="导出" onclick="alert('导出用例 ${c.id}')"><span class="material-icons-round">download</span></button><button class="row-action-btn" title="编辑" onclick="openAffinityCaseDetail('${c.id}')"><span class="material-icons-round">edit</span></button><button class="row-action-btn danger" title="删除" onclick="if(confirm('确认删除用例 ${c.id}？')) alert('已删除')"><span class="material-icons-round">delete</span></button></div></td></tr>`).join('')}</tbody>
                         </table>
                     </div>
                 </div>
@@ -2696,6 +3084,8 @@
 
             container.querySelector('#btn-save-affinity')?.addEventListener('click', () => {
                 document.getElementById('affinity-modal-title').textContent = '保存为用例';
+                document.getElementById('af-case-user-input').value = document.getElementById('af-debug-input').value;
+                document.getElementById('af-case-model').value = document.getElementById('af-debug-model').value;
                 document.getElementById('affinity-case-modal').classList.remove('hidden');
             });
         }
@@ -2811,6 +3201,167 @@
                 });
             };
             render();
+        }
+
+        // ========== 测试执行与用例管理函数 ==========
+
+        // 打开接口测试用例弹窗（新增模式）
+        function openInterfaceCaseModal() {
+            document.getElementById('interface-modal-title').textContent = '新增接口测试用例';
+            document.getElementById('if-case-id').value = '';
+            document.getElementById('if-case-name').value = '';
+            document.getElementById('if-case-input').value = '';
+            document.getElementById('if-case-expected').value = '';
+            document.getElementById('if-exec-result').style.display = 'none';
+            document.getElementById('interface-case-modal').classList.remove('hidden');
+        }
+
+        // 打开接口测试用例详情（编辑/查看模式）
+        function openInterfaceCaseDetail(caseId) {
+            const caseData = INTERFACE_TEST_CASES.find(c => c.id === caseId);
+            if (!caseData) return;
+
+            document.getElementById('interface-modal-title').textContent = `用例详情 - ${caseId}`;
+            document.getElementById('if-case-id').value = caseData.id;
+            document.getElementById('if-case-category').value = caseData.category;
+            document.getElementById('if-case-name').value = caseData.name;
+            document.getElementById('if-case-input').value = caseData.inputParams;
+            document.getElementById('if-case-expected').value = caseData.expectedOutput;
+            document.getElementById('if-exec-result').style.display = 'none';
+            document.getElementById('interface-case-modal').classList.remove('hidden');
+        }
+
+        // 执行接口测试
+        function executeInterfaceTest() {
+            const sessionId = document.getElementById('if-global-session-id')?.value.trim();
+            if (!sessionId) {
+                alert('请在表格上方输入 SessionID，没有此 ID 将无法调用接口测试功能');
+                return;
+            }
+
+            const resultArea = document.getElementById('if-exec-result');
+            const statusEl = document.getElementById('if-exec-status');
+            const outputEl = document.getElementById('if-exec-output');
+
+            resultArea.style.display = 'block';
+            statusEl.innerHTML = '<span class="material-icons-round spin" style="font-size:16px;">sync</span> 执行中...';
+            outputEl.textContent = '正在请求接口...';
+
+            // 模拟执行
+            setTimeout(() => {
+                const success = Math.random() > 0.3;
+                if (success) {
+                    statusEl.innerHTML = '<span class="badge badge-ready">200 OK</span> <span class="badge" style="background:var(--color-bg-app)">98ms</span>';
+                    outputEl.textContent = JSON.stringify({
+                        "temperature": 22,
+                        "conditions": "晴",
+                        "humidity": 45,
+                        "wind_kph": 12.5
+                    }, null, 2);
+                } else {
+                    statusEl.innerHTML = '<span class="badge badge-fail" style="background:#fee2e2;color:#991b1b;">500 Error</span>';
+                    outputEl.textContent = JSON.stringify({
+                        "error": "Internal Server Error",
+                        "message": "Failed to fetch weather data"
+                    }, null, 2);
+                }
+            }, 1000);
+        }
+
+        // 保存接口测试用例
+        function saveInterfaceCase() {
+            const id = document.getElementById('if-case-id').value.trim();
+            const name = document.getElementById('if-case-name').value.trim();
+            const inputParams = document.getElementById('if-case-input').value.trim();
+            const expected = document.getElementById('if-case-expected').value.trim();
+
+            if (!id || !name || !inputParams || !expected) {
+                alert('请填写所有必填项');
+                return;
+            }
+
+            alert('用例已保存');
+            document.getElementById('interface-case-modal').classList.add('hidden');
+        }
+
+        // 打开AI亲和性用例弹窗（新增模式）
+        function openAffinityCaseModal() {
+            document.getElementById('affinity-modal-title').textContent = '新增 AI 亲和性用例';
+            document.getElementById('af-case-id').value = '';
+            document.getElementById('af-case-name').value = '';
+            document.getElementById('af-case-user-input').value = '';
+            document.getElementById('af-case-llm-params').value = '';
+            document.getElementById('af-case-expected').value = '';
+            document.getElementById('af-exec-result').style.display = 'none';
+            document.getElementById('affinity-case-modal').classList.remove('hidden');
+        }
+
+        // 打开AI亲和性用例详情（编辑/查看模式）
+        function openAffinityCaseDetail(caseId) {
+            const caseData = AFFINITY_TEST_CASES.find(c => c.id === caseId);
+            if (!caseData) return;
+
+            document.getElementById('affinity-modal-title').textContent = `用例详情 - ${caseId}`;
+            document.getElementById('af-case-id').value = caseData.id;
+            document.getElementById('af-case-category').value = caseData.category;
+            document.getElementById('af-case-name').value = caseData.name;
+            document.getElementById('af-case-model').value = caseData.model;
+            document.getElementById('af-case-user-input').value = caseData.userInput;
+            document.getElementById('af-case-llm-params').value = caseData.expectedLLMParams;
+            document.getElementById('af-case-expected').value = caseData.expectedOutput;
+            document.getElementById('af-exec-result').style.display = 'none';
+            document.getElementById('affinity-case-modal').classList.remove('hidden');
+        }
+
+        // 执行AI亲和性测试
+        function executeAffinityTest() {
+            const sessionId = document.getElementById('af-global-session-id')?.value.trim();
+            if (!sessionId) {
+                alert('请在表格上方输入 SessionID，没有此 ID 将无法调用 LLM 测试功能');
+                return;
+            }
+
+            const resultArea = document.getElementById('af-exec-result');
+            const statusEl = document.getElementById('af-exec-status');
+            const hitEl = document.getElementById('af-exec-hit');
+            const scoreEl = document.getElementById('af-exec-score');
+            const paramsEl = document.getElementById('af-exec-params');
+
+            resultArea.style.display = 'block';
+            statusEl.innerHTML = '<span class="material-icons-round spin" style="font-size:16px;">sync</span> LLM 处理中...';
+            paramsEl.textContent = '正在调用 LLM...';
+            hitEl.textContent = '-';
+            scoreEl.textContent = '-';
+
+            // 模拟执行
+            setTimeout(() => {
+                const score = (4 + Math.random()).toFixed(1);
+                const hit = score >= 3.5;
+                statusEl.innerHTML = '<span class="badge badge-ready">完成</span>';
+                hitEl.innerHTML = hit ? '<span class="badge badge-ready">是</span>' : '<span class="badge badge-offline">否</span>';
+                scoreEl.innerHTML = `<span class="score-badge ${score >= 4.5 ? 'good' : score >= 3.5 ? 'warn' : 'bad'}">${score}</span>`;
+                paramsEl.textContent = JSON.stringify({
+                    "city": "北京",
+                    "date": "今天"
+                }, null, 2);
+            }, 1500);
+        }
+
+        // 保存AI亲和性用例
+        function saveAffinityCase() {
+            const id = document.getElementById('af-case-id').value.trim();
+            const name = document.getElementById('af-case-name').value.trim();
+            const userInput = document.getElementById('af-case-user-input').value.trim();
+            const llmParams = document.getElementById('af-case-llm-params').value.trim();
+            const expected = document.getElementById('af-case-expected').value.trim();
+
+            if (!id || !name || !userInput || !llmParams || !expected) {
+                alert('请填写所有必填项');
+                return;
+            }
+
+            alert('用例已保存');
+            document.getElementById('affinity-case-modal').classList.add('hidden');
         }
 
         // Init
