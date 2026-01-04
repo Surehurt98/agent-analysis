@@ -1,0 +1,337 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI 下个十年：从Scaling Law到太空算力，普通人的财富机会在哪里？</title>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;600;700&family=Inter:wght@400;500;600;700&display=swap"
+        rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary-color: #1a5490;
+            --secondary-color: #e63946;
+            --accent-color: #f77f00;
+            --text-dark: #1d3557;
+            --text-light: #457b9d;
+            --bg-light: #f8f9fa;
+            --bg-card: #ffffff;
+            --border-color: #dee2e6;
+            --success-color: #06d6a0;
+            --warning-color: #ffd60a;
+        }
+
+        body {
+            font-family: 'Noto Serif SC', serif;
+            line-height: 1.8;
+            color: var(--text-dark);
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 40px 20px;
+        }
+
+        .article-header {
+            background: linear-gradient(135deg, var(--primary-color) 0%, #2a75bb 100%);
+            color: white;
+            padding: 60px 40px;
+            border-radius: 20px;
+            margin-bottom: 40px;
+            box-shadow: 0 20px 60px rgba(26, 84, 144, 0.3);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .article-header h1 {
+            font-size: 2.2rem;
+            font-weight: 700;
+            margin-bottom: 20px;
+            position: relative;
+            z-index: 1;
+            line-height: 1.3;
+        }
+
+        .article-meta {
+            font-family: 'Inter', sans-serif;
+            opacity: 0.9;
+            display: flex;
+            gap: 20px;
+            z-index: 1;
+            position: relative;
+        }
+
+        .content-section {
+            background: var(--bg-card);
+            padding: 50px 40px;
+            border-radius: 20px;
+            margin-bottom: 30px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.08);
+            transition: transform 0.3s;
+        }
+
+        .content-section:hover {
+            transform: translateY(-5px);
+        }
+
+        .section-title {
+            font-size: 1.6rem;
+            font-weight: 700;
+            color: var(--primary-color);
+            border-bottom: 3px solid var(--accent-color);
+            padding-bottom: 15px;
+            margin-bottom: 25px;
+        }
+
+        .highlight-box {
+            background: linear-gradient(135deg, #fff5e6 0%, #ffe8cc 100%);
+            border-left: 5px solid var(--accent-color);
+            padding: 25px 30px;
+            margin: 25px 0;
+            border-radius: 10px;
+        }
+
+        .data-table {
+            width: 100%;
+            border-collapse: separate;
+            margin: 25px 0;
+            border-radius: 12px;
+            overflow: hidden;
+        }
+
+        .data-table th {
+            background: var(--primary-color);
+            color: white;
+            padding: 15px;
+            text-align: left;
+        }
+
+        .data-table td {
+            padding: 15px;
+            border-bottom: 1px solid var(--border-color);
+            background: white;
+        }
+
+        .badge {
+            display: inline-block;
+            padding: 4px 10px;
+            border-radius: 20px;
+            font-size: 0.8em;
+            font-weight: bold;
+        }
+
+        .badge-warn {
+            background: var(--warning-color);
+            color: black;
+        }
+
+        .cta-section {
+            background: linear-gradient(135deg, var(--accent-color) 0%, #f9844a 100%);
+            color: white;
+            padding: 40px;
+            border-radius: 20px;
+            text-align: center;
+            margin-top: 40px;
+        }
+
+        .cta-button {
+            display: inline-block;
+            background: white;
+            color: var(--accent-color);
+            padding: 15px 40px;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: 700;
+            margin-top: 20px;
+        }
+
+        .fade-in {
+            animation: fadeIn 0.8s ease-in;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Mobile Optimization */
+        .back-nav {
+            padding: 20px 0;
+            margin-bottom: 20px;
+        }
+
+        .back-nav a {
+            text-decoration: none;
+            color: var(--primary-color);
+            font-weight: 600;
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .back-nav a:hover {
+            color: var(--accent-color);
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 20px 15px;
+            }
+
+            .article-header {
+                padding: 40px 20px;
+                text-align: left;
+            }
+
+            .article-header h1 {
+                font-size: 1.8rem;
+            }
+
+            .article-meta {
+                gap: 10px;
+                font-size: 0.85rem;
+            }
+
+            .content-section {
+                padding: 30px 20px;
+            }
+
+            .section-title {
+                font-size: 1.4rem;
+            }
+
+            .highlight-box {
+                padding: 20px;
+            }
+
+            .data-table {
+                display: block;
+                overflow-x: auto;
+                white-space: nowrap;
+            }
+
+            .cta-section {
+                padding: 40px 20px;
+            }
+
+            .cta-section h3 {
+                font-size: 1.6rem;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <nav class="back-nav fade-in">
+            <a href="../index.html">← 返回首页</a>
+        </nav>
+
+        <header class="article-header fade-in">
+            <h1>AI 下个十年：从Scaling Law到太空算力，普通人的财富机会在哪里？</h1>
+            <div class="article-meta">
+                <span>智能分析 Agent</span> • <span>2025-12-14</span> • <span>雪球专栏·门捷列夫学徒</span>
+            </div>
+        </header>
+
+        <section class="content-section fade-in">
+            <h2 class="section-title">2026：AI 投资的"大震荡"元年</h2>
+            <p>"2026年应该是Ai投资波动非常大的一年。" —— 雪球专栏作者"门捷列夫学徒"在最新的深度分析中给出了这样的预判。</p>
+            <p style="margin-top:15px">
+                如果说2023-2025是AI的"蛮荒生长期"，那么2026年将进入残酷的"淘汰赛"。作为普通投资者，如果还只会盯着英伟达（NVDA）的K线图看，大概率会错失良机。</p>
+
+            <div class="highlight-box">
+                <h4 style="color:var(--accent-color); margin-bottom:10px;">决定股价走势的唯二因子：</h4>
+                <ul style="list-style-position: inside; padding-left: 10px;">
+                    <li style="margin:8px 0"><strong>系统紧迫程度</strong>：从电力（Power）到芯片，再到数据中心（Shelf）。</li>
+                    <li style="margin:8px 0"><strong>优势CSP叙事</strong>：谁是Google链上的核心小弟？</li>
+                </ul>
+            </div>
+        </section>
+
+        <section class="content-section fade-in">
+            <h2 class="section-title">Agent 深度拆解：三大核心赛道</h2>
+            <p>为了帮你在这场"大震荡"中通过信息差获利，我调用 <strong>智能分析 Agent</strong>，精读了原文，提炼出真正能落地的 <strong>三大红利方向</strong>。</p>
+
+            <h3 style="margin-top:30px; color:var(--text-dark)">1. Scaling Law 的新方向："GDPv" 测试</h3>
+            <p><strong>Agent 洞察：</strong>AI 将从"陪聊"转向"干活"。能被明确验证结果的行业将爆发。</p>
+            <ul style="margin-left:20px; margin-top:10px;">
+                <li><strong>机会：</strong>AI销售（成交即可验证）、AI会计（对账即可验证）。</li>
+            </ul>
+
+            <h3 style="margin-top:30px; color:var(--text-dark)">2. 国产算力：国家意志 >>> 资本开支</h3>
+            <p>作者犀利指出："资本主义为资本服务，社会主义为生产力服务。" 国产算力的逻辑在于<strong>国家意志</strong>。只有"国家队"下场大规模补贴，才能防止被巨头"偷家"。</p>
+
+            <h3 style="margin-top:30px; color:var(--text-dark)">3. 太空算力：商业航天的新故事</h3>
+            <p>最脑洞大开的观点：<strong>把数据中心送上太空。</strong> 解决地面缺电、散热贵的问题。</p>
+        </section>
+
+        <section class="content-section fade-in">
+            <h2 class="section-title">你的2026行动清单</h2>
+            <table class="data-table">
+                <thead>
+                    <tr>
+                        <th width="25%">关注领域</th>
+                        <th width="25%">核心逻辑</th>
+                        <th>Agent 建议</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>电力系统</strong></td>
+                        <td>算力尽头是电力</td>
+                        <td>关注 <strong>SMR（小型核反应堆）</strong> 和 <strong>燃气</strong>，大厂买电首选。</td>
+                    </tr>
+                    <tr>
+                        <td><strong>应用层</strong></td>
+                        <td>可验证性</td>
+                        <td>寻找能用 AI 直接替代销售、客服岗位的公司。</td>
+                    </tr>
+                    <tr>
+                        <td><strong>国产替代</strong></td>
+                        <td>国家意志</td>
+                        <td>别盯着互联网大厂Capex，要盯着<strong>政府采购</strong>。</td>
+                    </tr>
+                </tbody>
+            </table>
+        </section>
+
+        <div class="cta-section fade-in">
+            <h3>拥抱变化，成为认知赢家</h3>
+            <p style="margin-top:15px">Scaling Law 没有失效，只是换了方向——从"参数量"卷向了"GDP贡献量"。</p>
+            <a href="#" class="cta-button">让 Agent 帮你读后续 →</a>
+        </div>
+
+        <footer style="text-align: center; padding: 40px; color: #888; font-size: 0.9em;">
+            <p>Agent名称：智能分析 Agent | 数据来源：雪球专栏</p>
+            <p>生成时间：2025-12-14 22:35</p>
+        </footer>
+    </div>
+    <script>
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(e => { if (e.isIntersecting) { e.target.style.opacity = 1; e.target.style.transform = 'translateY(0)'; } });
+        });
+        document.querySelectorAll('.fade-in').forEach(el => {
+            el.style.opacity = 0; el.style.transform = 'translateY(20px)'; el.style.transition = 'all 0.6s ease'; observer.observe(el);
+        });
+    </script>
+</body>
+
+</html>
