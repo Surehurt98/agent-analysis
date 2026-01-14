@@ -1,0 +1,749 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Wind 金融终端 - Alice Agent</title>
+    <meta name="description" content="Wind 金融终端 Alice Agent - 轻松完成所有工作">
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+</head>
+
+<body>
+    <!-- 顶部一级导航栏 -->
+    <header class="global-header">
+        <div class="header-left">
+            <div class="logo">
+                <span class="logo-icon">W</span>
+                <span class="logo-text">Wind</span>
+            </div>
+            <div class="header-search">
+                <input type="text" placeholder="搜索..." class="search-input">
+                <span class="search-icon">🔍</span>
+            </div>
+        </div>
+        <nav class="primary-nav">
+            <a href="#" class="nav-item active">首页</a>
+            <a href="#" class="nav-item">股票</a>
+            <a href="#" class="nav-item">债券</a>
+            <a href="#" class="nav-item">商品</a>
+            <a href="#" class="nav-item">外汇</a>
+            <a href="#" class="nav-item">基金</a>
+            <a href="#" class="nav-item">指数</a>
+            <a href="#" class="nav-item">衍生品</a>
+            <a href="#" class="nav-item">宏观</a>
+            <a href="#" class="nav-item">资讯</a>
+            <a href="#" class="nav-item">企业</a>
+            <a href="#" class="nav-item">交易</a>
+        </nav>
+        <div class="header-right">
+            <a href="#" class="header-link hot">热门数据 <span class="badge hot">HOT</span></a>
+            <a href="#" class="header-link">资询监控</a>
+            <a href="#" class="header-link">对比股票综合屏</a>
+            <a href="#" class="header-link">港美股票综合屏</a>
+            <a href="#" class="header-link">美股股票综合屏</a>
+            <a href="#" class="header-link">全部AI服务</a>
+            <a href="#" class="header-link">全球市场数据</a>
+            <a href="#" class="header-link highlight">研报平台</a>
+            <div class="alice-badge">
+                <span class="alice-icon">Alice</span>
+            </div>
+        </div>
+    </header>
+
+    <!-- 二级标签页 -->
+    <div class="tab-bar">
+        <div class="tab-list">
+            <div class="tab active">
+                <span class="tab-icon">🏠</span>
+                <span class="tab-text">首页</span>
+            </div>
+            <div class="tab">
+                <span class="tab-icon">📈</span>
+                <span class="tab-text">我的</span>
+            </div>
+            <div class="tab">
+                <span class="tab-text">F9-浦发银行 600000.SH</span>
+                <span class="tab-close">×</span>
+            </div>
+            <div class="tab">
+                <span class="tab-text">全球并购库</span>
+                <span class="tab-close">×</span>
+            </div>
+            <div class="tab">
+                <span class="tab-text">研究工作台</span>
+                <span class="tab-close">×</span>
+            </div>
+            <div class="tab">
+                <span class="tab-text">沪港股票专题统计</span>
+                <span class="tab-close">×</span>
+            </div>
+            <div class="tab-add">+</div>
+        </div>
+    </div>
+
+    <!-- 主容器 -->
+    <div class="main-container">
+        <!-- 左侧边栏 -->
+        <aside class="sidebar">
+            <!-- 常用功能 - 标签式布局 -->
+            <section class="sidebar-section">
+                <h3 class="section-title">常用功能</h3>
+                <div class="quick-tags-grid">
+                    <a href="#" class="quick-tag">Alice Reader <span class="tag-badge">ARDR</span></a>
+                    <a href="#" class="quick-tag">Alice Chat <span class="tag-badge">ACHAT</span></a>
+                    <a href="#" class="quick-tag">财经资讯 <span class="tag-badge">NEWS</span></a>
+                    <a href="#" class="quick-tag">Alice Writer <span class="tag-badge">AWI</span></a>
+                    <a href="#" class="quick-tag">形态选股 <span class="tag-badge">913</span></a>
+                    <a href="#" class="quick-tag">板块管理 <span class="tag-badge">F2</span></a>
+                    <a href="#" class="quick-tag">Excel插件 <span class="tag-badge">RE</span></a>
+                    <a href="#" class="quick-tag">经济数据库 <span class="tag-badge">EDB</span></a>
+                    <a href="#" class="quick-tag">研报平台 <span class="tag-badge">RPP</span></a>
+                </div>
+                <div class="quick-links-sub">
+                    <p class="sub-link-title">您可能感兴趣的功能</p>
+                    <div class="sub-links-grid">
+                        <a href="#" class="sub-link">全球经济日历 <span class="tag-sm">ECO</span></a>
+                        <a href="#" class="sub-link">外汇口历 <span class="tag-sm">FXO</span></a>
+                        <a href="#" class="sub-link">万得大学 <span class="tag-sm">WU</span></a>
+                        <a href="#" class="sub-link">全球企业卡 <span class="tag-sm">GEL</span></a>
+                        <a href="#" class="sub-link">全球企业库 <span class="tag-sm">GCL</span></a>
+                        <a href="#" class="sub-link">保险索引 <span class="tag-sm">INF</span></a>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 收藏Agent -->
+            <section class="sidebar-section">
+                <h3 class="section-title">收藏Agent</h3>
+                <div class="collected-agents">
+                    <a href="#" class="collected-agent-item">
+                        <div class="agent-avatar-sm">
+                            <img src="images/agent_fund.png" alt="智投有招" class="avatar-sm-img">
+                        </div>
+                        <div class="agent-content">
+                            <div class="agent-name-row">
+                                <span class="agent-name">智投有招-上海私行服务前台</span>
+                                <span class="star">⭐</span>
+                            </div>
+                            <span class="agent-brief">本功能聚焦于上海地区私行服务及资本市场营销向导发现，通过...</span>
+                        </div>
+                    </a>
+                    <a href="#" class="collected-agent-item">
+                        <div class="agent-avatar-sm">
+                            <img src="images/agent_news.png" alt="今日热点" class="avatar-sm-img">
+                        </div>
+                        <div class="agent-content">
+                            <div class="agent-name-row">
+                                <span class="agent-name">今日热点新闻解析</span>
+                                <span class="star">⭐</span>
+                            </div>
+                            <span class="agent-brief">本功能监控财经动态，智能识别市场焦点，分析事件对行...</span>
+                        </div>
+                    </a>
+                    <a href="#" class="collected-agent-item">
+                        <div class="agent-avatar-sm">
+                            <img src="images/agent_exchange.png" alt="大类资产" class="avatar-sm-img">
+                        </div>
+                        <div class="agent-content">
+                            <div class="agent-name-row">
+                                <span class="agent-name">大类资产区间测算统计</span>
+                                <span class="star">⭐</span>
+                            </div>
+                            <span class="agent-brief">"大类资产区间测算统计"辅助投资者快速了解各类资...</span>
+                        </div>
+                    </a>
+                    <a href="#" class="collected-agent-item">
+                        <div class="agent-avatar-sm">
+                            <img src="images/agent_commodity.png" alt="文献翻译" class="avatar-sm-img">
+                        </div>
+                        <div class="agent-content">
+                            <div class="agent-name-row">
+                                <span class="agent-name">文献翻译专家</span>
+                                <span class="star">⭐</span>
+                            </div>
+                            <span class="agent-brief">文献翻译专家帮助研究员快速将外文资料翻译为标准中...</span>
+                        </div>
+                    </a>
+                    <a href="#" class="collected-agent-item">
+                        <div class="agent-avatar-sm">
+                            <img src="images/agent_fund.png" alt="自选股" class="avatar-sm-img">
+                        </div>
+                        <div class="agent-content">
+                            <div class="agent-name-row">
+                                <span class="agent-name">自选股财报分析师-测试</span>
+                                <span class="star">⭐</span>
+                            </div>
+                            <span class="agent-brief">专注于为用户筛选并分析自选股中今日发布的财务报告服务...</span>
+                        </div>
+                    </a>
+                    <a href="#" class="collected-agent-item">
+                        <div class="agent-avatar-sm">
+                            <img src="images/agent_news.png" alt="一周金融" class="avatar-sm-img">
+                        </div>
+                        <div class="agent-content">
+                            <div class="agent-name-row">
+                                <span class="agent-name">【定制】一周金融市场动态</span>
+                                <span class="star">⭐</span>
+                            </div>
+                            <span class="agent-brief">一周金融动态追踪各方财经数据及覆盖全球各市场最新发...</span>
+                        </div>
+                    </a>
+                    <a href="#" class="collected-agent-item">
+                        <div class="agent-avatar-sm">
+                            <img src="images/agent_exchange.png" alt="星矿债券" class="avatar-sm-img">
+                        </div>
+                        <div class="agent-content">
+                            <div class="agent-name-row">
+                                <span class="agent-name">星矿 债券分析</span>
+                                <span class="star">⭐</span>
+                            </div>
+                            <span class="agent-brief">债券分析Agent让您可以自定义分析的时间区间，此Agent...</span>
+                        </div>
+                    </a>
+                </div>
+            </section>
+        </aside>
+
+        <!-- 主体内容区 -->
+        <main class="main-content">
+            <!-- Hero Banner with Avatar -->
+            <section class="hero-banner">
+                <div class="hero-layout">
+                    <div class="hero-avatar">
+                        <img src="images/Alice icon.jpg" alt="Alice Agent" class="avatar-img">
+                    </div>
+                    <div class="hero-content">
+                        <h1 class="hero-title">
+                            <span class="alice-brand">Alice Agent</span>
+                            <span class="hero-subtitle">轻松完成所有工作</span>
+                        </h1>
+                        <div class="hero-actions">
+                            <button id="btnAutoCreate" class="btn btn-primary">
+                                <span class="btn-icon">+</span>
+                                用AI自动创建Agent
+                            </button>
+                            <button class="btn btn-secondary">
+                                <span class="btn-icon-outline">◇</span>
+                                请万得带我免费定制
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 全部Agent分类搜索区 -->
+            <section class="agent-directory">
+                <div class="directory-header">
+                    <h3 class="directory-title">全部Agent</h3>
+                    <div class="directory-tabs">
+                        <button class="dir-tab active" data-category="all">全部</button>
+                        <button class="dir-tab" data-category="股票">股票</button>
+                        <button class="dir-tab" data-category="债券">债券</button>
+                        <button class="dir-tab" data-category="商品">商品</button>
+                        <button class="dir-tab" data-category="基金">基金</button>
+                        <button class="dir-tab" data-category="指数">指数</button>
+                        <button class="dir-tab" data-category="衍生品">衍生品</button>
+                        <button class="dir-tab" data-category="宏观">宏观</button>
+                        <button class="dir-tab" data-category="资讯">资讯</button>
+                        <button class="dir-tab" data-category="企业">企业</button>
+                        <button class="dir-tab" data-category="风险">风险</button>
+                        <button class="dir-tab" data-category="发现">发现</button>
+                    </div>
+                    <div class="directory-search">
+                        <input type="text" placeholder="搜索Agent" class="dir-search-input">
+                        <span class="search-icon">🔍</span>
+                    </div>
+                </div>
+                <div class="directory-list">
+                    <!-- Agent Item 1 -->
+                    <div class="agent-list-item" data-category="基金">
+                        <div class="agent-thumb">
+                            <img src="images/agent_fund.png" alt="自选基金" class="thumb-img">
+                        </div>
+                        <div class="agent-info">
+                            <h4 class="agent-item-title">
+                                自选基金每日速递
+                                <span class="badge new">NEW</span>
+                            </h4>
+                            <p class="agent-item-desc">
+                                根据用户的自选库，定期跟踪重点基金产品表现。自选基金每日速递帮助投资者一键获取重点基金的每日关键数据。后台维护自建的策略操作建议，每天清晨准时推送。
+                            </p>
+                        </div>
+                    </div>
+
+                    <!-- Agent Item 2 -->
+                    <div class="agent-list-item" data-category="资讯">
+                        <div class="agent-thumb">
+                            <img src="images/agent_exchange.png" alt="全球交易" class="thumb-img">
+                        </div>
+                        <div class="agent-info">
+                            <h4 class="agent-item-title">
+                                全球交易所动态监控
+                            </h4>
+                            <p class="agent-item-desc">
+                                全球交易所动态监控是一款智能化的数据收集分析和信息工具。该Agent实时收集全球主流市场各交易所的新闻动态 and 资讯，协助用户掌握交易所动态、重要进展等内容。
+                            </p>
+                        </div>
+                    </div>
+
+                    <!-- Agent Item 3 -->
+                    <div class="agent-list-item" data-category="商品">
+                        <div class="agent-thumb">
+                            <img src="images/agent_commodity.png" alt="商品分析" class="thumb-img">
+                        </div>
+                        <div class="agent-info">
+                            <h4 class="agent-item-title">
+                                商品基差异动分析 <span class="badge new">NEW</span>
+                            </h4>
+                            <p class="agent-item-desc">
+                                商品需求表现如何？由于数据来源极度分散，难以实时获取准确。此类Agent可以协助整合和实时呈现商品显性及隐性基本面变化。
+                            </p>
+                        </div>
+                    </div>
+
+                    <!-- Agent Item 4 -->
+                    <div class="agent-list-item" data-category="资讯">
+                        <div class="agent-thumb">
+                            <img src="images/agent_news.png" alt="全球财经" class="thumb-img">
+                        </div>
+                        <div class="agent-info">
+                            <h4 class="agent-item-title">
+                                全球财经要闻通 <span class="badge new">NEW</span>
+                            </h4>
+                            <p class="agent-item-desc">
+                                只需输入目标国家，AI将帮助您一键整合全球最新动态。投资参考，支持广大金融市场。
+                            </p>
+                        </div>
+                    </div>
+
+                    <!-- Agent Item 5 (股票) -->
+                    <div class="agent-list-item" data-category="股票">
+                        <div class="agent-thumb">
+                            <img src="images/agent_fund.png" alt="股票分析" class="thumb-img">
+                        </div>
+                        <div class="agent-info">
+                            <h4 class="agent-item-title">
+                                股票形态选股大师
+                            </h4>
+                            <p class="agent-item-desc">
+                                通过海量历史数据训练，智能识别股票K线形态。帮助投资者快速捕捉潜在的突破和反转机会。
+                            </p>
+                        </div>
+                    </div>
+
+                    <!-- Agent Item 6 (债券) -->
+                    <div class="agent-list-item" data-category="债券">
+                        <div class="agent-thumb">
+                            <img src="images/agent_exchange.png" alt="债券分析" class="thumb-img">
+                        </div>
+                        <div class="agent-info">
+                            <h4 class="agent-item-title">
+                                星矿 债券信用分析
+                            </h4>
+                            <p class="agent-item-desc">
+                                实时监控债券市场信用风险，提供深度的财务指标分析与舆情预警。
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <!-- 底部状态栏 -->
+    <footer class="status-bar">
+        <div class="news-ticker">
+            <span class="ticker-time">15:30</span>
+            <span class="ticker-content">央视理法大量资金提前分摊入金 原始总公司资产处理处理公告(Wind All)</span>
+        </div>
+        <div class="market-ticker">
+            <div class="ticker-scroll">
+                <div class="market-item">
+                    <span class="market-name">沪:</span>
+                    <span class="market-value up">21068.96</span>
+                    <span class="market-change up">+23.67</span>
+                    <span class="market-percent up">+3.07%</span>
+                </div>
+                <div class="market-item">
+                    <span class="market-name">深:</span>
+                    <span class="market-value up">4976.03</span>
+                    <span class="market-change up">+23.67</span>
+                    <span class="market-percent up">+3.07%</span>
+                </div>
+                <div class="market-item">
+                    <span class="market-name">港:</span>
+                    <span class="market-value up">3695%</span>
+                </div>
+                <div class="market-item">
+                    <span class="market-name">美道:</span>
+                    <span class="market-value down">-</span>
+                </div>
+                <div class="market-item">
+                    <span class="market-name">台:</span>
+                    <span class="market-value up">14298.67</span>
+                    <span class="market-percent up">+0.07%</span>
+                </div>
+                <div class="market-item">
+                    <span class="market-name">金:</span>
+                    <span class="market-value up">2892.1</span>
+                </div>
+                <div class="market-item">
+                    <span class="market-name">油:</span>
+                    <span class="market-value down">68.17</span>
+                </div>
+            </div>
+        </div>
+        <div class="status-tools">
+            <span class="status-time">15:30:27</span>
+            <button class="quick-cmd-btn">快捷命令</button>
+        </div>
+    </footer>
+
+    <!-- Auto-Create Agent Modal -->
+    <div id="createAgentModal" class="modal-backdrop hidden">
+        <div class="modal-container agent-modal-container">
+            <div class="modal-header">
+                <h3 class="modal-title">自动创建 Agent</h3>
+                <button class="modal-close">&times;</button>
+            </div>
+            <div class="modal-body">
+                <!-- Claude-style Input Area -->
+                <div class="agent-input-area">
+                    <textarea id="agentRequirement" class="agent-textarea"
+                        placeholder="描述您希望 Agent 完成的任务...&#10;例如：帮我监控每天的半导体行业新闻，并自动总结重点"></textarea>
+
+                    <!-- Bottom Toolbar -->
+                    <div class="input-toolbar">
+                        <!-- MCP Entry (Left) -->
+                        <div class="toolbar-left">
+                            <button type="button" class="mcp-entry-btn" id="btnMcpEntry" title="配置 MCP 工具">
+                                <span class="mcp-icon">🔌</span>
+                                <span class="mcp-label">MCP</span>
+                            </button>
+                            <!-- MCP Badge (shows when tools are configured) -->
+                            <div class="mcp-badge-wrapper" id="mcpBadgeWrapper">
+                                <span class="mcp-badge" id="mcpBadge">2 个工具</span>
+                                <!-- Hover Tooltip -->
+                                <div class="mcp-tooltip" id="mcpTooltip">
+                                    <div class="tooltip-header">已配置的 MCP 工具</div>
+                                    <div class="tooltip-list" id="mcpTooltipList">
+                                        <!-- Dynamic content -->
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Submit Button (Right) -->
+                        <div class="toolbar-right">
+                            <button class="btn btn-primary submit-btn" id="btnSubmitAgent">
+                                <span class="btn-icon">✨</span>
+                                开始创建
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- MCP Panel (Claude-style dropdown) -->
+                <div class="mcp-panel hidden" id="mcpPanel">
+                    <div class="mcp-panel-header">
+                        <span class="panel-title">MCP 工具</span>
+                        <button type="button" class="panel-close" id="btnCloseMcpPanel">&times;</button>
+                    </div>
+
+                    <!-- Tool Source Tabs -->
+                    <div class="mcp-source-tabs">
+                        <button type="button" class="source-tab active" data-source="wind">Wind 官方</button>
+                        <button type="button" class="source-tab" data-source="custom">自定义</button>
+                    </div>
+
+                    <!-- Wind MCP Tools -->
+                    <div class="mcp-source-content active" data-source="wind">
+                        <div class="tool-mini-list">
+                            <label class="tool-mini-item">
+                                <input type="checkbox" checked>
+                                <span class="tool-mini-icon">📊</span>
+                                <span class="tool-mini-name">Wind 股票数据</span>
+                            </label>
+                            <label class="tool-mini-item">
+                                <input type="checkbox" checked>
+                                <span class="tool-mini-icon">📈</span>
+                                <span class="tool-mini-name">Wind 财务报表</span>
+                            </label>
+                            <label class="tool-mini-item">
+                                <input type="checkbox">
+                                <span class="tool-mini-icon">📰</span>
+                                <span class="tool-mini-name">Wind 资讯舆情</span>
+                            </label>
+                            <label class="tool-mini-item">
+                                <input type="checkbox">
+                                <span class="tool-mini-icon">🏢</span>
+                                <span class="tool-mini-name">Wind 企业数据</span>
+                            </label>
+                        </div>
+                    </div>
+
+                    <!-- Custom MCP Tools -->
+                    <div class="mcp-source-content" data-source="custom">
+                        <!-- Empty State -->
+                        <div class="custom-mcp-empty" id="customMcpEmpty">
+                            <div class="empty-icon">🔌</div>
+                            <p>暂无自定义 MCP 服务器</p>
+                            <p class="empty-hint">添加您自己的 MCP 服务器以接入私域数据</p>
+                        </div>
+
+                        <!-- MCP Server List (when servers exist) -->
+                        <div class="custom-mcp-list hidden" id="customMcpList">
+                            <!-- Dynamic content -->
+                        </div>
+
+                        <!-- Add New MCP -->
+                        <button type="button" class="add-mcp-btn" id="btnAddMcp">
+                            <span class="add-icon">+</span>
+                            添加 MCP 服务器
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- MCP Configuration Wizard Modal -->
+    <div id="mcpWizardModal" class="modal-backdrop hidden">
+        <div class="modal-container mcp-wizard-container">
+            <div class="modal-header">
+                <h3 class="modal-title">配置 MCP 服务器</h3>
+                <button class="modal-close mcp-wizard-close">&times;</button>
+            </div>
+
+            <!-- Step Progress Indicator -->
+            <div class="step-progress">
+                <div class="step-item active" data-step="1">
+                    <div class="step-number">1</div>
+                    <div class="step-label">连接配置</div>
+                </div>
+                <div class="step-connector"></div>
+                <div class="step-item" data-step="2">
+                    <div class="step-number">2</div>
+                    <div class="step-label">认证设置</div>
+                </div>
+                <div class="step-connector"></div>
+                <div class="step-item" data-step="3">
+                    <div class="step-number">3</div>
+                    <div class="step-label">工具发现</div>
+                </div>
+            </div>
+
+            <div class="modal-body mcp-wizard-body">
+                <!-- Step 1: Connection -->
+                <div class="wizard-step active" data-step="1">
+                    <div class="form-group">
+                        <label class="form-label" for="mcpServerName">服务器名称 <span class="required">*</span></label>
+                        <input type="text" id="mcpServerName" class="form-input" placeholder="例如：内部知识库 MCP">
+                        <p class="input-hint">用于标识此 MCP 服务器的名称</p>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label" for="mcpServerUrl">SSE 端点地址 <span class="required">*</span></label>
+                        <div class="input-with-status">
+                            <input type="text" id="mcpServerUrl" class="form-input"
+                                placeholder="https://your-mcp-server.example.com/sse">
+                            <div class="connection-status" id="connectionStatus">
+                                <span class="status-dot"></span>
+                                <span class="status-text">未连接</span>
+                            </div>
+                        </div>
+                        <p class="input-hint">MCP 服务器的 SSE 或 Streamable HTTP 端点</p>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label" for="mcpTimeout">连接超时</label>
+                        <select id="mcpTimeout" class="form-select">
+                            <option value="5000">5 秒</option>
+                            <option value="10000" selected>10 秒</option>
+                            <option value="30000">30 秒</option>
+                            <option value="60000">60 秒</option>
+                        </select>
+                    </div>
+
+                    <button type="button" id="btnTestConnection" class="btn btn-outline-primary">
+                        <span class="btn-icon">🔗</span>
+                        测试连接
+                    </button>
+
+                    <!-- Connection Result -->
+                    <div id="connectionResult" class="connection-result hidden">
+                        <div class="result-icon"></div>
+                        <div class="result-content">
+                            <div class="result-title"></div>
+                            <div class="result-message"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Step 2: Authentication -->
+                <div class="wizard-step" data-step="2">
+                    <div class="form-group">
+                        <label class="form-label">认证方式</label>
+                        <div class="auth-type-selector">
+                            <button type="button" class="auth-type-btn active" data-auth="none">
+                                <span class="auth-icon">🔓</span>
+                                <span>无认证</span>
+                            </button>
+                            <button type="button" class="auth-type-btn" data-auth="bearer">
+                                <span class="auth-icon">🎫</span>
+                                <span>Bearer Token</span>
+                            </button>
+                            <button type="button" class="auth-type-btn" data-auth="apikey">
+                                <span class="auth-icon">🔑</span>
+                                <span>API Key</span>
+                            </button>
+                            <button type="button" class="auth-type-btn" data-auth="oauth2">
+                                <span class="auth-icon">🔐</span>
+                                <span>OAuth 2.0</span>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Auth: None -->
+                    <div class="auth-config active" data-auth="none">
+                        <div class="auth-info-box">
+                            <span class="info-icon">ℹ️</span>
+                            <p>不需要认证信息，服务器将直接接受连接请求。</p>
+                        </div>
+                    </div>
+
+                    <!-- Auth: Bearer Token -->
+                    <div class="auth-config" data-auth="bearer">
+                        <div class="form-group">
+                            <label class="form-label" for="bearerToken">Bearer Token <span
+                                    class="required">*</span></label>
+                            <div class="password-input-wrapper">
+                                <input type="password" id="bearerToken" class="form-input"
+                                    placeholder="输入您的 Bearer Token">
+                                <button type="button" class="password-toggle" data-target="bearerToken">
+                                    <span class="eye-icon">👁️</span>
+                                </button>
+                            </div>
+                            <p class="input-hint">
+                                <span class="security-badge">🔒 安全</span>
+                                Token 将加密存储，不会明文传输
+                            </p>
+                        </div>
+                    </div>
+
+                    <!-- Auth: API Key -->
+                    <div class="auth-config" data-auth="apikey">
+                        <div class="form-group">
+                            <label class="form-label" for="apiKeyHeader">Header 名称 <span
+                                    class="required">*</span></label>
+                            <input type="text" id="apiKeyHeader" class="form-input" placeholder="例如：X-API-Key">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label" for="apiKeyValue">API Key <span class="required">*</span></label>
+                            <div class="password-input-wrapper">
+                                <input type="password" id="apiKeyValue" class="form-input" placeholder="输入您的 API Key">
+                                <button type="button" class="password-toggle" data-target="apiKeyValue">
+                                    <span class="eye-icon">👁️</span>
+                                </button>
+                            </div>
+                            <p class="input-hint">
+                                <span class="security-badge">🔒 安全</span>
+                                密钥将加密存储
+                            </p>
+                        </div>
+                    </div>
+
+                    <!-- Auth: OAuth 2.0 -->
+                    <div class="auth-config" data-auth="oauth2">
+                        <div class="form-group">
+                            <label class="form-label" for="oauth2ClientId">Client ID <span
+                                    class="required">*</span></label>
+                            <input type="text" id="oauth2ClientId" class="form-input" placeholder="OAuth 客户端 ID">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label" for="oauth2ClientSecret">Client Secret <span
+                                    class="required">*</span></label>
+                            <div class="password-input-wrapper">
+                                <input type="password" id="oauth2ClientSecret" class="form-input"
+                                    placeholder="OAuth 客户端密钥">
+                                <button type="button" class="password-toggle" data-target="oauth2ClientSecret">
+                                    <span class="eye-icon">👁️</span>
+                                </button>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label" for="oauth2AuthUrl">Authorization URL <span
+                                    class="required">*</span></label>
+                            <input type="text" id="oauth2AuthUrl" class="form-input"
+                                placeholder="https://auth.example.com/authorize">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label" for="oauth2TokenUrl">Token URL <span
+                                    class="required">*</span></label>
+                            <input type="text" id="oauth2TokenUrl" class="form-input"
+                                placeholder="https://auth.example.com/token">
+                        </div>
+                        <p class="input-hint">
+                            <span class="security-badge">🔒 安全</span>
+                            所有凭证将加密存储
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Step 3: Tool Discovery -->
+                <div class="wizard-step" data-step="3">
+                    <div class="tool-discovery-header">
+                        <div class="discovery-info">
+                            <h4>已发现的工具</h4>
+                            <span class="tool-count" id="toolCount">0 个工具</span>
+                        </div>
+                        <div class="tool-actions">
+                            <input type="text" id="toolSearch" class="form-input tool-search" placeholder="搜索工具...">
+                            <button type="button" class="btn btn-sm btn-outline" id="btnSelectAll">全选</button>
+                            <button type="button" class="btn btn-sm btn-outline" id="btnSelectNone">全不选</button>
+                        </div>
+                    </div>
+
+                    <!-- Loading State -->
+                    <div class="tool-loading" id="toolLoading">
+                        <div class="loading-spinner"></div>
+                        <p>正在发现可用工具...</p>
+                    </div>
+
+                    <!-- Tool List -->
+                    <div class="tool-list" id="toolList">
+                        <!-- Tools will be dynamically inserted here -->
+                    </div>
+
+                    <!-- Empty State -->
+                    <div class="tool-empty hidden" id="toolEmpty">
+                        <div class="empty-icon">📭</div>
+                        <p>未发现任何工具</p>
+                        <p class="empty-hint">请检查 MCP 服务器配置</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="modal-footer mcp-wizard-footer">
+                <button class="btn btn-secondary" id="btnWizardCancel">取消</button>
+                <div class="wizard-nav-buttons">
+                    <button class="btn btn-outline-primary hidden" id="btnWizardPrev">
+                        <span class="btn-icon">←</span> 上一步
+                    </button>
+                    <button class="btn btn-primary" id="btnWizardNext">
+                        下一步 <span class="btn-icon">→</span>
+                    </button>
+                    <button class="btn btn-primary hidden" id="btnWizardFinish">
+                        <span class="btn-icon">✓</span> 完成配置
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+
+</html>
