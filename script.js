@@ -283,40 +283,158 @@ function initCreateAgentModal() {
     const btnMcpEntry = document.getElementById('btnMcpEntry');
     const mcpPanel = document.getElementById('mcpPanel');
     const btnCloseMcpPanel = document.getElementById('btnCloseMcpPanel');
-    const mcpBadgeWrapper = document.getElementById('mcpBadgeWrapper');
-    const mcpBadge = document.getElementById('mcpBadge');
-    const mcpTooltipList = document.getElementById('mcpTooltipList');
+    const mcpStatusDot = document.getElementById('mcpStatusDot');
     const btnSubmitAgent = document.getElementById('btnSubmitAgent');
-    const btnAddMcp = document.getElementById('btnAddMcp');
+    const oauthModal = document.getElementById('oauthModal');
 
     if (!modal) return;
 
-    // State
-    let selectedTools = [
-        { name: 'Wind 股票数据', icon: '📊', source: 'wind' },
-        { name: 'Wind 财务报表', icon: '📈', source: 'wind' }
-    ];
+    // ===== Lightweight MCP State =====
+    const mcpState = {
+        thirdParty: {
+            notion: { connected: false, accessToken: null, name: 'Notion' },
+            youdao: { connected: false, accessToken: null, name: '有道云笔记' }
+        },
+        builtIn: {
+            'file-handler': { enabled: true, name: '文件处理' },
+            'windows-cmd': { enabled: true, name: 'Windows 命令' },
+            'browser-ops': { enabled: false, name: '浏览器操作' }
+        }
+    };
 
-    // Update badge and tooltip
-    function updateMcpBadge() {
-        if (selectedTools.length > 0) {
-            mcpBadgeWrapper.style.display = 'block';
-            mcpBadge.textContent = `${selectedTools.length} 个工具`;
+    // Update MCP Status Dot
+    function updateMcpStatusDot() {
+        const hasConnectedThirdParty = Object.values(mcpState.thirdParty).some(s => s.connected);
+        const hasEnabledBuiltIn = Object.values(mcpState.builtIn).some(t => t.enabled);
+        const hasEnabledTools = hasConnectedThirdParty || hasEnabledBuiltIn;
 
-            // Update tooltip content
-            mcpTooltipList.innerHTML = selectedTools.map(tool => `
-                <div class="tooltip-item">
-                    <span class="tooltip-item-icon">${tool.icon}</span>
-                    <span>${tool.name}</span>
-                </div>
-            `).join('');
-        } else {
-            mcpBadgeWrapper.style.display = 'none';
+        if (mcpStatusDot) {
+            mcpStatusDot.classList.toggle('active', hasEnabledTools);
+            mcpStatusDot.classList.toggle('inactive', !hasEnabledTools);
         }
     }
 
-    // Initialize badge
-    updateMcpBadge();
+    // Initialize status dot
+    updateMcpStatusDot();
+
+    // ===== Third-Party OAuth Connect =====
+    document.querySelectorAll('.connect-btn').forEach(btn => {
+        btn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            const service = btn.dataset.service;
+            handleOAuthConnect(service, btn);
+        });
+    });
+
+    function handleOAuthConnect(service, btn) {
+        const serviceInfo = mcpState.thirdParty[service];
+        if (!serviceInfo) return;
+
+        // If already connected, toggle disconnect
+        if (serviceInfo.connected) {
+            if (confirm(`确定要断开与 ${serviceInfo.name} 的连接吗？`)) {
+                serviceInfo.connected = false;
+                serviceInfo.accessToken = null;
+                updateIntegrationUI(service, false);
+                updateMcpStatusDot();
+                showToast(`${serviceInfo.name} 已断开连接`, 'info');
+            }
+            return;
+        }
+
+        // Show OAuth loading modal
+        const oauthServiceName = document.getElementById('oauthServiceName');
+        if (oauthServiceName) {
+            oauthServiceName.textContent = serviceInfo.name;
+        }
+        if (oauthModal) {
+            oauthModal.classList.remove('hidden');
+        }
+
+        // Simulate OAuth redirect flow
+        // In real implementation, this would open a popup or redirect to OAuth provider
+        setTimeout(() => {
+            // Simulate successful authorization callback
+            if (oauthModal) {
+                oauthModal.classList.add('hidden');
+            }
+
+            // Update state
+            serviceInfo.connected = true;
+            serviceInfo.accessToken = 'mock_token_' + Date.now();
+
+            // Update UI
+            updateIntegrationUI(service, true);
+            updateMcpStatusDot();
+
+            showToast(`${serviceInfo.name} 连接成功！`, 'success');
+        }, 2500);
+    }
+
+    function updateIntegrationUI(service, connected) {
+        const item = document.querySelector(`.mcp-integration-item[data-service="${service}"]`);
+        if (!item) return;
+
+        const btn = item.querySelector('.connect-btn');
+        const connectText = btn.querySelector('.connect-text');
+        const connectArrow = btn.querySelector('.connect-arrow');
+
+        if (connected) {
+            item.classList.add('connected');
+            btn.classList.add('connected');
+            connectText.textContent = '已连接';
+            if (connectArrow) connectArrow.style.display = 'none';
+        } else {
+            item.classList.remove('connected');
+            btn.classList.remove('connected');
+            connectText.textContent = '去连接';
+            if (connectArrow) connectArrow.style.display = '';
+        }
+    }
+
+    // ===== Built-in Tool Toggles =====
+    document.querySelectorAll('.mcp-builtin-item input[type="checkbox"]').forEach(toggle => {
+        toggle.addEventListener('change', (e) => {
+            const tool = e.target.dataset.tool;
+            const enabled = e.target.checked;
+
+            if (mcpState.builtIn[tool]) {
+                mcpState.builtIn[tool].enabled = enabled;
+            }
+
+            const item = e.target.closest('.mcp-builtin-item');
+            if (item) {
+                item.classList.toggle('enabled', enabled);
+            }
+
+            updateMcpStatusDot();
+        });
+    });
+
+    // ===== Toast Notification =====
+    function showToast(message, type = 'info') {
+        // Remove existing toast
+        const existingToast = document.querySelector('.toast');
+        if (existingToast) existingToast.remove();
+
+        const toast = document.createElement('div');
+        toast.className = `toast toast-${type}`;
+        toast.textContent = message;
+        document.body.appendChild(toast);
+
+        // Trigger animation
+        requestAnimationFrame(() => {
+            toast.classList.add('show');
+        });
+
+        // Auto remove
+        setTimeout(() => {
+            toast.classList.remove('show');
+            setTimeout(() => toast.remove(), 300);
+        }, 3000);
+    }
+
+    // ===== Modal Controls =====
 
     // Open Modal
     if (btnOpen) {
@@ -330,6 +448,8 @@ function initCreateAgentModal() {
     function closeModal() {
         modal.classList.remove('show');
         setTimeout(() => modal.classList.add('hidden'), 300);
+        if (mcpPanel) mcpPanel.classList.add('hidden');
+        if (oauthModal) oauthModal.classList.add('hidden');
     }
 
     if (btnClose) btnClose.addEventListener('click', closeModal);
@@ -344,7 +464,7 @@ function initCreateAgentModal() {
         }
     });
 
-    // MCP Panel Toggle
+    // ===== MCP Panel Toggle =====
     if (btnMcpEntry) {
         btnMcpEntry.addEventListener('click', () => {
             mcpPanel.classList.toggle('hidden');
@@ -357,58 +477,32 @@ function initCreateAgentModal() {
         });
     }
 
-    // MCP Source Tabs
-    const sourceTabs = document.querySelectorAll('.source-tab');
-    const sourceContents = document.querySelectorAll('.mcp-source-content');
-
-    sourceTabs.forEach(tab => {
-        tab.addEventListener('click', () => {
-            const source = tab.dataset.source;
-
-            sourceTabs.forEach(t => t.classList.remove('active'));
-            tab.classList.add('active');
-
-            sourceContents.forEach(content => {
-                content.classList.toggle('active', content.dataset.source === source);
-            });
-        });
-    });
-
-    // Tool Checkboxes
-    const toolCheckboxes = document.querySelectorAll('.tool-mini-item input[type="checkbox"]');
-    toolCheckboxes.forEach(checkbox => {
-        checkbox.addEventListener('change', () => {
-            updateSelectedToolsFromCheckboxes();
-        });
-    });
-
-    function updateSelectedToolsFromCheckboxes() {
-        selectedTools = [];
-        document.querySelectorAll('.tool-mini-item').forEach(item => {
-            const checkbox = item.querySelector('input[type="checkbox"]');
-            if (checkbox && checkbox.checked) {
-                const icon = item.querySelector('.tool-mini-icon')?.textContent || '🔧';
-                const name = item.querySelector('.tool-mini-name')?.textContent || 'Unknown';
-                selectedTools.push({ name, icon, source: 'wind' });
-            }
-        });
-        updateMcpBadge();
-    }
-
-    // Add MCP Button - Opens wizard modal
-    if (btnAddMcp) {
-        btnAddMcp.addEventListener('click', () => {
-            // Open the MCP wizard modal
-            const wizardModal = document.getElementById('mcpWizardModal');
-            if (wizardModal) {
+    // Close panel when clicking outside
+    document.addEventListener('click', (e) => {
+        if (mcpPanel && !mcpPanel.classList.contains('hidden')) {
+            if (!mcpPanel.contains(e.target) && !btnMcpEntry.contains(e.target)) {
                 mcpPanel.classList.add('hidden');
-                wizardModal.classList.remove('hidden');
-                setTimeout(() => wizardModal.classList.add('show'), 10);
             }
-        });
+        }
+    });
+
+    // ===== Submit Agent =====
+    function getEnabledToolsSummary() {
+        const connectedServices = Object.entries(mcpState.thirdParty)
+            .filter(([_, s]) => s.connected)
+            .map(([_, s]) => s.name);
+
+        const enabledBuiltIn = Object.entries(mcpState.builtIn)
+            .filter(([_, t]) => t.enabled)
+            .map(([_, t]) => t.name);
+
+        return {
+            thirdParty: connectedServices,
+            builtIn: enabledBuiltIn,
+            total: connectedServices.length + enabledBuiltIn.length
+        };
     }
 
-    // Submit Agent
     if (btnSubmitAgent) {
         btnSubmitAgent.addEventListener('click', () => {
             const requirement = document.getElementById('agentRequirement')?.value || '';
@@ -418,7 +512,12 @@ function initCreateAgentModal() {
                 return;
             }
 
-            console.log('Creating Agent:', { requirement, tools: selectedTools });
+            const toolsSummary = getEnabledToolsSummary();
+
+            console.log('Creating Agent:', {
+                requirement,
+                tools: toolsSummary
+            });
 
             const originalContent = btnSubmitAgent.innerHTML;
             btnSubmitAgent.innerHTML = '<span class="btn-icon">⏳</span> 创建中...';
@@ -428,405 +527,18 @@ function initCreateAgentModal() {
                 btnSubmitAgent.innerHTML = originalContent;
                 btnSubmitAgent.disabled = false;
                 closeModal();
-                alert(`Agent 创建请求已提交！\n需求: ${requirement.substring(0, 50)}...\n工具: ${selectedTools.length} 个`);
+
+                let toolsMsg = '';
+                if (toolsSummary.thirdParty.length > 0) {
+                    toolsMsg += `\n第三方集成: ${toolsSummary.thirdParty.join(', ')}`;
+                }
+                if (toolsSummary.builtIn.length > 0) {
+                    toolsMsg += `\n内置工具: ${toolsSummary.builtIn.join(', ')}`;
+                }
+
+                showToast('Agent 创建请求已提交！', 'success');
             }, 1500);
         });
-    }
-}
-
-// ===== MCP Wizard Modal Logic =====
-document.addEventListener('DOMContentLoaded', () => {
-    initMcpWizardModal();
-});
-
-function initMcpWizardModal() {
-    const modal = document.getElementById('mcpWizardModal');
-    const btnOpen = document.getElementById('btnOpenMcpWizard');
-    const btnClose = document.querySelector('.mcp-wizard-close');
-    const btnCancel = document.getElementById('btnWizardCancel');
-    const btnPrev = document.getElementById('btnWizardPrev');
-    const btnNext = document.getElementById('btnWizardNext');
-    const btnFinish = document.getElementById('btnWizardFinish');
-    const btnTestConnection = document.getElementById('btnTestConnection');
-
-    if (!modal) return;
-
-    // State
-    let currentStep = 1;
-    const totalSteps = 3;
-    let connectionStatus = 'disconnected';
-    let discoveredTools = [];
-
-    // Open Wizard Modal
-    if (btnOpen) {
-        btnOpen.addEventListener('click', () => {
-            modal.classList.remove('hidden');
-            setTimeout(() => modal.classList.add('show'), 10);
-            resetWizard();
-        });
-    }
-
-    // Close Modal
-    function closeWizardModal() {
-        modal.classList.remove('show');
-        setTimeout(() => modal.classList.add('hidden'), 300);
-    }
-
-    if (btnClose) btnClose.addEventListener('click', closeWizardModal);
-    if (btnCancel) btnCancel.addEventListener('click', closeWizardModal);
-
-    modal.addEventListener('click', (e) => {
-        if (e.target === modal) closeWizardModal();
-    });
-
-    document.addEventListener('keydown', (e) => {
-        if (e.key === 'Escape' && modal.classList.contains('show')) {
-            closeWizardModal();
-        }
-    });
-
-    // Step Navigation
-    function updateStep(step) {
-        currentStep = step;
-
-        // Update step indicators
-        document.querySelectorAll('.step-item').forEach((item, index) => {
-            const stepNum = index + 1;
-            item.classList.remove('active', 'completed');
-            if (stepNum === currentStep) {
-                item.classList.add('active');
-            } else if (stepNum < currentStep) {
-                item.classList.add('completed');
-            }
-        });
-
-        // Update connectors
-        document.querySelectorAll('.step-connector').forEach((connector, index) => {
-            connector.classList.toggle('completed', index < currentStep - 1);
-        });
-
-        // Update step content
-        document.querySelectorAll('.wizard-step').forEach((stepEl) => {
-            const stepNum = parseInt(stepEl.dataset.step);
-            stepEl.classList.toggle('active', stepNum === currentStep);
-        });
-
-        // Update navigation buttons
-        btnPrev.classList.toggle('hidden', currentStep === 1);
-        btnNext.classList.toggle('hidden', currentStep === totalSteps);
-        btnFinish.classList.toggle('hidden', currentStep !== totalSteps);
-
-        // If entering step 3, trigger tool discovery
-        if (currentStep === 3) {
-            discoverTools();
-        }
-    }
-
-    function validateStep(step) {
-        if (step === 1) {
-            const serverName = document.getElementById('mcpServerName').value.trim();
-            const serverUrl = document.getElementById('mcpServerUrl').value.trim();
-            if (!serverName) {
-                showValidationError('请输入服务器名称');
-                return false;
-            }
-            if (!serverUrl) {
-                showValidationError('请输入 SSE 端点地址');
-                return false;
-            }
-            if (!serverUrl.startsWith('http://') && !serverUrl.startsWith('https://')) {
-                showValidationError('请输入有效的 URL 地址');
-                return false;
-            }
-        }
-        if (step === 2) {
-            const authType = document.querySelector('.auth-type-btn.active')?.dataset.auth;
-            if (authType === 'bearer') {
-                const token = document.getElementById('bearerToken').value.trim();
-                if (!token) {
-                    showValidationError('请输入 Bearer Token');
-                    return false;
-                }
-            }
-            if (authType === 'apikey') {
-                const header = document.getElementById('apiKeyHeader').value.trim();
-                const key = document.getElementById('apiKeyValue').value.trim();
-                if (!header || !key) {
-                    showValidationError('请填写完整的 API Key 配置');
-                    return false;
-                }
-            }
-            if (authType === 'oauth2') {
-                const clientId = document.getElementById('oauth2ClientId').value.trim();
-                const clientSecret = document.getElementById('oauth2ClientSecret').value.trim();
-                const authUrl = document.getElementById('oauth2AuthUrl').value.trim();
-                const tokenUrl = document.getElementById('oauth2TokenUrl').value.trim();
-                if (!clientId || !clientSecret || !authUrl || !tokenUrl) {
-                    showValidationError('请填写完整的 OAuth 2.0 配置');
-                    return false;
-                }
-            }
-        }
-        return true;
-    }
-
-    function showValidationError(message) {
-        alert(message);
-    }
-
-    if (btnNext) {
-        btnNext.addEventListener('click', () => {
-            if (validateStep(currentStep)) {
-                updateStep(currentStep + 1);
-            }
-        });
-    }
-
-    if (btnPrev) {
-        btnPrev.addEventListener('click', () => {
-            if (currentStep > 1) {
-                updateStep(currentStep - 1);
-            }
-        });
-    }
-
-    if (btnFinish) {
-        btnFinish.addEventListener('click', () => {
-            const selectedTools = discoveredTools.filter(t => t.enabled);
-            const config = {
-                serverName: document.getElementById('mcpServerName').value,
-                serverUrl: document.getElementById('mcpServerUrl').value,
-                authType: document.querySelector('.auth-type-btn.active')?.dataset.auth,
-                tools: selectedTools
-            };
-            console.log('MCP Configuration:', config);
-
-            btnFinish.innerHTML = '<span class="btn-icon">⏳</span> 保存中...';
-            btnFinish.disabled = true;
-
-            setTimeout(() => {
-                btnFinish.innerHTML = '<span class="btn-icon">✓</span> 完成配置';
-                btnFinish.disabled = false;
-                closeWizardModal();
-                alert(`MCP 服务器配置完成！\n服务器: ${config.serverName}\n已启用 ${selectedTools.length} 个工具`);
-            }, 1500);
-        });
-    }
-
-    // Test Connection
-    if (btnTestConnection) {
-        btnTestConnection.addEventListener('click', () => {
-            const serverUrl = document.getElementById('mcpServerUrl').value.trim();
-            if (!serverUrl) {
-                showValidationError('请先输入 SSE 端点地址');
-                return;
-            }
-
-            const statusEl = document.getElementById('connectionStatus');
-            const resultEl = document.getElementById('connectionResult');
-
-            // Set testing state
-            statusEl.className = 'connection-status testing';
-            statusEl.querySelector('.status-text').textContent = '测试中...';
-
-            btnTestConnection.disabled = true;
-            btnTestConnection.innerHTML = '<span class="btn-icon">⏳</span> 测试中...';
-
-            // Simulate connection test
-            setTimeout(() => {
-                const success = Math.random() > 0.3; // 70% success rate for demo
-
-                if (success) {
-                    statusEl.className = 'connection-status connected';
-                    statusEl.querySelector('.status-text').textContent = '已连接';
-                    connectionStatus = 'connected';
-
-                    resultEl.className = 'connection-result success';
-                    resultEl.querySelector('.result-icon').textContent = '✅';
-                    resultEl.querySelector('.result-title').textContent = '连接成功';
-                    resultEl.querySelector('.result-message').textContent = '已成功连接到 MCP 服务器，可以继续配置。';
-                } else {
-                    statusEl.className = 'connection-status failed';
-                    statusEl.querySelector('.status-text').textContent = '连接失败';
-                    connectionStatus = 'failed';
-
-                    resultEl.className = 'connection-result error';
-                    resultEl.querySelector('.result-icon').textContent = '❌';
-                    resultEl.querySelector('.result-title').textContent = '连接失败';
-                    resultEl.querySelector('.result-message').textContent = '无法连接到服务器，请检查地址是否正确或网络是否可达。';
-                }
-
-                resultEl.classList.remove('hidden');
-                btnTestConnection.disabled = false;
-                btnTestConnection.innerHTML = '<span class="btn-icon">🔗</span> 测试连接';
-            }, 2000);
-        });
-    }
-
-    // Auth Type Switching
-    const authTypeBtns = document.querySelectorAll('.auth-type-btn');
-    authTypeBtns.forEach(btn => {
-        btn.addEventListener('click', () => {
-            authTypeBtns.forEach(b => b.classList.remove('active'));
-            btn.classList.add('active');
-
-            const authType = btn.dataset.auth;
-            document.querySelectorAll('.auth-config').forEach(config => {
-                config.classList.toggle('active', config.dataset.auth === authType);
-            });
-        });
-    });
-
-    // Password Toggle
-    const passwordToggles = document.querySelectorAll('.password-toggle');
-    passwordToggles.forEach(toggle => {
-        toggle.addEventListener('click', () => {
-            const targetId = toggle.dataset.target;
-            const input = document.getElementById(targetId);
-            if (input) {
-                const isPassword = input.type === 'password';
-                input.type = isPassword ? 'text' : 'password';
-                toggle.querySelector('.eye-icon').textContent = isPassword ? '🙈' : '👁️';
-            }
-        });
-    });
-
-    // Tool Discovery
-    function discoverTools() {
-        const loadingEl = document.getElementById('toolLoading');
-        const listEl = document.getElementById('toolList');
-        const emptyEl = document.getElementById('toolEmpty');
-        const countEl = document.getElementById('toolCount');
-
-        loadingEl.classList.remove('hidden');
-        listEl.classList.add('hidden');
-        listEl.innerHTML = '';
-        emptyEl.classList.add('hidden');
-
-        // Simulate tool discovery
-        setTimeout(() => {
-            // Sample tools for demo
-            discoveredTools = [
-                { id: 'get_exposure', name: 'get_exposure', desc: '获取主体敞口信息，包括授信额度、已用额度、担保关系等', enabled: true },
-                { id: 'list_risk_events', name: 'list_risk_events', desc: '列出指定主体在时间范围内的风险事件记录', enabled: true },
-                { id: 'get_internal_rating', name: 'get_internal_rating', desc: '获取主体的内部评级信息及评级历史变动', enabled: true },
-                { id: 'search_notes', name: 'search_notes', desc: '在知识库中搜索相关研究笔记和调研记录', enabled: true },
-                { id: 'get_weekly_template', name: 'get_weekly_template', desc: '获取周报模板和格式化规范', enabled: false },
-                { id: 'submit_compliance', name: 'submit_compliance', desc: '提交合规审批工单并返回审批状态', enabled: false }
-            ];
-
-            loadingEl.classList.add('hidden');
-
-            if (discoveredTools.length === 0) {
-                emptyEl.classList.remove('hidden');
-            } else {
-                listEl.classList.remove('hidden');
-                renderToolList();
-                countEl.textContent = `${discoveredTools.length} 个工具`;
-            }
-        }, 1500);
-    }
-
-    function renderToolList() {
-        const listEl = document.getElementById('toolList');
-        const searchTerm = document.getElementById('toolSearch')?.value.toLowerCase() || '';
-
-        const filteredTools = discoveredTools.filter(tool =>
-            tool.name.toLowerCase().includes(searchTerm) ||
-            tool.desc.toLowerCase().includes(searchTerm)
-        );
-
-        listEl.innerHTML = filteredTools.map(tool => `
-            <div class="tool-card ${tool.enabled ? '' : 'disabled'}" data-tool-id="${tool.id}">
-                <div class="tool-icon">🔧</div>
-                <div class="tool-info">
-                    <div class="tool-name">${tool.name}</div>
-                    <div class="tool-desc">${tool.desc}</div>
-                    <span class="tool-schema">📋 查看 Schema</span>
-                </div>
-                <label class="tool-toggle">
-                    <input type="checkbox" ${tool.enabled ? 'checked' : ''} data-tool-id="${tool.id}">
-                    <span class="toggle-slider"></span>
-                </label>
-            </div>
-        `).join('');
-
-        // Bind toggle events
-        listEl.querySelectorAll('.tool-toggle input').forEach(checkbox => {
-            checkbox.addEventListener('change', (e) => {
-                const toolId = e.target.dataset.toolId;
-                const tool = discoveredTools.find(t => t.id === toolId);
-                if (tool) {
-                    tool.enabled = e.target.checked;
-                    e.target.closest('.tool-card').classList.toggle('disabled', !tool.enabled);
-                }
-                updateSelectedCount();
-            });
-        });
-    }
-
-    function updateSelectedCount() {
-        const countEl = document.getElementById('toolCount');
-        const enabledCount = discoveredTools.filter(t => t.enabled).length;
-        countEl.textContent = `${enabledCount}/${discoveredTools.length} 个已选`;
-    }
-
-    // Tool Search
-    const toolSearch = document.getElementById('toolSearch');
-    if (toolSearch) {
-        toolSearch.addEventListener('input', () => {
-            renderToolList();
-        });
-    }
-
-    // Select All / None
-    const btnSelectAll = document.getElementById('btnSelectAll');
-    const btnSelectNone = document.getElementById('btnSelectNone');
-
-    if (btnSelectAll) {
-        btnSelectAll.addEventListener('click', () => {
-            discoveredTools.forEach(t => t.enabled = true);
-            renderToolList();
-            updateSelectedCount();
-        });
-    }
-
-    if (btnSelectNone) {
-        btnSelectNone.addEventListener('click', () => {
-            discoveredTools.forEach(t => t.enabled = false);
-            renderToolList();
-            updateSelectedCount();
-        });
-    }
-
-    // Reset Wizard
-    function resetWizard() {
-        currentStep = 1;
-        connectionStatus = 'disconnected';
-        discoveredTools = [];
-
-        // Reset form fields
-        document.getElementById('mcpServerName').value = '';
-        document.getElementById('mcpServerUrl').value = '';
-        document.getElementById('connectionStatus').className = 'connection-status';
-        document.getElementById('connectionStatus').querySelector('.status-text').textContent = '未连接';
-        document.getElementById('connectionResult').classList.add('hidden');
-        document.getElementById('bearerToken').value = '';
-        document.getElementById('apiKeyHeader').value = '';
-        document.getElementById('apiKeyValue').value = '';
-        document.getElementById('oauth2ClientId').value = '';
-        document.getElementById('oauth2ClientSecret').value = '';
-        document.getElementById('oauth2AuthUrl').value = '';
-        document.getElementById('oauth2TokenUrl').value = '';
-
-        // Reset auth type to none
-        document.querySelectorAll('.auth-type-btn').forEach(b => b.classList.remove('active'));
-        document.querySelector('.auth-type-btn[data-auth="none"]').classList.add('active');
-        document.querySelectorAll('.auth-config').forEach(c => c.classList.remove('active'));
-        document.querySelector('.auth-config[data-auth="none"]').classList.add('active');
-
-        // Reset steps
-        updateStep(1);
     }
 }
 

@@ -420,19 +420,8 @@
                         <div class="toolbar-left">
                             <button type="button" class="mcp-entry-btn" id="btnMcpEntry" title="配置 MCP 工具">
                                 <span class="mcp-icon">🔌</span>
-                                <span class="mcp-label">MCP</span>
+                                <span class="mcp-status-dot active" id="mcpStatusDot"></span>
                             </button>
-                            <!-- MCP Badge (shows when tools are configured) -->
-                            <div class="mcp-badge-wrapper" id="mcpBadgeWrapper">
-                                <span class="mcp-badge" id="mcpBadge">2 个工具</span>
-                                <!-- Hover Tooltip -->
-                                <div class="mcp-tooltip" id="mcpTooltip">
-                                    <div class="tooltip-header">已配置的 MCP 工具</div>
-                                    <div class="tooltip-list" id="mcpTooltipList">
-                                        <!-- Dynamic content -->
-                                    </div>
-                                </div>
-                            </div>
                         </div>
 
                         <!-- Submit Button (Right) -->
@@ -445,303 +434,123 @@
                     </div>
                 </div>
 
-                <!-- MCP Panel (Claude-style dropdown) -->
+                <!-- MCP Panel (Lightweight Design) -->
                 <div class="mcp-panel hidden" id="mcpPanel">
                     <div class="mcp-panel-header">
                         <span class="panel-title">MCP 工具</span>
                         <button type="button" class="panel-close" id="btnCloseMcpPanel">&times;</button>
                     </div>
 
-                    <!-- Tool Source Tabs -->
-                    <div class="mcp-source-tabs">
-                        <button type="button" class="source-tab active" data-source="wind">Wind 官方</button>
-                        <button type="button" class="source-tab" data-source="custom">自定义</button>
-                    </div>
+                    <div class="mcp-panel-content">
+                        <!-- 第三方集成 Section -->
+                        <div class="mcp-section">
+                            <div class="mcp-section-header">
+                                <span class="section-title">第三方集成</span>
+                            </div>
 
-                    <!-- Wind MCP Tools -->
-                    <div class="mcp-source-content active" data-source="wind">
-                        <div class="tool-mini-list">
-                            <label class="tool-mini-item">
-                                <input type="checkbox" checked>
-                                <span class="tool-mini-icon">📊</span>
-                                <span class="tool-mini-name">Wind 股票数据</span>
-                            </label>
-                            <label class="tool-mini-item">
-                                <input type="checkbox" checked>
-                                <span class="tool-mini-icon">📈</span>
-                                <span class="tool-mini-name">Wind 财务报表</span>
-                            </label>
-                            <label class="tool-mini-item">
-                                <input type="checkbox">
-                                <span class="tool-mini-icon">📰</span>
-                                <span class="tool-mini-name">Wind 资讯舆情</span>
-                            </label>
-                            <label class="tool-mini-item">
-                                <input type="checkbox">
-                                <span class="tool-mini-icon">🏢</span>
-                                <span class="tool-mini-name">Wind 企业数据</span>
-                            </label>
+                            <!-- Notion Integration -->
+                            <div class="mcp-integration-item" data-service="notion">
+                                <div class="integration-icon">
+                                    <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+                                        <path
+                                            d="M4.459 4.208c.746.606 1.026.56 2.428.466l13.215-.793c.28 0 .047-.28-.046-.326L17.86 2.016c-.42-.326-.98-.7-2.055-.607L3.01 2.516c-.466.046-.56.28-.374.466l1.823 1.226zm.793 3.313v13.647c0 .746.373 1.026 1.214.98l14.523-.84c.84-.046.933-.56.933-1.166V6.474c0-.606-.233-.933-.746-.886l-15.177.886c-.56.047-.747.327-.747.887zm14.337.653c.093.42 0 .84-.42.887l-.7.14v10.08c-.606.327-1.166.514-1.633.514-.746 0-.933-.234-1.493-.933l-4.573-7.186v6.953l1.446.327s0 .84-1.166.84l-3.22.187c-.093-.187 0-.653.327-.746l.84-.233V9.854L7.82 9.761c-.094-.42.14-1.026.793-1.073l3.453-.233 4.76 7.28v-6.44l-1.213-.14c-.094-.513.28-.886.746-.933l3.22-.187zM2.222 1.21L16.105.3c1.726-.14 2.147-.046 3.22.7l4.433 3.126c.73.513.933.653.933 1.213v16.807c0 1.074-.393 1.727-1.773 1.82l-15.457.933c-1.026.047-1.54-.093-2.1-.746L2.035 19.82c-.653-.84-.933-1.447-.933-2.147V2.89c0-.886.42-1.587 1.12-1.68z" />
+                                    </svg>
+                                </div>
+                                <div class="integration-info">
+                                    <div class="integration-name">Notion</div>
+                                    <div class="integration-desc">连接您的 Notion 工作区</div>
+                                </div>
+                                <div class="integration-action">
+                                    <button class="connect-btn" data-service="notion">
+                                        <span class="connect-text">去连接</span>
+                                        <span class="connect-arrow">→</span>
+                                    </button>
+                                </div>
+                            </div>
+
+                            <!-- Youdao Notes Integration -->
+                            <div class="mcp-integration-item" data-service="youdao">
+                                <div class="integration-icon youdao-icon">
+                                    <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+                                        <path
+                                            d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z" />
+                                    </svg>
+                                </div>
+                                <div class="integration-info">
+                                    <div class="integration-name">有道云笔记</div>
+                                    <div class="integration-desc">连接您的有道云笔记账户</div>
+                                </div>
+                                <div class="integration-action">
+                                    <button class="connect-btn" data-service="youdao">
+                                        <span class="connect-text">去连接</span>
+                                        <span class="connect-arrow">→</span>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- 内置工具 Section -->
+                        <div class="mcp-section">
+                            <div class="mcp-section-header">
+                                <span class="section-title">内置工具</span>
+                            </div>
+
+                            <!-- File Handler -->
+                            <div class="mcp-builtin-item enabled" data-tool="file-handler">
+                                <div class="builtin-icon">📁</div>
+                                <div class="builtin-info">
+                                    <div class="builtin-name">文件处理</div>
+                                    <div class="builtin-desc">读取、写入、管理本地文件</div>
+                                </div>
+                                <label class="builtin-toggle">
+                                    <input type="checkbox" checked data-tool="file-handler">
+                                    <span class="toggle-slider"></span>
+                                </label>
+                            </div>
+
+                            <!-- Windows Command -->
+                            <div class="mcp-builtin-item enabled" data-tool="windows-cmd">
+                                <div class="builtin-icon">💻</div>
+                                <div class="builtin-info">
+                                    <div class="builtin-name">Windows 命令</div>
+                                    <div class="builtin-desc">执行系统命令和脚本</div>
+                                </div>
+                                <label class="builtin-toggle">
+                                    <input type="checkbox" checked data-tool="windows-cmd">
+                                    <span class="toggle-slider"></span>
+                                </label>
+                            </div>
+
+                            <!-- Browser Operations -->
+                            <div class="mcp-builtin-item" data-tool="browser-ops">
+                                <div class="builtin-icon">🌐</div>
+                                <div class="builtin-info">
+                                    <div class="builtin-name">浏览器操作</div>
+                                    <div class="builtin-desc">自动化网页操作与数据采集</div>
+                                </div>
+                                <label class="builtin-toggle">
+                                    <input type="checkbox" data-tool="browser-ops">
+                                    <span class="toggle-slider"></span>
+                                </label>
+                            </div>
                         </div>
                     </div>
+                </div>
 
-                    <!-- Custom MCP Tools -->
-                    <div class="mcp-source-content" data-source="custom">
-                        <!-- Empty State -->
-                        <div class="custom-mcp-empty" id="customMcpEmpty">
-                            <div class="empty-icon">🔌</div>
-                            <p>暂无自定义 MCP 服务器</p>
-                            <p class="empty-hint">添加您自己的 MCP 服务器以接入私域数据</p>
+                <!-- OAuth Redirect Modal -->
+                <div class="oauth-modal hidden" id="oauthModal">
+                    <div class="oauth-modal-content">
+                        <div class="oauth-loading">
+                            <div class="oauth-spinner"></div>
+                            <p class="oauth-text">正在跳转到 <span id="oauthServiceName">服务</span> 进行授权...</p>
+                            <p class="oauth-hint">请在新窗口中完成授权</p>
                         </div>
-
-                        <!-- MCP Server List (when servers exist) -->
-                        <div class="custom-mcp-list hidden" id="customMcpList">
-                            <!-- Dynamic content -->
-                        </div>
-
-                        <!-- Add New MCP -->
-                        <button type="button" class="add-mcp-btn" id="btnAddMcp">
-                            <span class="add-icon">+</span>
-                            添加 MCP 服务器
-                        </button>
                     </div>
                 </div>
             </div>
         </div>
     </div>
 
-    <!-- MCP Configuration Wizard Modal -->
-    <div id="mcpWizardModal" class="modal-backdrop hidden">
-        <div class="modal-container mcp-wizard-container">
-            <div class="modal-header">
-                <h3 class="modal-title">配置 MCP 服务器</h3>
-                <button class="modal-close mcp-wizard-close">&times;</button>
-            </div>
-
-            <!-- Step Progress Indicator -->
-            <div class="step-progress">
-                <div class="step-item active" data-step="1">
-                    <div class="step-number">1</div>
-                    <div class="step-label">连接配置</div>
-                </div>
-                <div class="step-connector"></div>
-                <div class="step-item" data-step="2">
-                    <div class="step-number">2</div>
-                    <div class="step-label">认证设置</div>
-                </div>
-                <div class="step-connector"></div>
-                <div class="step-item" data-step="3">
-                    <div class="step-number">3</div>
-                    <div class="step-label">工具发现</div>
-                </div>
-            </div>
-
-            <div class="modal-body mcp-wizard-body">
-                <!-- Step 1: Connection -->
-                <div class="wizard-step active" data-step="1">
-                    <div class="form-group">
-                        <label class="form-label" for="mcpServerName">服务器名称 <span class="required">*</span></label>
-                        <input type="text" id="mcpServerName" class="form-input" placeholder="例如：内部知识库 MCP">
-                        <p class="input-hint">用于标识此 MCP 服务器的名称</p>
-                    </div>
-
-                    <div class="form-group">
-                        <label class="form-label" for="mcpServerUrl">SSE 端点地址 <span class="required">*</span></label>
-                        <div class="input-with-status">
-                            <input type="text" id="mcpServerUrl" class="form-input"
-                                placeholder="https://your-mcp-server.example.com/sse">
-                            <div class="connection-status" id="connectionStatus">
-                                <span class="status-dot"></span>
-                                <span class="status-text">未连接</span>
-                            </div>
-                        </div>
-                        <p class="input-hint">MCP 服务器的 SSE 或 Streamable HTTP 端点</p>
-                    </div>
-
-                    <div class="form-group">
-                        <label class="form-label" for="mcpTimeout">连接超时</label>
-                        <select id="mcpTimeout" class="form-select">
-                            <option value="5000">5 秒</option>
-                            <option value="10000" selected>10 秒</option>
-                            <option value="30000">30 秒</option>
-                            <option value="60000">60 秒</option>
-                        </select>
-                    </div>
-
-                    <button type="button" id="btnTestConnection" class="btn btn-outline-primary">
-                        <span class="btn-icon">🔗</span>
-                        测试连接
-                    </button>
-
-                    <!-- Connection Result -->
-                    <div id="connectionResult" class="connection-result hidden">
-                        <div class="result-icon"></div>
-                        <div class="result-content">
-                            <div class="result-title"></div>
-                            <div class="result-message"></div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Step 2: Authentication -->
-                <div class="wizard-step" data-step="2">
-                    <div class="form-group">
-                        <label class="form-label">认证方式</label>
-                        <div class="auth-type-selector">
-                            <button type="button" class="auth-type-btn active" data-auth="none">
-                                <span class="auth-icon">🔓</span>
-                                <span>无认证</span>
-                            </button>
-                            <button type="button" class="auth-type-btn" data-auth="bearer">
-                                <span class="auth-icon">🎫</span>
-                                <span>Bearer Token</span>
-                            </button>
-                            <button type="button" class="auth-type-btn" data-auth="apikey">
-                                <span class="auth-icon">🔑</span>
-                                <span>API Key</span>
-                            </button>
-                            <button type="button" class="auth-type-btn" data-auth="oauth2">
-                                <span class="auth-icon">🔐</span>
-                                <span>OAuth 2.0</span>
-                            </button>
-                        </div>
-                    </div>
-
-                    <!-- Auth: None -->
-                    <div class="auth-config active" data-auth="none">
-                        <div class="auth-info-box">
-                            <span class="info-icon">ℹ️</span>
-                            <p>不需要认证信息，服务器将直接接受连接请求。</p>
-                        </div>
-                    </div>
-
-                    <!-- Auth: Bearer Token -->
-                    <div class="auth-config" data-auth="bearer">
-                        <div class="form-group">
-                            <label class="form-label" for="bearerToken">Bearer Token <span
-                                    class="required">*</span></label>
-                            <div class="password-input-wrapper">
-                                <input type="password" id="bearerToken" class="form-input"
-                                    placeholder="输入您的 Bearer Token">
-                                <button type="button" class="password-toggle" data-target="bearerToken">
-                                    <span class="eye-icon">👁️</span>
-                                </button>
-                            </div>
-                            <p class="input-hint">
-                                <span class="security-badge">🔒 安全</span>
-                                Token 将加密存储，不会明文传输
-                            </p>
-                        </div>
-                    </div>
-
-                    <!-- Auth: API Key -->
-                    <div class="auth-config" data-auth="apikey">
-                        <div class="form-group">
-                            <label class="form-label" for="apiKeyHeader">Header 名称 <span
-                                    class="required">*</span></label>
-                            <input type="text" id="apiKeyHeader" class="form-input" placeholder="例如：X-API-Key">
-                        </div>
-                        <div class="form-group">
-                            <label class="form-label" for="apiKeyValue">API Key <span class="required">*</span></label>
-                            <div class="password-input-wrapper">
-                                <input type="password" id="apiKeyValue" class="form-input" placeholder="输入您的 API Key">
-                                <button type="button" class="password-toggle" data-target="apiKeyValue">
-                                    <span class="eye-icon">👁️</span>
-                                </button>
-                            </div>
-                            <p class="input-hint">
-                                <span class="security-badge">🔒 安全</span>
-                                密钥将加密存储
-                            </p>
-                        </div>
-                    </div>
-
-                    <!-- Auth: OAuth 2.0 -->
-                    <div class="auth-config" data-auth="oauth2">
-                        <div class="form-group">
-                            <label class="form-label" for="oauth2ClientId">Client ID <span
-                                    class="required">*</span></label>
-                            <input type="text" id="oauth2ClientId" class="form-input" placeholder="OAuth 客户端 ID">
-                        </div>
-                        <div class="form-group">
-                            <label class="form-label" for="oauth2ClientSecret">Client Secret <span
-                                    class="required">*</span></label>
-                            <div class="password-input-wrapper">
-                                <input type="password" id="oauth2ClientSecret" class="form-input"
-                                    placeholder="OAuth 客户端密钥">
-                                <button type="button" class="password-toggle" data-target="oauth2ClientSecret">
-                                    <span class="eye-icon">👁️</span>
-                                </button>
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <label class="form-label" for="oauth2AuthUrl">Authorization URL <span
-                                    class="required">*</span></label>
-                            <input type="text" id="oauth2AuthUrl" class="form-input"
-                                placeholder="https://auth.example.com/authorize">
-                        </div>
-                        <div class="form-group">
-                            <label class="form-label" for="oauth2TokenUrl">Token URL <span
-                                    class="required">*</span></label>
-                            <input type="text" id="oauth2TokenUrl" class="form-input"
-                                placeholder="https://auth.example.com/token">
-                        </div>
-                        <p class="input-hint">
-                            <span class="security-badge">🔒 安全</span>
-                            所有凭证将加密存储
-                        </p>
-                    </div>
-                </div>
-
-                <!-- Step 3: Tool Discovery -->
-                <div class="wizard-step" data-step="3">
-                    <div class="tool-discovery-header">
-                        <div class="discovery-info">
-                            <h4>已发现的工具</h4>
-                            <span class="tool-count" id="toolCount">0 个工具</span>
-                        </div>
-                        <div class="tool-actions">
-                            <input type="text" id="toolSearch" class="form-input tool-search" placeholder="搜索工具...">
-                            <button type="button" class="btn btn-sm btn-outline" id="btnSelectAll">全选</button>
-                            <button type="button" class="btn btn-sm btn-outline" id="btnSelectNone">全不选</button>
-                        </div>
-                    </div>
-
-                    <!-- Loading State -->
-                    <div class="tool-loading" id="toolLoading">
-                        <div class="loading-spinner"></div>
-                        <p>正在发现可用工具...</p>
-                    </div>
-
-                    <!-- Tool List -->
-                    <div class="tool-list" id="toolList">
-                        <!-- Tools will be dynamically inserted here -->
-                    </div>
-
-                    <!-- Empty State -->
-                    <div class="tool-empty hidden" id="toolEmpty">
-                        <div class="empty-icon">📭</div>
-                        <p>未发现任何工具</p>
-                        <p class="empty-hint">请检查 MCP 服务器配置</p>
-                    </div>
-                </div>
-            </div>
-
-            <div class="modal-footer mcp-wizard-footer">
-                <button class="btn btn-secondary" id="btnWizardCancel">取消</button>
-                <div class="wizard-nav-buttons">
-                    <button class="btn btn-outline-primary hidden" id="btnWizardPrev">
-                        <span class="btn-icon">←</span> 上一步
-                    </button>
-                    <button class="btn btn-primary" id="btnWizardNext">
-                        下一步 <span class="btn-icon">→</span>
-                    </button>
-                    <button class="btn btn-primary hidden" id="btnWizardFinish">
-                        <span class="btn-icon">✓</span> 完成配置
-                    </button>
-                </div>
-            </div>
-        </div>
-    </div>
 
     <script src="script.js"></script>
 </body>
